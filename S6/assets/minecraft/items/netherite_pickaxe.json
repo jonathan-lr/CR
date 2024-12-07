@@ -1,0 +1,40 @@
+{
+  "model": {
+    "type": "select",
+    "property": "custom_model_data",
+    "fallback": {
+      "type": "model",
+      "model": "item/netherite_pickaxe"
+    },
+    "cases": [
+      {
+        "when": "water",
+        "model": {
+          "type": "model",
+          "model": "item/custom/water/pick"
+        }
+      },
+      {
+        "when": "sky",
+        "model": {
+          "type": "model",
+          "model": "item/custom/sky/pick"
+        }
+      },
+      {
+        "when": "earth",
+        "model": {
+          "type": "model",
+          "model": "item/custom/earth/pick"
+        }
+      },
+      {
+        "when": "fire",
+        "model": {
+          "type": "model",
+          "model": "item/custom/fire/pick"
+        }
+      }
+    ]
+  }  
+}

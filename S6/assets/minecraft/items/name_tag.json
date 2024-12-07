@@ -1,0 +1,47 @@
+{
+  "model": {
+    "type": "select",
+    "property": "custom_model_data",
+    "fallback": {
+      "type": "model",
+      "model": "item/name_tag"
+    },
+    "cases": [
+      {
+        "when": "red-lanyard",
+        "model": {
+          "type": "model",
+          "model": "item/custom/lanyards/red-lanyard"
+        }
+      },
+      {
+        "when": "blue-lanyard",
+        "model": {
+          "type": "model",
+          "model": "item/custom/lanyards/blue-lanyard"
+        }
+      },
+      {
+        "when": "green-lanyard",
+        "model": {
+          "type": "model",
+          "model": "item/custom/lanyards/green-lanyard"
+        }
+      },
+      {
+        "when": "orange-lanyard",
+        "model": {
+          "type": "model",
+          "model": "item/custom/lanyards/orange-lanyard"
+        }
+      },
+      {
+        "when": "pink-lanyard",
+        "model": {
+          "type": "model",
+          "model": "item/custom/lanyards/pink-lanyard"
+        }
+      }
+    ]
+  }   
+}

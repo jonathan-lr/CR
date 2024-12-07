@@ -1,0 +1,40 @@
+{
+  "model": {
+    "type": "select",
+    "property": "custom_model_data",
+    "fallback": {
+      "type": "model",
+      "model": "item/netherite_hoe"
+    },
+    "cases": [
+      {
+        "when": "water",
+        "model": {
+          "type": "model",
+          "model": "item/custom/water/hoe"
+        }
+      },
+      {
+        "when": "sky",
+        "model": {
+          "type": "model",
+          "model": "item/custom/sky/hoe"
+        }
+      },
+      {
+        "when": "earth",
+        "model": {
+          "type": "model",
+          "model": "item/custom/earth/hoe"
+        }
+      },
+      {
+        "when": "fire",
+        "model": {
+          "type": "model",
+          "model": "item/custom/fire/hoe"
+        }
+      }
+    ]
+  } 
+}

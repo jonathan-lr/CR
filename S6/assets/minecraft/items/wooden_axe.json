@@ -1,0 +1,26 @@
+{
+  "model": {
+    "type": "select",
+    "property": "custom_model_data",
+    "fallback": {
+      "type": "model",
+      "model": "item/wooden_axe"
+    },
+    "cases": [
+      {
+        "when": "gavel",
+        "model": {
+          "type": "model",
+          "model": "item/custom/gavel"
+        }
+      },
+      {
+        "when": "hammer",
+        "model": {
+          "type": "model",
+          "model": "item/custom/yorickshammer"
+        }
+      }
+    ]
+  }   
+}

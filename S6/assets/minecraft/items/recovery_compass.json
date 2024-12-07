@@ -1,0 +1,26 @@
+{
+  "model": {
+    "type": "select",
+    "property": "custom_model_data",
+    "fallback": {
+      "type": "model",
+      "model": "item/recovery_compass"
+    },
+    "cases": [
+      {
+        "when": "anchor",
+        "model": {
+          "type": "model",
+          "model": "item/custom/anchor"
+        }
+      },      
+	  {
+        "when": "grinder",
+        "model": {
+          "type": "model",
+          "model": "item/custom/anchor"
+        }
+      }
+    ]
+  }     
+}

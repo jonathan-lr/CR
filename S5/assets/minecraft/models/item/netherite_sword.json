@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "minecraft:item/netherite_sword"
+  },
+  "overrides": [
+	{"predicate": {"custom_model_data": 1},"model": "item/custom/sky/sword"},
+	{"predicate": {"custom_model_data": 2},"model": "item/custom/fire/sword"},
+	{"predicate": {"custom_model_data": 3},"model": "item/custom/water/sword"},
+	{"predicate": {"custom_model_data": 4},"model": "item/custom/earth/sword"}
+  ]
+}

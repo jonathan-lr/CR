@@ -1,0 +1,19 @@
+{
+  "model": {
+    "type": "select",
+    "property": "custom_model_data",
+    "fallback": {
+      "type": "model",
+      "model": "item/gold_ingot"
+    },
+    "cases": [
+      {
+        "when": "dt",
+        "model": {
+          "type": "model",
+          "model": "item/custom/dungeontoken/dungeontoken"
+        }
+      }
+    ]
+  }   
+}

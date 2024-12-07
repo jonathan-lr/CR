@@ -1,0 +1,40 @@
+{
+  "model": {
+    "type": "select",
+    "property": "custom_model_data",
+    "fallback": {
+      "type": "model",
+      "model": "item/netherite_shovel"
+    },
+    "cases": [
+      {
+        "when": "water",
+        "model": {
+          "type": "model",
+          "model": "item/custom/water/shovel"
+        }
+      },
+      {
+        "when": "sky",
+        "model": {
+          "type": "model",
+          "model": "item/custom/sky/shovel"
+        }
+      },
+      {
+        "when": "earth",
+        "model": {
+          "type": "model",
+          "model": "item/custom/earth/shovel"
+        }
+      },
+      {
+        "when": "fire",
+        "model": {
+          "type": "model",
+          "model": "item/custom/fire/shovel"
+        }
+      }
+    ]
+  }
+}

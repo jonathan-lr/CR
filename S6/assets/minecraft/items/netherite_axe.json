@@ -1,0 +1,40 @@
+{
+  "model": {
+    "type": "select",
+    "property": "custom_model_data",
+    "fallback": {
+      "type": "model",
+      "model": "item/netherite_axe"
+    },
+    "cases": [
+      {
+        "when": "water",
+        "model": {
+          "type": "model",
+          "model": "item/custom/water/axe"
+        }
+      },
+      {
+        "when": "sky",
+        "model": {
+          "type": "model",
+          "model": "item/custom/sky/axe"
+        }
+      },
+      {
+        "when": "earth",
+        "model": {
+          "type": "model",
+          "model": "item/custom/earth/axe"
+        }
+      },
+      {
+        "when": "fire",
+        "model": {
+          "type": "model",
+          "model": "item/custom/fire/axe"
+        }
+      }
+    ]
+  } 
+}

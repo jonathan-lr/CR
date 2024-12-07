@@ -1,0 +1,11 @@
+{
+  "pack": {
+    "pack_format": 46,
+    "description": "§5CR§cS5 §61.21.3 \n§8by §4Red §8& §2Yorick"
+  },
+  "features": {
+    "enabled": [
+      "vanilla"
+    ]
+  }
+}
