@@ -1,0 +1,61 @@
+configuration:
+  air:
+    pick: 3
+    shovel: 3
+    hoe: 3
+    axe: 3
+    sword: 3
+    helmet: 3
+    chestplate: 3
+    leggings: 3
+    boots: 3
+    wings: 3
+  fire:
+    pick: 3
+    shovel: 3
+    hoe: 3
+    axe: 3
+    sword: 3
+    helmet: 3
+    chestplate: 3
+    leggings: 3
+    boots: 3
+    wings: 3
+  water:
+    pick: 3
+    shovel: 3
+    hoe: 3
+    axe: 3
+    sword: 3
+    helmet: 3
+    chestplate: 3
+    leggings: 3
+    boots: 3
+    wings: 3
+  earth:
+    pick: 3
+    shovel: 3
+    hoe: 3
+    axe: 3
+    sword: 3
+    helmet: 3
+    chestplate: 3
+    leggings: 3
+    boots: 3
+    wings: 3
+  yorick:
+    survival: 'YorickSK'
+    creative: '&#6767ab&lYorick'
+    adventure: '&4Redbrine'
+  jay:
+    survival: 'Wasbie'
+    creative: 'WasbieButCreative'
+    adventure: 'WasbieButAdventure'
+  red:
+    survival: '&4&lRed'
+    creative: '&5&lOverlord'
+    adventure: '&cJeff'
+  tag:
+    current: "Null"
+    last: "Null"
+    passed: 0

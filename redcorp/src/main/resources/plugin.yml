@@ -1,0 +1,36 @@
+name: RedCorp
+version: '${project.version}'
+main: com.cosmicreach.redcorp.RedCorp
+depend: [WorldGuard, Vault, ProtocolLib]
+api-version: 1.21
+commands:
+  togglegod:
+    description: transitions the gm to godmode or playmode
+    aliases: tg
+  nick:
+    description: custom nicknaming for tab and essentials
+  getrelic:
+    description: used to get relics
+    aliases: gr
+  addrelic:
+    description: used to add relics to config
+    aliases: ar
+  setnicks:
+    description: used to set god nicknames
+  starttag:
+    description: used to start tag
+    aliases: tag
+  toggleparticle:
+    description: starts particle on player
+    aliases: particle
+  materia:
+    description: used to cast glamors onto items
+  getReward:
+    description: used to give rewards (server only)
+  getToken:
+    description: used to get tokens
+    aliases: gt
+  NPC:
+    description: used for npc dialogue (server only)
+  testcommand:
+    description: for testing
