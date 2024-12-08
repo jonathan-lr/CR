@@ -1,0 +1,19 @@
+{
+  "model": {
+    "type": "select",
+    "property": "custom_model_data",
+    "fallback": {
+      "type": "model",
+      "model": "item/kelp"
+    },
+    "cases": [
+      {
+        "when": "coke",
+        "model": {
+          "type": "model",
+          "model": "item/drugs/coca_leaf"
+        }
+      }
+    ]
+  }   
+}
