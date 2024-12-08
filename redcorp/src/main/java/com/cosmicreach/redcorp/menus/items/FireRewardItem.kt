@@ -14,7 +14,7 @@ import xyz.xenondevs.invui.item.impl.AbstractItem
 
 class FireRewardItem(private var econ: Economy, private var balItem: BalanceItem) : AbstractItem() {
     override fun getItemProvider(): ItemProvider {
-        val item = DungeonItems().earthReward()
+        val item = DungeonItems().fireReward()
         val meta = item.itemMeta as ItemMeta
         meta.setDisplayName("§c§lFire §f§lReward§8§l: §c§l${econ.format(300.0)}")
         meta.lore = mutableListOf("§f§lClick to §2§lSELL")
