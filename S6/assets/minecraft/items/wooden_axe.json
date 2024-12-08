@@ -11,14 +11,14 @@
         "when": "gavel",
         "model": {
           "type": "model",
-          "model": "item/custom/gavel"
+          "model": "item/gavel"
         }
       },
       {
         "when": "hammer",
         "model": {
           "type": "model",
-          "model": "item/custom/yorickshammer"
+          "model": "item/yorickshammer"
         }
       }
     ]

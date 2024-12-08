@@ -11,28 +11,28 @@
         "when": "water",
         "model": {
           "type": "model",
-          "model": "item/custom/water/sword"
+          "model": "item/water/sword"
         }
       },
       {
         "when": "sky",
         "model": {
           "type": "model",
-          "model": "item/custom/sky/sword"
+          "model": "item/sky/sword"
         }
       },
       {
         "when": "earth",
         "model": {
           "type": "model",
-          "model": "item/custom/earth/sword"
+          "model": "item/earth/sword"
         }
       },
       {
         "when": "fire",
         "model": {
           "type": "model",
-          "model": "item/custom/fire/sword"
+          "model": "item/fire/sword"
         }
       }
     ]

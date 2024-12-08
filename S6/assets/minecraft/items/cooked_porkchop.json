@@ -11,7 +11,7 @@
         "when": "mre",
         "model": {
           "type": "model",
-          "model": "item/custom/redcorpmre"
+          "model": "item/redcorpmre"
         }
       }
     ]

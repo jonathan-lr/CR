@@ -11,7 +11,7 @@
         "when": "arlbaro",
         "model": {
           "type": "model",
-          "model": "item/custom/cig"
+          "model": "item/cig"
         }
       }
     ]

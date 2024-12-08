@@ -11,7 +11,7 @@
         "when": "tag",
         "model": {
           "type": "model",
-          "model": "item/custom/tagstick"
+          "model": "item/tagstick"
         }
       }
     ]

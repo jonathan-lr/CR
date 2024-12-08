@@ -7,16 +7,12 @@ commands:
   togglegod:
     description: transitions the gm to godmode or playmode
     aliases: tg
-  nick:
-    description: custom nicknaming for tab and essentials
   getrelic:
     description: used to get relics
     aliases: gr
   addrelic:
     description: used to add relics to config
     aliases: ar
-  setnicks:
-    description: used to set god nicknames
   starttag:
     description: used to start tag
     aliases: tag

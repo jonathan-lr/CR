@@ -11,7 +11,7 @@
         "when": "dt",
         "model": {
           "type": "model",
-          "model": "item/custom/dungeontoken/dungeontoken"
+          "model": "item/dungeontoken/dungeontoken"
         }
       }
     ]

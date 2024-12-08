@@ -11,28 +11,28 @@
         "when": "sky",
         "model": {
           "type": "model",
-          "model": "item/custom/dungeontoken/dungeonrewardair1"
+          "model": "item/dungeontoken/dungeonrewardair1"
         }
       },
       {
         "when": "earth",
         "model": {
           "type": "model",
-          "model": "item/custom/dungeontoken/dungeonrewardearth2"
+          "model": "item/dungeontoken/dungeonrewardearth2"
         }
       },
       {
         "when": "water",
         "model": {
           "type": "model",
-          "model": "item/custom/dungeontoken/dungeonrewardwater4"
+          "model": "item/dungeontoken/dungeonrewardwater4"
         }
       },
       {
         "when": "fire",
         "model": {
           "type": "model",
-          "model": "item/custom/dungeontoken/dungeonrewardfire3"
+          "model": "item/dungeontoken/dungeonrewardfire3"
         }
       }
     ]

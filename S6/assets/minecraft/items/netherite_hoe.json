@@ -11,28 +11,28 @@
         "when": "water",
         "model": {
           "type": "model",
-          "model": "item/custom/water/hoe"
+          "model": "item/water/hoe"
         }
       },
       {
         "when": "sky",
         "model": {
           "type": "model",
-          "model": "item/custom/sky/hoe"
+          "model": "item/sky/hoe"
         }
       },
       {
         "when": "earth",
         "model": {
           "type": "model",
-          "model": "item/custom/earth/hoe"
+          "model": "item/earth/hoe"
         }
       },
       {
         "when": "fire",
         "model": {
           "type": "model",
-          "model": "item/custom/fire/hoe"
+          "model": "item/fire/hoe"
         }
       }
     ]

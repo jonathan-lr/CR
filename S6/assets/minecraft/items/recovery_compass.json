@@ -11,14 +11,14 @@
         "when": "anchor",
         "model": {
           "type": "model",
-          "model": "item/custom/anchor"
+          "model": "item/anchor"
         }
       },      
 	  {
         "when": "grinder",
         "model": {
           "type": "model",
-          "model": "item/custom/anchor"
+          "model": "item/anchor"
         }
       }
     ]

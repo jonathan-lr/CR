@@ -55,7 +55,3 @@ configuration:
     survival: '&4&lRed'
     creative: '&5&lOverlord'
     adventure: '&cJeff'
-  tag:
-    current: "Null"
-    last: "Null"
-    passed: 0

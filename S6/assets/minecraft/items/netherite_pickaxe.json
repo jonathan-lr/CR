@@ -11,28 +11,28 @@
         "when": "water",
         "model": {
           "type": "model",
-          "model": "item/custom/water/pick"
+          "model": "item/water/pick"
         }
       },
       {
         "when": "sky",
         "model": {
           "type": "model",
-          "model": "item/custom/sky/pick"
+          "model": "item/sky/pick"
         }
       },
       {
         "when": "earth",
         "model": {
           "type": "model",
-          "model": "item/custom/earth/pick"
+          "model": "item/earth/pick"
         }
       },
       {
         "when": "fire",
         "model": {
           "type": "model",
-          "model": "item/custom/fire/pick"
+          "model": "item/fire/pick"
         }
       }
     ]

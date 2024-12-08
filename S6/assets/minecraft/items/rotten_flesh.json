@@ -11,7 +11,7 @@
         "when": "penis",
         "model": {
           "type": "model",
-          "model": "item/custom/penis"
+          "model": "item/penis"
         }
       }
     ]

@@ -11,28 +11,28 @@
         "when": "water",
         "model": {
           "type": "model",
-          "model": "item/custom/water/shovel"
+          "model": "item/water/shovel"
         }
       },
       {
         "when": "sky",
         "model": {
           "type": "model",
-          "model": "item/custom/sky/shovel"
+          "model": "item/sky/shovel"
         }
       },
       {
         "when": "earth",
         "model": {
           "type": "model",
-          "model": "item/custom/earth/shovel"
+          "model": "item/earth/shovel"
         }
       },
       {
         "when": "fire",
         "model": {
           "type": "model",
-          "model": "item/custom/fire/shovel"
+          "model": "item/fire/shovel"
         }
       }
     ]
