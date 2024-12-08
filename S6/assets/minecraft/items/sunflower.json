@@ -1,0 +1,47 @@
+{
+  "model": {
+    "type": "select",
+    "property": "custom_model_data",
+    "fallback": {
+      "type": "model",
+      "model": "item/sunflower"
+    },
+    "cases": [
+      {
+        "when": "red-unit",
+        "model": {
+          "type": "model",
+          "model": "item/units/red-unit"
+        }
+      },
+      {
+        "when": "blue-unit",
+        "model": {
+          "type": "model",
+          "model": "item/units/blue-unit"
+        }
+      },
+      {
+        "when": "green-unit",
+        "model": {
+          "type": "model",
+          "model": "item/units/green-unit"
+        }
+      },
+      {
+        "when": "orange-unit",
+        "model": {
+          "type": "model",
+          "model": "item/units/orange-unit"
+        }
+      },
+      {
+        "when": "pink-unit",
+        "model": {
+          "type": "model",
+          "model": "item/units/pink-unit"
+        }
+      }
+    ]
+  }   
+}

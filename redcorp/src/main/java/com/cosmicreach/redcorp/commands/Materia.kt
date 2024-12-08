@@ -9,7 +9,7 @@ import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 
 class Materia : CommandExecutor {
-    private var types = arrayOf("mre", "weed", "coke", "poppy", "grinder", "barrel", "ivan", "arlbaro", "hammer", "gavel", "anchor", "scroll", "lanyard", "penis", "debug")
+    private var types = arrayOf("mre", "weed", "coke", "poppy", "grinder", "barrel", "ivan", "arlbaro", "hammer", "gavel", "anchor", "scroll", "lanyard", "unit", "penis", "debug")
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (sender !is Player) {return false}
@@ -189,13 +189,20 @@ class Materia : CommandExecutor {
                         sender.sendMessage("§cCR §8| §rInvalid Permission")
                         return false
                     }
-                    var transform = CustomItems().RedLanyard(item.amount)
-                    when(args[1]) {
-                        "orange" -> transform = CustomItems().OrangeLanyard(item.amount)
-                        "pink" -> transform = CustomItems().PinkLanyard(item.amount)
-                        "green" -> transform = CustomItems().GreenLanyard(item.amount)
-                        "blue" -> transform = CustomItems().BlueLanyard(item.amount)
+                    val transform = CustomItems().Lanyard(item.amount, args[1])
+                    if (item.type == transform.type) {
+                        sender.inventory.setItemInMainHand(transform)
+                        sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
+                    } else {
+                        sender.sendMessage("§cCR §8| §rInvalid Option")
                     }
+                }
+                "unit" -> {
+                    if (!sender.hasPermission("redcorp.materia.unit")) {
+                        sender.sendMessage("§cCR §8| §rInvalid Permission")
+                        return false
+                    }
+                    val transform = CustomItems().Unit(item.amount, args[1])
                     if (item.type == transform.type) {
                         sender.inventory.setItemInMainHand(transform)
                         sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
@@ -284,6 +291,9 @@ class MateriaComplete : TabCompleter {
             if (sender.hasPermission("redcorp.materia.lanyard")) {
                 returnValue.add("lanyard")
             }
+            if (sender.hasPermission("redcorp.materia.unit")) {
+                returnValue.add("unit")
+            }
             if (sender.hasPermission("redcorp.materia.penis")) {
                 returnValue.add("penis")
             }
@@ -296,6 +306,11 @@ class MateriaComplete : TabCompleter {
         if (args.size == 2) {
             if (sender.hasPermission("redcorp.materia.lanyard")) {
                 if (args[0] == "lanyard") {
+                    return mutableListOf("red", "orange", "pink", "green", "blue")
+                }
+            }
+            if (sender.hasPermission("redcorp.materia.unit")) {
+                if (args[0] == "unit") {
                     return mutableListOf("red", "orange", "pink", "green", "blue")
                 }
             }

@@ -210,15 +210,15 @@ class CustomItems {
         return item
     }
 
-    fun RedLanyard (a : Int): ItemStack {
+    fun Lanyard (a : Int, type: String): ItemStack {
         val item = ItemStack(Material.NAME_TAG, a)
         val meta = item.itemMeta as ItemMeta
         val cm = meta.customModelDataComponent
 
-        cm.strings = mutableListOf("red-lanyard")
+        cm.strings = mutableListOf("${type}-lanyard")
 
         meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§c§lRed §f§lLanyard")
+        meta.setDisplayName("§c§l${type.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }} §f§lLanyard")
 
         val lore = listOf("§fUsed by the CCP for security")
         meta.lore = lore
@@ -227,73 +227,24 @@ class CustomItems {
         return item
     }
 
-    fun OrangeLanyard (a : Int): ItemStack {
-        val item = ItemStack(Material.NAME_TAG, a)
+    fun Unit (a : Int, type: String): ItemStack {
+        val item = ItemStack(Material.SUNFLOWER, a)
         val meta = item.itemMeta as ItemMeta
         val cm = meta.customModelDataComponent
 
-        cm.strings = mutableListOf("orange-lanyard")
+        cm.strings = mutableListOf("${type}-unit")
 
         meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§6§lOrange §f§lLanyard")
+        meta.setDisplayName("§c§lᴜɴɪᴛs")
 
-        val lore = listOf("§fUsed by the CCP for security")
+        val lore = listOf("§fCurrency of Insomnis")
         meta.lore = lore
         item.setItemMeta(meta)
 
         return item
     }
 
-    fun PinkLanyard (a : Int): ItemStack {
-        val item = ItemStack(Material.NAME_TAG, a)
-        val meta = item.itemMeta as ItemMeta
-        val cm = meta.customModelDataComponent
 
-        cm.strings = mutableListOf("pink-lanyard")
-
-        meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§d§lPink §f§lLanyard")
-
-        val lore = listOf("§fUsed by the CCP for security")
-        meta.lore = lore
-        item.setItemMeta(meta)
-
-        return item
-    }
-
-    fun GreenLanyard (a : Int): ItemStack {
-        val item = ItemStack(Material.NAME_TAG, a)
-        val meta = item.itemMeta as ItemMeta
-        val cm = meta.customModelDataComponent
-
-        cm.strings = mutableListOf("green-lanyard")
-
-        meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§a§lGreen §f§lLanyard")
-
-        val lore = listOf("§fUsed by the CCP for security")
-        meta.lore = lore
-        item.setItemMeta(meta)
-
-        return item
-    }
-
-    fun BlueLanyard (a : Int): ItemStack {
-        val item = ItemStack(Material.NAME_TAG, a)
-        val meta = item.itemMeta as ItemMeta
-        val cm = meta.customModelDataComponent
-
-        cm.strings = mutableListOf("blue-lanyard")
-
-        meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§9§lBlue §f§lLanyard")
-
-        val lore = listOf("§fUsed by the CCP for security")
-        meta.lore = lore
-        item.setItemMeta(meta)
-
-        return item
-    }
 
     fun DebugStick (a : Int): ItemStack {
         val item = ItemStack(Material.STICK, a)
