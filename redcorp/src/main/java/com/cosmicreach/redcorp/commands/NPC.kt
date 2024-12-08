@@ -207,6 +207,17 @@ class NPC(economy: Economy?, private val protocolManager: ProtocolManager?): Com
                     window.open()
                     return false
                 }
+                "shade" -> {
+                    player.sendMessage("§8Shade E §8|§r Looking for a lil something something?")
+                    val window = Window.single()
+                            .setViewer(player)
+                            .setTitle("§8§lShade E's Drug Store")
+                            .setGui(DrugStore(econ).makeGUI(player))
+                            .build()
+
+                    window.open()
+                    return false
+                }
             }
         }
         return false
