@@ -6,12 +6,14 @@ import com.cosmicreach.redcorp.items.TagItems
 import com.cosmicreach.redcorp.menus.AgingBarrel
 import com.cosmicreach.redcorp.menus.Grinder
 import com.cosmicreach.redcorp.menus.Teleport
+import com.cosmicreach.redcorp.utils.DrugTest
 import com.cosmicreach.redcorp.utils.TeleportActions
 import com.cosmicreach.redcorp.utils.Utils
 import de.tr7zw.nbtapi.NBT
 import de.tr7zw.nbtapi.NBTBlock
 import org.bukkit.*
 import org.bukkit.block.Block
+import org.bukkit.block.BlockFace
 import org.bukkit.block.data.Ageable
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
@@ -27,6 +29,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent
 import org.bukkit.event.inventory.InventoryType
 import org.bukkit.event.inventory.PrepareItemCraftEvent
 import org.bukkit.event.player.*
+import org.bukkit.event.world.StructureGrowEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
 import xyz.xenondevs.invui.inventory.VirtualInventory
@@ -249,10 +252,12 @@ class EventsListener(
             val p: Player = event.player
             val i: ItemStack = event.item!!
 
+            // Gavel
             if(Utils().checkID(i, arrayOf(2))) {
                 p.world.playSound(p.location, Sound.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR, 0.75f, 1.0f)
             }
 
+            // Grinder
             if(Utils().checkID(i, arrayOf(400))) {
                 val window = Window.single()
                     .setViewer(p)
@@ -263,6 +268,7 @@ class EventsListener(
                 window.open()
             }
 
+            // Debug Stick
             if(Utils().checkID(i, arrayOf(2886))) {
                 val nbt = NBTBlock(event.clickedBlock).data
 
@@ -271,8 +277,10 @@ class EventsListener(
                 Bukkit.broadcastMessage("§cCR §8|§r debug popy ${nbt.getBoolean("poppy")}")
                 Bukkit.broadcastMessage("§cCR §8|§r debug barrel ${nbt.getBoolean("barrel")}")
                 Bukkit.broadcastMessage("§cCR §8|§r debug ferment ${nbt.getBoolean("ferment")}")
+                Bukkit.broadcastMessage("§cCR §8|§r debug shroom ${nbt.getBoolean("shroom")}")
             }
 
+            // Player Teleport
             if(Utils().checkID(i, arrayOf(3))) {
                 val window = Window.single()
                         .setViewer(p)
@@ -283,6 +291,7 @@ class EventsListener(
                 window.open()
             }
 
+            // Death Teleport
             if(Utils().checkID(i, arrayOf(5))) {
                 if (p.lastDeathLocation is Location) {
                     teleportActions.runTeleportLocation(p, p.lastDeathLocation!!, 1)
@@ -292,6 +301,7 @@ class EventsListener(
 
             }
 
+            // Home Teleport
             if(Utils().checkID(i, arrayOf(6))) {
                 if (p.respawnLocation is Location) {
                     teleportActions.runTeleportLocation(p, p.respawnLocation!!, 2)
@@ -329,7 +339,7 @@ class EventsListener(
 
             // Sets Poppy Data
             if(Utils().checkID(i, arrayOf(440))) {
-                if (event.clickedBlock!!.type == Material.PODZOL) {
+                if (event.clickedBlock!!.type == Material.PODZOL && event.blockFace == BlockFace.UP) {
                     val location = event.clickedBlock!!.location
                     location.y += 1
 
@@ -340,6 +350,26 @@ class EventsListener(
                 } else {
                     event.isCancelled = true
                     p.sendMessage("§cCR §8|§r This must be placed on podzol :)")
+                }
+            }
+
+            // Sets Mushroom Data
+            if(Utils().checkID(i, arrayOf(450)) || Utils().checkID(i, arrayOf(451))) {
+                if (event.clickedBlock!!.type == Material.MYCELIUM && event.blockFace == BlockFace.UP) {
+                    val location = event.clickedBlock!!.location
+                    location.y += 1
+
+                    val block = location.block
+                    val nbt = NBTBlock(block).data
+
+                    if(i.type == Material.RED_MUSHROOM) {
+                        nbt.setBoolean("shroom", true)
+                    } else {
+                        nbt.setBoolean("truffle", true)
+                    }
+                } else {
+                    event.isCancelled = true
+                    p.sendMessage("§cCR §8|§r This must be placed on mycelium :)")
                 }
             }
 
@@ -376,6 +406,7 @@ class EventsListener(
             }
             nbt.clearNBT()
         }
+
         // Coke Stuff
         if (event.block.type == Material.BEETROOTS) {
             val nbt = NBTBlock(event.block).data
@@ -393,9 +424,13 @@ class EventsListener(
             nbt.clearNBT()
         }
 
-        // Poppy Stuff
-        if (event.block.type == Material.SWEET_BERRY_BUSH) {
+        // Drug Cleanup Stuff
+        if (event.block.type == Material.SWEET_BERRY_BUSH || event.block.type == Material.RED_MUSHROOM || event.block.type == Material.BROWN_MUSHROOM) {
             val nbt = NBTBlock(event.block).data
+            if (nbt.getBoolean("poppy") || nbt.getBoolean("shroom") || nbt.getBoolean("truffle")) {
+                event.isDropItems = false
+                event.block.drops.clear()
+            }
 
             nbt.clearNBT()
         }
@@ -413,6 +448,27 @@ class EventsListener(
 
                 nbt.clearNBT()
             }
+        }
+
+        // Shroom Stuff
+        if (event.block.type == Material.RED_MUSHROOM_BLOCK || event.block.type == Material.BROWN_MUSHROOM_BLOCK || event.block.type == Material.MUSHROOM_STEM) {
+            val nbt = NBTBlock(event.block).data
+            val shroom = nbt.getBoolean("shroom")
+            val truffle = nbt.getBoolean("truffle")
+            if (shroom) {
+                event.isDropItems = false
+                event.block.drops.clear()
+
+                event.block.world.dropItemNaturally(event.block.location, DrugItems().Shrooms(1))
+            }
+            if (truffle) {
+                event.isDropItems = false
+                event.block.drops.clear()
+
+                event.block.world.dropItemNaturally(event.block.location, DrugItems().Truffles(1))
+            }
+
+            nbt.clearNBT()
         }
 
         return
@@ -456,6 +512,33 @@ class EventsListener(
                         }
                     }
                 }
+
+                if (Utils().checkID(item, arrayOf(402))) {
+                    if (DrugTest().doTest(taggie)) {
+                        Bukkit.broadcastMessage("§cCR §8|§r AHHHHHHHH ${taggie.displayName} HAS DRUGS!!!!!")
+                    }
+                }
+            }
+        }
+        return
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    fun onGrow(event: StructureGrowEvent) {
+        if (event.species == TreeType.RED_MUSHROOM) {
+            event.blocks.forEach {
+                val block = it.block
+                val nbt = NBTBlock(block).data
+
+                nbt.setBoolean("shroom", true)
+            }
+        }
+        if (event.species == TreeType.BROWN_MUSHROOM) {
+            event.blocks.forEach {
+                val block = it.block
+                val nbt = NBTBlock(block).data
+
+                nbt.setBoolean("truffle", true)
             }
         }
         return

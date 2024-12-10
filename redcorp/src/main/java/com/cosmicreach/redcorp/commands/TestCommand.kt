@@ -13,10 +13,14 @@ class TestCommand(private val protocolManager: ProtocolManager?) : CommandExecut
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (sender !is Player) { return false }
         if (sender.hasPermission("redcorp.dev")) {
-            sender.sendMessage("§cCR §8| §c${sender.displayName} nothing here")
-            //sender.sendMessage("§cCR §8| §c Item id: ${ Utils().getID(sender.inventory.itemInMainHand)} ")
-            //sender.sendMessage("§cCR §8| §c Item meta: ${sender.inventory.itemInMainHand.itemMeta as ItemMeta} ")
-            sender.health = 0.0
+            sender.sendMessage("§cCR §8| §f${sender.displayName} nothing here")
+            sender.sendMessage("")
+            sender.sendMessage("§cCR §8| §f Item id: ${ Utils().getID(sender.inventory.itemInMainHand)} ")
+            sender.sendMessage("")
+            sender.sendMessage("§cCR §8| §f Item meta: ${sender.inventory.itemInMainHand.itemMeta as ItemMeta} ")
+            sender.sendMessage("")
+            sender.sendMessage("§cCR §8| §f Item Data: ${sender.inventory.itemInMainHand.data} ")
+            //sender.health = 0.0
         } else {
             sender.sendMessage("§cCR §8| §c${sender.displayName} kindly fuck off")
             return false

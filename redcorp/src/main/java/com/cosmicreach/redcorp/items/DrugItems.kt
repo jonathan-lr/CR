@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.inventory.meta.PotionMeta
+import org.bukkit.inventory.meta.components.FoodComponent
 import org.bukkit.potion.PotionType
 
 class DrugItems {
@@ -43,6 +44,27 @@ class DrugItems {
         meta.setDisplayName("§2§lᴀɢɪɴɢ ʙᴀʀʀᴇʟ")
         item.setItemMeta(meta)
 
+        return item
+    }
+
+    fun DrugStick (a : Int): ItemStack {
+        val item = ItemStack(Material.STICK, a)
+
+        NBT.modify(item) { nbt ->
+            nbt.setInteger("item-id", 402)
+        }
+
+        val meta = item.itemMeta as ItemMeta
+        val cm = meta.customModelDataComponent
+
+        cm.strings = mutableListOf("tag")
+
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+        meta.setCustomModelDataComponent(cm)
+
+        meta.setDisplayName("§c§lDrug Batton")
+
+        item.setItemMeta(meta)
         return item
     }
 
@@ -116,7 +138,8 @@ class DrugItems {
 
         val meta = item.itemMeta as ItemMeta
         val cm = meta.customModelDataComponent
-        val food = meta.food
+        val food = meta.food as FoodComponent
+
 
         food.setCanAlwaysEat(true)
         food.nutrition = 1
@@ -236,12 +259,53 @@ class DrugItems {
         return item
     }
 
+    // Shroom Stuff
+    fun Shrooms (a : Int): ItemStack {
+        val item = ItemStack(Material.RED_MUSHROOM, a)
+
+        NBT.modify(item) { nbt ->
+            nbt.setInteger("item-id", 450)
+        }
+
+        val meta = item.itemMeta as ItemMeta
+        val cm = meta.customModelDataComponent
+
+        cm.strings = mutableListOf("shroom")
+
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+        meta.setCustomModelDataComponent(cm)
+        meta.setDisplayName("§4§lsʜʀᴏᴏᴍs")
+        item.setItemMeta(meta)
+
+        return item
+    }
+
+    fun Truffles (a : Int): ItemStack {
+        val item = ItemStack(Material.BROWN_MUSHROOM, a)
+
+        NBT.modify(item) { nbt ->
+            nbt.setInteger("item-id", 451)
+        }
+
+        val meta = item.itemMeta as ItemMeta
+        val cm = meta.customModelDataComponent
+
+        cm.strings = mutableListOf("truffles")
+
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+        meta.setCustomModelDataComponent(cm)
+        meta.setDisplayName("§4§lᴛʀᴜғғʟᴇs")
+        item.setItemMeta(meta)
+
+        return item
+    }
+
     // Alchol Stuff
     fun Larger (a : Int): ItemStack {
         val item = ItemStack(Material.POTION, a)
 
         NBT.modify(item) { nbt ->
-            nbt.setInteger("item-id", 450)
+            nbt.setInteger("item-id", 460)
         }
 
         val meta = item.itemMeta as PotionMeta
@@ -263,7 +327,7 @@ class DrugItems {
         val item = ItemStack(Material.POTION, a)
 
         NBT.modify(item) { nbt ->
-            nbt.setInteger("item-id", 451)
+            nbt.setInteger("item-id", 461)
         }
 
         val meta = item.itemMeta as PotionMeta
@@ -285,7 +349,7 @@ class DrugItems {
         val item = ItemStack(Material.POTION, a)
 
         NBT.modify(item) { nbt ->
-            nbt.setInteger("item-id", 452)
+            nbt.setInteger("item-id", 462)
         }
 
         val meta = item.itemMeta as PotionMeta
@@ -307,7 +371,7 @@ class DrugItems {
         val item = ItemStack(Material.POTION, a)
 
         NBT.modify(item) { nbt ->
-            nbt.setInteger("item-id", 453)
+            nbt.setInteger("item-id", 463)
         }
 
         val meta = item.itemMeta as PotionMeta
@@ -316,7 +380,7 @@ class DrugItems {
         cm.strings = mutableListOf("vodka")
 
         meta.setMaxStackSize(16)
-        meta.basePotionType = PotionType.HEALING
+        meta.basePotionType = PotionType.SWIFTNESS
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
         meta.setDisplayName("§f§lᴠᴏᴅᴋᴀ")

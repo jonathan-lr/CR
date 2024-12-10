@@ -9,7 +9,7 @@ import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 
 class Materia : CommandExecutor {
-    private var types = arrayOf("mre", "weed", "coke", "poppy", "grinder", "barrel", "ivan", "arlbaro", "hammer", "gavel", "anchor", "scroll", "lanyard", "unit", "penis", "debug")
+    private var types = arrayOf("mre", "weed", "coke", "poppy", "shroom", "truffle", "grinder", "barrel", "ivan", "arlbaro", "hammer", "gavel", "anchor", "scroll", "lanyard", "unit", "penis", "debug", "drugstick")
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (sender !is Player) {return false}
@@ -58,6 +58,32 @@ class Materia : CommandExecutor {
                         return false
                     }
                     val transform = DrugItems().OpiumFlower(item.amount)
+                    if (item.type == transform.type) {
+                        sender.inventory.setItemInMainHand(transform)
+                        sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
+                    } else {
+                        sender.sendMessage("§cCR §8| §rInvalid Option")
+                    }
+                }
+                "shroom" -> {
+                    if (!sender.hasPermission("redcorp.materia.shroom")) {
+                        sender.sendMessage("§cCR §8| §rInvalid Permission")
+                        return false
+                    }
+                    val transform = DrugItems().Shrooms(item.amount)
+                    if (item.type == transform.type) {
+                        sender.inventory.setItemInMainHand(transform)
+                        sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
+                    } else {
+                        sender.sendMessage("§cCR §8| §rInvalid Option")
+                    }
+                }
+                "truffle" -> {
+                    if (!sender.hasPermission("redcorp.materia.truffle")) {
+                        sender.sendMessage("§cCR §8| §rInvalid Permission")
+                        return false
+                    }
+                    val transform = DrugItems().Truffles(item.amount)
                     if (item.type == transform.type) {
                         sender.inventory.setItemInMainHand(transform)
                         sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
@@ -236,6 +262,19 @@ class Materia : CommandExecutor {
                         sender.sendMessage("§cCR §8| §rInvalid Option")
                     }
                 }
+                "drugstick" -> {
+                    if (!sender.hasPermission("redcorp.materia.drugstick")) {
+                        sender.sendMessage("§cCR §8| §rInvalid Permission")
+                        return false
+                    }
+                    val transform = DrugItems().DrugStick(item.amount)
+                    if (item.type == transform.type) {
+                        sender.inventory.setItemInMainHand(transform)
+                        sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
+                    } else {
+                        sender.sendMessage("§cCR §8| §rInvalid Option")
+                    }
+                }
             }
 
 
@@ -263,6 +302,12 @@ class MateriaComplete : TabCompleter {
             }
             if (sender.hasPermission("redcorp.materia.poppy")) {
                 returnValue.add("poppy")
+            }
+            if (sender.hasPermission("redcorp.materia.shroom")) {
+                returnValue.add("shroom")
+            }
+            if (sender.hasPermission("redcorp.materia.truffle")) {
+                returnValue.add("truffle")
             }
             if (sender.hasPermission("redcorp.materia.grinder")) {
                 returnValue.add("grinder")
@@ -299,6 +344,9 @@ class MateriaComplete : TabCompleter {
             }
             if (sender.hasPermission("redcorp.materia.debug")) {
                 returnValue.add("debug")
+            }
+            if (sender.hasPermission("redcorp.materia.drugstick")) {
+                returnValue.add("drugstick")
             }
             return returnValue
         }

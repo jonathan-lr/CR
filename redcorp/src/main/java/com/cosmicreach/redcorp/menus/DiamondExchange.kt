@@ -1,11 +1,11 @@
 package com.cosmicreach.redcorp.menus
 
 import com.cosmicreach.redcorp.menus.items.BalanceItem
-import com.cosmicreach.redcorp.menus.items.DiamondBlockItem
-import com.cosmicreach.redcorp.menus.items.DiamondItem
+import com.cosmicreach.redcorp.menus.items.ShopItem
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.Material
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.SimpleItem
@@ -21,8 +21,8 @@ class DiamondExchange(private var econ: Economy) {
                         "# . x . . . y . #",
                         "# . . . . . . . #")
                 .addIngredient('#', border)
-                .addIngredient('x', DiamondItem(econ, balItem))
-                .addIngredient('y', DiamondBlockItem(econ, balItem))
+                .addIngredient('x', ShopItem(econ, balItem, ItemStack(Material.DIAMOND, 1), 100.0, 100.0, "§cReginald"))
+                .addIngredient('y', ShopItem(econ, balItem, ItemStack(Material.DIAMOND_BLOCK, 1), 900.0, 900.0, "§cReginald"))
                 .addIngredient('z', balItem)
                 .build()
         return gui
