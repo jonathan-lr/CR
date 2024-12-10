@@ -25,7 +25,8 @@ class ShopItem(
     private var vendorStock: String = "%vendor% §8|§r Sorry %player%§r, %item%§r is currently out of stock."
 ) : AbstractItem() {
     override fun getItemProvider(): ItemProvider {
-        val meta = shopItem.itemMeta as ItemMeta
+        val displayItem = shopItem.clone()
+        val meta = displayItem.itemMeta as ItemMeta
         var sell = ""
         var buy = ""
         if (sellPrice > 0.0) {
@@ -38,8 +39,8 @@ class ShopItem(
             sell = "§c§lOut of Stock"
         }
         meta.lore = mutableListOf(sell, buy)
-        shopItem.setItemMeta(meta)
-        return ItemWrapper(shopItem)
+        displayItem.setItemMeta(meta)
+        return ItemWrapper(displayItem)
     }
 
     override fun handleClick(clickType: ClickType, player: Player, event: InventoryClickEvent) {
@@ -64,6 +65,8 @@ class ShopItem(
                         econ.depositPlayer(player, buyPrice)
                         balItem.refreshBal()
                         gotItem = true
+
+                        return
                     }
                 } else {
                     player.sendMessage(replacePlaceholders(vendorCompleteBuy, player))
@@ -71,8 +74,10 @@ class ShopItem(
                     econ.depositPlayer(player, buyPrice)
                     balItem.refreshBal()
                     gotItem = true
+
+                    return
                 }
-                return
+                return@forEach
             }
             if (!gotItem) {
                 player.sendMessage(replacePlaceholders(vendorFailBuy, player))
