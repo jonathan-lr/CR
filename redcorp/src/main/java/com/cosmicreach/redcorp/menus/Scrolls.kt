@@ -1,7 +1,6 @@
 package com.cosmicreach.redcorp.menus
 
 import com.cosmicreach.redcorp.items.CustomItems
-import com.cosmicreach.redcorp.items.DungeonItems
 import com.cosmicreach.redcorp.menus.items.*
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.Material

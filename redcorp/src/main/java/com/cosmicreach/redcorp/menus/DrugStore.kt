@@ -5,7 +5,6 @@ import com.cosmicreach.redcorp.menus.items.*
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.Material
 import org.bukkit.entity.Player
-import org.bukkit.inventory.ItemStack
 import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.SimpleItem

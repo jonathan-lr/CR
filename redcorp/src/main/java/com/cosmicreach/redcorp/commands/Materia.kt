@@ -9,7 +9,7 @@ import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 
 class Materia : CommandExecutor {
-    private var types = arrayOf("mre", "weed", "coke", "poppy", "shroom", "truffle", "grinder", "barrel", "ivan", "arlbaro", "hammer", "gavel", "anchor", "scroll", "lanyard", "unit", "penis", "debug", "drugstick")
+    private var types = arrayOf("mre", "weed", "coke", "poppy", "shroom", "truffle", "grinder", "barrel", "coffee", "ivan", "arlbaro", "hammer", "gavel", "anchor", "scroll", "lanyard", "unit", "penis", "debug", "drugstick")
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (sender !is Player) {return false}
@@ -110,6 +110,19 @@ class Materia : CommandExecutor {
                         return false
                     }
                     val transform = DrugItems().AgingBarrel(item.amount)
+                    if (item.type == transform.type) {
+                        sender.inventory.setItemInMainHand(transform)
+                        sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
+                    } else {
+                        sender.sendMessage("§cCR §8| §rInvalid Option")
+                    }
+                }
+                "coffee" -> {
+                    if (!sender.hasPermission("redcorp.materia.coffee")) {
+                        sender.sendMessage("§cCR §8| §rInvalid Permission")
+                        return false
+                    }
+                    val transform = DrugItems().CoffieMachine(item.amount)
                     if (item.type == transform.type) {
                         sender.inventory.setItemInMainHand(transform)
                         sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
@@ -314,6 +327,9 @@ class MateriaComplete : TabCompleter {
             }
             if (sender.hasPermission("redcorp.materia.barrel")) {
                 returnValue.add("barrel")
+            }
+            if (sender.hasPermission("redcorp.materia.coffee")) {
+                returnValue.add("coffee")
             }
             if (sender.hasPermission("redcorp.materia.arlbaro")) {
                 returnValue.add("arlbaro")

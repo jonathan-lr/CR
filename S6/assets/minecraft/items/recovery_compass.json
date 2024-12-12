@@ -18,7 +18,7 @@
         "when": "grinder",
         "model": {
           "type": "model",
-          "model": "item/anchor"
+          "model": "item/drugs/grinder"
         }
       }
     ]

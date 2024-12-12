@@ -2,13 +2,9 @@ package com.cosmicreach.redcorp.items
 
 import de.tr7zw.nbtapi.NBT
 import org.bukkit.Material
-import org.bukkit.attribute.Attribute
-import org.bukkit.attribute.AttributeModifier
-import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
-import java.util.*
 
 class TagItems {
     fun tagStick (a : String, b : String, c : Int, gameId: Int): ItemStack {
@@ -27,7 +23,7 @@ class TagItems {
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
 
-        meta.setDisplayName("§c§lTag Stick")
+        meta.setDisplayName("§c§lᴛᴀɢ sᴛɪᴄᴋ")
 
         val lore = listOf("§9Current Tagger: $a", "§9Last Tagger: $b", "§9Times Passed: $c")
         meta.lore = lore

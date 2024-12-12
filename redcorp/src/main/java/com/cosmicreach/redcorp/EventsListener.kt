@@ -4,18 +4,17 @@ import com.cosmicreach.redcorp.items.CustomItems
 import com.cosmicreach.redcorp.items.DrugItems
 import com.cosmicreach.redcorp.items.TagItems
 import com.cosmicreach.redcorp.menus.AgingBarrel
+import com.cosmicreach.redcorp.menus.CoffeeMachine
 import com.cosmicreach.redcorp.menus.Grinder
 import com.cosmicreach.redcorp.menus.Teleport
 import com.cosmicreach.redcorp.utils.DrugTest
 import com.cosmicreach.redcorp.utils.TeleportActions
 import com.cosmicreach.redcorp.utils.Utils
-import de.tr7zw.nbtapi.NBT
 import de.tr7zw.nbtapi.NBTBlock
 import org.bukkit.*
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.block.data.Ageable
-import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -24,7 +23,6 @@ import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.inventory.InventoryMoveItemEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
 import org.bukkit.event.inventory.InventoryType
 import org.bukkit.event.inventory.PrepareItemCraftEvent
@@ -35,7 +33,6 @@ import org.bukkit.inventory.meta.ItemMeta
 import xyz.xenondevs.invui.inventory.VirtualInventory
 import xyz.xenondevs.invui.window.Window
 import java.lang.Integer.parseInt
-import java.lang.Runtime.Version
 import kotlin.random.Random
 
 
@@ -98,13 +95,14 @@ class EventsListener(
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    fun onBarrel(event : InventoryOpenEvent) {
+    fun onInventory(event : InventoryOpenEvent) {
         if (event.inventory.type == InventoryType.BARREL) {
             val p = event.player as Player
             val b = event.inventory.location?.block as Block
             val nbt = NBTBlock(b).data
             val temp = nbt.getBoolean("barrel")
             val fermenting = nbt.getBoolean("ferment")
+            var viewers = RedCorp.getPlugin().getAgingViewers()
             if (fermenting) {
                 event.isCancelled = true
                 p.sendMessage("§cCR §8|§r Sorry ${p.displayName} §rthat barrel is still fermenting!")
@@ -119,8 +117,46 @@ class EventsListener(
                     .build()
 
                 window.open()
+
+                if (viewers[b] != null) {
+                    viewers[b]?.add(window)
+                } else {
+                    viewers[b] = mutableListOf(window)
+                }
             }
         }
+
+        if (event.inventory.type == InventoryType.BREWING) {
+            val p = event.player as Player
+            val b = event.inventory.location?.block as Block
+            val nbt = NBTBlock(b).data
+            val temp = nbt.getBoolean("coffee")
+            val fermenting = nbt.getBoolean("ferment")
+            var viewers = RedCorp.getPlugin().getAgingViewers()
+            if (fermenting) {
+                event.isCancelled = true
+                p.sendMessage("§cCR §8|§r Sorry ${p.displayName} §rthat coffee is still brewing!")
+                return
+            }
+            if (temp) {
+                event.isCancelled = true
+                val window = Window.single()
+                    .setViewer(p)
+                    .setTitle("§6§lCoffee Machine")
+                    .setGui(CoffeeMachine(agingBarrels).makeGUI(b))
+                    .build()
+
+                window.open()
+
+                if (viewers[b] != null) {
+                    viewers[b]?.add(window)
+                } else {
+                    viewers[b] = mutableListOf(window)
+                }
+            }
+        }
+
+        return
     }
 
     /* :todo implement bow model and id for checking
@@ -384,6 +420,18 @@ class EventsListener(
                 nbt.setBoolean("barrel", true)
                 nbt.setBoolean("ferment", false)
             }
+
+            // Sets Coffee Data
+            if(Utils().checkID(i, arrayOf(403))) {
+                val location = event.clickedBlock!!.location
+                location.y += 1
+
+                val block = location.block
+                val nbt = NBTBlock(block).data
+
+                nbt.setBoolean("coffee", true)
+                nbt.setBoolean("ferment", false)
+            }
         }
         return
     }
@@ -445,6 +493,21 @@ class EventsListener(
                 event.block.drops.clear()
 
                 event.block.world.dropItemNaturally(event.block.location, DrugItems().AgingBarrel(1))
+
+                nbt.clearNBT()
+            }
+        }
+
+        // Coffee Machine
+        if (event.block.type == Material.BREWING_STAND) {
+            val nbt = NBTBlock(event.block).data
+            val temp = nbt.getBoolean("coffee")
+
+            if (temp) {
+                event.isDropItems = false
+                event.block.drops.clear()
+
+                event.block.world.dropItemNaturally(event.block.location, DrugItems().CoffieMachine(1))
 
                 nbt.clearNBT()
             }

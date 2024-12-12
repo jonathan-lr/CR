@@ -12,7 +12,6 @@ import xyz.xenondevs.invui.gui.PagedGui
 import xyz.xenondevs.invui.item.ItemProvider
 import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.controlitem.ControlItem
-import java.util.UUID
 
 class PlayerItem(private val p: Player, private val t: Player, private val teleportActions: TeleportActions) : ControlItem<PagedGui<*>>() {
     override fun getItemProvider(gui: PagedGui<*>): ItemProvider {

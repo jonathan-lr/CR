@@ -1,9 +1,7 @@
 package com.cosmicreach.redcorp.menus.items
 
 import com.cosmicreach.redcorp.items.CustomItems
-import com.cosmicreach.redcorp.items.DungeonItems
 import net.milkbowl.vault.economy.Economy
-import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent

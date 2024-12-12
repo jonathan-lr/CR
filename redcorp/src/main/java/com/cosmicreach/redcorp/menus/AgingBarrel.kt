@@ -3,7 +3,6 @@ package com.cosmicreach.redcorp.menus
 import com.cosmicreach.redcorp.menus.items.FermentItem
 import org.bukkit.Material
 import org.bukkit.block.Block
-import org.bukkit.inventory.ItemStack
 import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.inventory.VirtualInventory
 import xyz.xenondevs.invui.item.builder.ItemBuilder

@@ -1,0 +1,40 @@
+{
+  "model": {
+    "type": "select",
+    "property": "custom_model_data",
+    "fallback": {
+      "type": "model",
+      "model": "item/oak_sapling"
+    },
+    "cases": [
+      {
+        "when": "water",
+        "model": {
+          "type": "model",
+          "model": "item/water/hoe"
+        }
+      },
+      {
+        "when": "sky",
+        "model": {
+          "type": "model",
+          "model": "item/sky/hoe"
+        }
+      },
+      {
+        "when": "earth",
+        "model": {
+          "type": "model",
+          "model": "item/earth/hoe"
+        }
+      },
+      {
+        "when": "fire",
+        "model": {
+          "type": "model",
+          "model": "item/fire/hoe"
+        }
+      }
+    ]
+  } 
+}

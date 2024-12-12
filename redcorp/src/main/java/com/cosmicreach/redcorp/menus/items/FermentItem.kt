@@ -13,7 +13,6 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
 import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.inventory.VirtualInventory
-import xyz.xenondevs.invui.inventory.get
 import xyz.xenondevs.invui.item.ItemProvider
 import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.controlitem.ControlItem
@@ -34,7 +33,14 @@ class FermentItem(private val inv : VirtualInventory, private val block: Block) 
 
         if (fermentables.contains(item.type) && item.amount >= 4) {
             nbt.setBoolean("ferment", true)
-            gui.closeForAllViewers()
+            val viewers = RedCorp.getPlugin().getAgingViewers()
+            if (viewers[block] != null) {
+                viewers[block]?.forEach {
+                    it.viewer.closeInventory()
+                }
+                viewers[block]?.clear()
+            }
+            //gui.closeForAllViewers()
 
             var count = 5
             object : BukkitRunnable() {
@@ -50,17 +56,20 @@ class FermentItem(private val inv : VirtualInventory, private val block: Block) 
                             nbt.setBoolean("ferment", false)
                             player.world.playSound(player.location, Sound.BLOCK_BREWING_STAND_BREW, 0.75f, 1.0f)
 
-                            if(item.type == Material.WHEAT) {
-                                inv.setItemSilently(0, ItemStack(DrugItems().Larger(item.amount/4)))
-                            }
-                            if(item.type == Material.APPLE) {
-                                inv.setItemSilently(0, ItemStack(DrugItems().Cider(item.amount/4)))
-                            }
-                            if(item.type == Material.POTATO) {
-                                inv.setItemSilently(0, ItemStack(DrugItems().Vodka(item.amount/4)))
-                            }
-                            if(item.type == Material.SWEET_BERRIES) {
-                                inv.setItemSilently(0, ItemStack(DrugItems().Wine(item.amount/4)))
+                            when (item.type) {
+                                Material.WHEAT -> {
+                                    inv.setItemSilently(0, ItemStack(DrugItems().Larger(item.amount/4)))
+                                }
+                                Material.APPLE -> {
+                                    inv.setItemSilently(0, ItemStack(DrugItems().Cider(item.amount/4)))
+                                }
+                                Material.POTATO -> {
+                                    inv.setItemSilently(0, ItemStack(DrugItems().Vodka(item.amount/4)))
+                                }
+                                Material.SWEET_BERRIES -> {
+                                    inv.setItemSilently(0, ItemStack(DrugItems().Wine(item.amount/4)))
+                                }
+                                else -> {return}
                             }
 
                             cancel()

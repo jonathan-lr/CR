@@ -13,9 +13,9 @@ import com.sk89q.worldguard.protection.flags.registry.FlagConflictException
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.block.Block
 import org.bukkit.entity.Player
-import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.java.JavaPlugin
 import xyz.xenondevs.invui.inventory.VirtualInventory
+import xyz.xenondevs.invui.window.Window
 
 
 class RedCorp : JavaPlugin() {
@@ -27,6 +27,7 @@ class RedCorp : JavaPlugin() {
     private var particlePlayers = HashMap<Player, ParticleManager>()
     private var grinderPlayers = HashMap<Player, VirtualInventory>()
     private var agingBarrels = HashMap<Block, VirtualInventory>()
+    private val agingViewers = HashMap<Block, MutableList<Window>>()
     private var particleTeleport = HashMap<Player, ParticleManager>()
     private var economy: Economy? = null
     private var protocolManager: ProtocolManager? = null
@@ -125,6 +126,10 @@ class RedCorp : JavaPlugin() {
 
     fun getPassedTimes(): HashMap<Int, Int> {
         return passedTimes
+    }
+
+    fun getAgingViewers(): HashMap<Block, MutableList<Window>> {
+        return agingViewers
     }
 
     companion object {

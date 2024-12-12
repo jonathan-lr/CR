@@ -4,6 +4,7 @@ import com.comphenix.protocol.ProtocolManager
 import com.cosmicreach.redcorp.menus.*
 import com.cosmicreach.redcorp.utils.Utils
 import com.cosmicreach.redcorp.utils.DecideLoot
+import com.cosmicreach.redcorp.utils.DrugTest
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
@@ -85,6 +86,9 @@ class NPC(economy: Economy?, private val protocolManager: ProtocolManager?): Com
                     player.sendMessage("§cIvan §8|§r I suppose for this I could lower the bridge")
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "opendoor 10")
                     player.inventory.itemInMainHand.amount -= 1
+                }
+                "cop" -> {
+                    player.sendMessage("§cIvan §8|§r Drug Test ${DrugTest().doTest(player)}")
                 }
                 "kyle" -> {
                     val item = player.inventory.itemInMainHand

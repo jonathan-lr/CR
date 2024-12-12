@@ -2,13 +2,9 @@ package com.cosmicreach.redcorp.items
 
 import de.tr7zw.nbtapi.NBT
 import org.bukkit.Material
-import org.bukkit.attribute.Attribute
-import org.bukkit.attribute.AttributeModifier
-import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
-import java.util.*
 
 class DungeonItems {
     fun dungeonToken (): ItemStack {
@@ -25,7 +21,7 @@ class DungeonItems {
 
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§e§lDungeon Token")
+        meta.setDisplayName("§e§lᴅᴜɴɢᴇᴏɴ ᴛᴏᴋᴇɴ")
 
         val lore = listOf("A mysterious relic,", "Said to unlock the secrets of hidden labyrinths,", "Coveted by seekers of forgotten treasures.")
         meta.lore = lore
@@ -48,7 +44,7 @@ class DungeonItems {
 
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§4§lDungeon Token Hard Mode")
+        meta.setDisplayName("§4§lᴅᴜɴɢᴇᴏɴ ᴛᴏᴋᴇɴ ʜᴀʀᴅ")
 
         val lore = listOf("A mysterious relic,", "Said to unlock the secrets of hidden labyrinths,", "Coveted by seekers of forgotten treasures.")
         meta.lore = lore
@@ -71,7 +67,7 @@ class DungeonItems {
 
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§7§lAir §f§lDungeon Reward")
+        meta.setDisplayName("§7§lᴀɪʀ §f§lᴅᴜɴɢᴇᴏɴ ʀᴇᴡᴀʀᴅ")
 
         val lore = listOf("A rare prize,", "Soaring with the winds of adventure,", "Promising newfound heights to those who claim it.")
         meta.lore = lore
@@ -94,7 +90,7 @@ class DungeonItems {
 
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§c§lFire §f§lDungeon Reward")
+        meta.setDisplayName("§c§lғɪʀᴇ §f§lᴅᴜɴɢᴇᴏɴ ʀᴇᴡᴀʀᴅ")
 
         val lore = listOf("A blazing treasure,", "Forged in the crucible of challenge,", "Bestowing infernal power to those who dare to conquer the flames.")
         meta.lore = lore
@@ -117,7 +113,7 @@ class DungeonItems {
 
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§9§lWater §f§lDungeon Reward")
+        meta.setDisplayName("§9§lᴡᴀᴛᴇʀ §f§lᴅᴜɴɢᴇᴏɴ ʀᴇᴡᴀʀᴅ")
 
         val lore = listOf("A liquid gem,", "Drawn from the depths of mystery,", "Granting the bearer mastery over the ever-shifting tides of destiny.")
         meta.lore = lore
@@ -140,7 +136,7 @@ class DungeonItems {
 
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§2§lEarth §f§lDungeon Reward")
+        meta.setDisplayName("§2§lᴇᴀʀᴛʜ §f§lᴅᴜɴɢᴇᴏɴ ʀᴇᴡᴀʀᴅ")
 
         val lore = listOf("A rugged relic,", "Hewn from the depths of the earth's secrets,", "Granting resilience and grounding to those who unearth its power.")
         meta.lore = lore

@@ -1,0 +1,33 @@
+{
+  "model": {
+    "type": "select",
+    "property": "custom_model_data",
+    "fallback": {
+      "type": "model",
+      "model": "item/paper"
+    },
+    "cases": [
+      {
+        "when": "scroll-teleport",
+        "model": {
+          "type": "model",
+          "model": "item/scroll-teleport"
+        }
+      },
+      {
+        "when": "scroll-death",
+        "model": {
+          "type": "model",
+          "model": "item/scroll-death"
+        }
+      },
+      {
+        "when": "scroll-home",
+        "model": {
+          "type": "model",
+          "model": "item/scroll-home"
+        }
+      }
+    ]
+  }   
+}

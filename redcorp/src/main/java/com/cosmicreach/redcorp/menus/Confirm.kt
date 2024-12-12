@@ -1,7 +1,6 @@
 package com.cosmicreach.redcorp.menus
 
 import com.cosmicreach.redcorp.menus.items.*
-import net.milkbowl.vault.economy.Economy
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import xyz.xenondevs.invui.gui.Gui

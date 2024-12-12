@@ -1,0 +1,107 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"1": "item/custom/scroll-teleport",
+		"particle": "item/custom/scroll-teleport"
+	},
+	"elements": [
+		{
+			"name": "Handle Top",
+			"from": [-3, 27, 6],
+			"to": [19, 31, 10],
+			"faces": {
+				"north": {"uv": [0, 7, 5.5, 6], "texture": "#1"},
+				"east": {"uv": [1, 6, 0, 7], "texture": "#1"},
+				"south": {"uv": [0, 6, 5.5, 7], "texture": "#1"},
+				"west": {"uv": [4.5, 6, 5.5, 7], "texture": "#1"},
+				"up": {"uv": [5.5, 7, 0, 6], "texture": "#1"},
+				"down": {"uv": [5.5, 7, 0, 6], "texture": "#1"}
+			}
+		},
+		{
+			"name": "Paper",
+			"from": [-2, 4, 8],
+			"to": [18, 27, 8],
+			"faces": {
+				"north": {"uv": [0, 0, 5, 6], "texture": "#1"},
+				"south": {"uv": [5, 0, 10, 6], "texture": "#1"}
+			}
+		},
+		{
+			"name": "Handle Bottom",
+			"from": [-3, 0, 6],
+			"to": [19, 4, 10],
+			"faces": {
+				"north": {"uv": [0, 6, 5.5, 7], "texture": "#1"},
+				"east": {"uv": [0, 6, 1, 7], "texture": "#1"},
+				"south": {"uv": [0, 7, 5.5, 6], "texture": "#1"},
+				"west": {"uv": [4.5, 6, 5.5, 7], "texture": "#1"},
+				"up": {"uv": [5.5, 6, 0, 7], "texture": "#1"},
+				"down": {"uv": [5.5, 6, 0, 7], "texture": "#1"}
+			}
+		},
+		{
+			"name": "Ribbon Part 4",
+			"from": [-1, -6, 7.99],
+			"to": [3, 3, 7.99],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-3, -1, 2]},
+			"faces": {
+				"north": {"uv": [10, 0, 11, 2.25], "texture": "#1"},
+				"south": {"uv": [11, 0, 10, 2.25], "texture": "#1"}
+			}
+		},
+		{
+			"name": "Ribbon Part 4",
+			"from": [13, -6, 7.99],
+			"to": [17, 3, 7.99],
+			"rotation": {"angle": 0, "axis": "y", "origin": [11, -1, 2]},
+			"faces": {
+				"north": {"uv": [11, 0, 10, 2.25], "texture": "#1"},
+				"south": {"uv": [10, 0, 11, 2.25], "texture": "#1"}
+			}
+		}
+	],
+	"gui_light": "front",
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, -10, -0.25],
+			"scale": [0.385, 0.385, 0.385]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, -10, -0.25],
+			"scale": [0.385, 0.385, 0.385]
+		},
+		"firstperson_righthand": {
+			"rotation": [180, 32.5, 180],
+			"translation": [0.25, 0, 0],
+			"scale": [0.6, 0.6, 0.6]
+		},
+		"firstperson_lefthand": {
+			"rotation": [180, 32.5, 180],
+			"translation": [0.25, 0, 0],
+			"scale": [0.6, 0.6, 0.6]
+		},
+		"ground": {
+			"translation": [0, 5.35, 0],
+			"scale": [0.6, 0.6, 0.6]
+		},
+		"gui": {
+			"rotation": [-178.13, 28.95, -173.3],
+			"translation": [0, -4, 0],
+			"scale": [0.52, 0.52, 0.52]
+		},
+		"fixed": {
+			"translation": [0, -9.25, -0.4],
+			"scale": [1.2, 1.25, 1.2]
+		}
+	},
+	"groups": [
+		{
+			"name": "Diamond Permit",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [0, 1, 2, 3, 4]
+		}
+	]
+}

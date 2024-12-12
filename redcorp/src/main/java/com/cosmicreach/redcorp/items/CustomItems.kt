@@ -15,7 +15,7 @@ class CustomItems {
         cm.strings = mutableListOf("mre")
 
         meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§4§lRed§8Corp §f§lMRE")
+        meta.setDisplayName("§4§lʀᴇᴅ§8ᴄᴏʀᴘ §f§lᴍʀᴇ")
 
         val lore = listOf("§4§lRed§8Corp§f's sinister sustenance: A pork-packed MRE,", "§fA vile delicacy born of darkness,", "§fSating their hunger for power, one bite at a time.")
         meta.lore = lore
@@ -32,7 +32,7 @@ class CustomItems {
         cm.strings = mutableListOf("arlbaro")
 
         meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§c§lArlbaro Red")
+        meta.setDisplayName("§c§lᴀʀʟʙᴀʀᴏ ʀᴇᴅ")
 
         val lore = listOf("§fFumar §4acorta la vida")
         meta.lore = lore
@@ -49,7 +49,7 @@ class CustomItems {
         cm.strings = mutableListOf("hammer")
 
         meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§6§lYorick's Hammer")
+        meta.setDisplayName("§6§lʏᴏʀɪᴄᴋ's ʜᴀᴍᴍᴇʀ")
 
         val lore = listOf("§fWhen found, return to Yorick")
         meta.lore = lore
@@ -72,7 +72,7 @@ class CustomItems {
 
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§3§oIvan's Premium beets")
+        meta.setDisplayName("§3§oɪᴠᴀɴ's ᴘʀᴇᴍɪᴜᴍ ʙᴇᴇᴛs")
         item.setItemMeta(meta)
 
         return item
@@ -92,7 +92,7 @@ class CustomItems {
 
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§6§lJudges Hammer")
+        meta.setDisplayName("§6§lᴊᴜᴅɢᴇs ʜᴀᴍᴍᴇʀ")
 
         val lore = listOf("§fWhen found, return to Judge")
         meta.lore = lore
@@ -111,11 +111,11 @@ class CustomItems {
         val meta = item.itemMeta as ItemMeta
         val cm = meta.customModelDataComponent
 
-        cm.strings = mutableListOf("scroll")
+        cm.strings = mutableListOf("scroll-teleport")
 
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§3§lTeleport Scroll")
+        meta.setDisplayName("§3§lᴛᴇʟᴇᴘᴏʀᴛ sᴄʀᴏʟʟ")
 
         val lore = listOf("§fAllows teleport to player")
         meta.lore = lore
@@ -134,11 +134,11 @@ class CustomItems {
         val meta = item.itemMeta as ItemMeta
         val cm = meta.customModelDataComponent
 
-        cm.strings = mutableListOf("scroll")
+        cm.strings = mutableListOf("scroll-death")
 
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§3§lDeath Scroll")
+        meta.setDisplayName("§3§lᴅᴇᴀᴛʜ sᴄʀᴏʟʟ")
 
         val lore = listOf("§fAllows teleport to death location")
         meta.lore = lore
@@ -157,11 +157,11 @@ class CustomItems {
         val meta = item.itemMeta as ItemMeta
         val cm = meta.customModelDataComponent
 
-        cm.strings = mutableListOf("scroll")
+        cm.strings = mutableListOf("scroll-home")
 
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§3§lHome Scroll")
+        meta.setDisplayName("§3§lʜᴏᴍᴇ sᴄʀᴏʟʟ")
 
         val lore = listOf("§fAllows teleport to their bed")
         meta.lore = lore
@@ -184,7 +184,7 @@ class CustomItems {
 
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§3§lTeleport Anchor")
+        meta.setDisplayName("§3§lᴛᴇʟᴇᴘᴏʀᴛ ᴀɴᴄʜᴏʀ")
 
         val lore = listOf("§fAllows players to teleport to you")
         meta.lore = lore
@@ -201,7 +201,7 @@ class CustomItems {
         cm.strings = mutableListOf("penis")
 
         meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§3§lPenus")
+        meta.setDisplayName("§3§lᴘᴇɴᴜs")
 
         val lore = listOf("§fLol its kinda funny")
         meta.lore = lore
@@ -218,7 +218,7 @@ class CustomItems {
         cm.strings = mutableListOf("${type}-lanyard")
 
         meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§c§l${type.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }} §f§lLanyard")
+        meta.setDisplayName("§c§l${type.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }} §f§lʟᴀɴʏᴀʀᴅ")
 
         val lore = listOf("§fUsed by the CCP for security")
         meta.lore = lore
@@ -261,7 +261,7 @@ class CustomItems {
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
 
-        meta.setDisplayName("§c§lDebug Stick")
+        meta.setDisplayName("§c§lᴅᴇʙᴜɢ sᴛɪᴄᴋ")
 
         item.setItemMeta(meta)
         return item

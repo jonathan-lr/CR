@@ -7,7 +7,6 @@ import org.bukkit.NamespacedKey
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
 import org.bukkit.enchantments.Enchantment
-import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.EquipmentSlotGroup
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
@@ -16,7 +15,6 @@ import org.bukkit.inventory.meta.ArmorMeta
 import org.bukkit.inventory.meta.trim.ArmorTrim
 import org.bukkit.inventory.meta.trim.TrimMaterial
 import org.bukkit.inventory.meta.trim.TrimPattern
-import java.util.*
 
 class EarthItems {
     var speedAttribute = AttributeModifier(NamespacedKey(RedCorp.getPlugin(), "earth-speed"), -0.1, AttributeModifier.Operation.ADD_SCALAR, EquipmentSlotGroup.HEAD)

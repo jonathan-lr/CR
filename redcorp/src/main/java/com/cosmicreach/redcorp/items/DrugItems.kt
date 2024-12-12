@@ -62,9 +62,25 @@ class DrugItems {
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
 
-        meta.setDisplayName("§c§lDrug Batton")
+        meta.setDisplayName("§c§lᴅʀᴜɢ ʙᴀᴛᴛᴏɴ")
 
         item.setItemMeta(meta)
+        return item
+    }
+
+    fun CoffieMachine (a : Int): ItemStack {
+        val item = ItemStack(Material.BREWING_STAND, a)
+
+        NBT.modify(item) { nbt ->
+            nbt.setInteger("item-id", 403)
+        }
+
+        val meta = item.itemMeta as ItemMeta
+
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+        meta.setDisplayName("§2§lᴄᴏғғɪᴇ ᴍᴀᴄʜɪɴᴇ")
+        item.setItemMeta(meta)
+
         return item
     }
 
@@ -384,6 +400,70 @@ class DrugItems {
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
         meta.setDisplayName("§f§lᴠᴏᴅᴋᴀ")
+        item.setItemMeta(meta)
+
+        return item
+    }
+
+    // Coffee Stuff
+    fun weakCoffee (a : Int): ItemStack {
+        val item = ItemStack(Material.POTION, a)
+
+        NBT.modify(item) { nbt ->
+            nbt.setInteger("item-id", 470)
+        }
+
+        val meta = item.itemMeta as PotionMeta
+        val cm = meta.customModelDataComponent
+
+        cm.strings = mutableListOf("coffee")
+
+        meta.setMaxStackSize(16)
+        meta.basePotionType = PotionType.WEAVING
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+        meta.setCustomModelDataComponent(cm)
+        item.setItemMeta(meta)
+
+        return item
+    }
+
+    fun mediumCoffee (a : Int): ItemStack {
+        val item = ItemStack(Material.POTION, a)
+
+        NBT.modify(item) { nbt ->
+            nbt.setInteger("item-id", 471)
+        }
+
+        val meta = item.itemMeta as PotionMeta
+        val cm = meta.customModelDataComponent
+
+        cm.strings = mutableListOf("coffee")
+
+        meta.setMaxStackSize(16)
+        meta.basePotionType = PotionType.WEAVING
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+        meta.setCustomModelDataComponent(cm)
+        item.setItemMeta(meta)
+
+        return item
+    }
+
+    fun strongCoffee (a : Int): ItemStack {
+        val item = ItemStack(Material.POTION, a)
+
+        NBT.modify(item) { nbt ->
+            nbt.setInteger("item-id", 472)
+        }
+
+        val meta = item.itemMeta as PotionMeta
+        val cm = meta.customModelDataComponent
+
+        cm.strings = mutableListOf("coffee")
+
+        meta.setMaxStackSize(16)
+        meta.basePotionType = PotionType.WEAVING
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+        meta.setCustomModelDataComponent(cm)
         item.setItemMeta(meta)
 
         return item

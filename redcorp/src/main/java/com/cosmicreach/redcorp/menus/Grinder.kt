@@ -1,6 +1,5 @@
 package com.cosmicreach.redcorp.menus
 
-import com.cosmicreach.redcorp.ParticleManager
 import com.cosmicreach.redcorp.menus.items.GrindItem
 import org.bukkit.Material
 import org.bukkit.entity.Player
