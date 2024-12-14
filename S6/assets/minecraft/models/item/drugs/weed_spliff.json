@@ -2,8 +2,8 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-		"0": "block/weed_spliff",
-		"particle": "block/weed_spliff"
+		"0": "item/drugs/weed_spliff",
+		"particle": "item/drugs/weed_spliff"
 	},
 	"elements": [
 		{
