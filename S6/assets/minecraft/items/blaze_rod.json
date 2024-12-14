@@ -11,7 +11,7 @@
         "when": "weed",
         "model": {
           "type": "model",
-          "model": "item/drugs/blaze_rod"
+          "model": "item/drugs/weed_spliff"
         }
       }
     ]
