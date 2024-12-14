@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "item/custom/drugs/coca_leaf"
+		"layer0": "item/drugs/coca_leaf"
 	}
 }

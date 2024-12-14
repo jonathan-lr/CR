@@ -30,6 +30,8 @@ import org.bukkit.event.player.*
 import org.bukkit.event.world.StructureGrowEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
 import xyz.xenondevs.invui.inventory.VirtualInventory
 import xyz.xenondevs.invui.window.Window
 import java.lang.Integer.parseInt
@@ -50,7 +52,7 @@ class EventsListener(
     }
 
     private var ids = arrayOf(101, 102, 103, 104, 105, 106, 107, 108, 109, 110)
-    private var extendedIds = arrayOf(101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 50, 51, 52, 53, 54, 55, 69, 3, 4)
+    private var extendedIds = arrayOf(101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 50, 51, 52, 53, 54, 55, 69, 3, 4, 5, 6, 400, 401, 402, 403, 420, 421, 423, 430, 431, 432, 440, 441, 450, 451, 460, 461, 462, 463, 470, 471, 472)
     private var types = arrayOf("air", "fire", "water", "earth")
     private var items = arrayOf("pick", "shovel", "hoe", "axe", "sword", "helmet", "chestplate", "leggings", "boots", "wings")
 
@@ -79,16 +81,24 @@ class EventsListener(
 
     @EventHandler(priority = EventPriority.MONITOR)
     fun onAnvil(event : InventoryClickEvent) {
-        if (event.inventory.type == InventoryType.ANVIL || event.inventory.type == InventoryType.GRINDSTONE) {
+        if (event.inventory.type == InventoryType.ANVIL || event.inventory.type == InventoryType.GRINDSTONE || event.inventory.type == InventoryType.BREWING || event.inventory.type == InventoryType.FURNACE || event.inventory.type == InventoryType.BLAST_FURNACE || event.inventory.type == InventoryType.SMOKER || event.inventory.type == InventoryType.WORKBENCH || event.inventory.type == InventoryType.CRAFTER) {
             val player = event.whoClicked
             if (event.currentItem != null) {
                 val item = event.currentItem as ItemStack
                 if (player !is Player) { return }
                 if (Utils().checkID(item, extendedIds)) {
+                    if ((Utils().checkID(item, arrayOf(423)) && event.slotType == InventoryType.SlotType.RESULT) || (Utils().checkID(item, arrayOf(440, 441)) && event.inventory.type == InventoryType.SMOKER)) {
+                        return
+                    } else {
+                        event.isCancelled = true
+                        player.sendMessage("§cCR §8|§r Stop ${player.displayName} §rthats not allowed! Persistence may result in item loss.")
+                    }
+
+                    /*
                     val tempInv = player.inventory.contents
                     player.closeInventory()
-                    player.sendMessage("§cCR §8|§r Stop ${player.displayName} §rthats not allowed! Persistence may result in item loss.")
-                    player.inventory.contents = tempInv
+
+                    player.inventory.contents = tempInv*/
                 }
             }
         }
@@ -291,6 +301,45 @@ class EventsListener(
             // Gavel
             if(Utils().checkID(i, arrayOf(2))) {
                 p.world.playSound(p.location, Sound.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR, 0.75f, 1.0f)
+            }
+
+            // Use Drugs
+            if(Utils().checkID(i, arrayOf(423, 432, 441, 450, 451))) {
+                when (Utils().getID(i)) {
+                    //Spliff
+                    423 -> {
+                        p.world.playSound(p.location, Sound.ENTITY_BREEZE_INHALE, 0.2f, 1.0f)
+                        p.world.playSound(p.location, Sound.ENTITY_BLAZE_BURN, 0.2f, 1.0f)
+                        p.addPotionEffect(PotionEffect(PotionEffectType.HUNGER, 1200, 1, true, false, false))
+                        p.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 1200, 2, true, false, false))
+                    }
+                    //Coke
+                    432 -> {
+                        p.world.playSound(p.location, Sound.ENTITY_SNIFFER_SNIFFING, 0.75f, 1.0f)
+                        p.addPotionEffect(PotionEffect(PotionEffectType.SPEED, 1200, 2, true, false, false))
+                    }
+                    //Opium
+                    441 -> {
+                        p.world.playSound(p.location, Sound.ENTITY_SNIFFER_SNIFFING, 0.75f, 1.0f)
+                        p.addPotionEffect(PotionEffect(PotionEffectType.UNLUCK, 6000, 2, true, false, false))
+                    }
+                    //Shroom
+                    450 -> {
+                        if (event.clickedBlock!!.type == Material.MYCELIUM) { return }
+                        p.world.playSound(p.location, Sound.ENTITY_STRIDER_EAT, 0.75f, 1.0f)
+                        p.addPotionEffect(PotionEffect(PotionEffectType.DARKNESS, 1200, 2, true, false, false))
+                    }
+                    //Truffle
+                    451 -> {
+                        if (event.clickedBlock != null) {
+                            if (event.clickedBlock!!.type == Material.MYCELIUM) { return }
+                        }
+                        p.world.playSound(p.location, Sound.ENTITY_STRIDER_EAT, 0.75f, 1.0f)
+                        p.addPotionEffect(PotionEffect(PotionEffectType.DARKNESS, 1200, 2, true, false, false))
+                    }
+                }
+                p.inventory.itemInMainHand.amount -= 1
+
             }
 
             // Grinder
@@ -605,5 +654,12 @@ class EventsListener(
             }
         }
         return
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    fun onEat(event: PlayerItemConsumeEvent) {
+        event.player.sendMessage("§cCR §8|§r Test eat ${event.eventName}")
+        event.player.sendMessage("§cCR §8|§r Test eat ${event.hand}")
+        event.player.sendMessage("§cCR §8|§r Test eat ${event.item}")
     }
 }

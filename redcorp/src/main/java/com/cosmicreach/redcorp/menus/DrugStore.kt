@@ -19,11 +19,11 @@ class DrugStore(private var econ: Economy) {
                 "# . u . x . y . #",
                 "# . . v . w . . #")
             .addIngredient('#', border)
-            .addIngredient('u', ShopItem(econ, balItem, DrugItems().WeedSeed(1), 1000.0, 0.0, "§8Shade E", "%player%§r get out of here before the cops come!", "", "Fuck off %player%§r, you do not have enough Units this shizz!"))
-            .addIngredient('x', ShopItem(econ, balItem, DrugItems().CocaSeed(1), 2000.0, 0.0, "§8Shade E", "%player%§r get out of here before the cops come!", "", "Fuck off %player%§r, you do not have enough Units this shizz!"))
-            .addIngredient('y', ShopItem(econ, balItem, DrugItems().OpiumFlower(1), 2500.0, 0.0, "§8Shade E", "%player%§r get out of here before the cops come!", "", "Fuck off %player%§r, you do not have enough Units this shizz!"))
-            .addIngredient('v', ShopItem(econ, balItem, DrugItems().Shrooms(1), 5000.0, 0.0, "§8Shade E", "%player%§r get out of here before the cops come!", "", "Fuck off %player%§r, you do not have enough Units this shizz!"))
-            .addIngredient('w', ShopItem(econ, balItem, DrugItems().Truffles(1), 5000.0, 0.0, "§8Shade E", "%player%§r get out of here before the cops come!", "", "Fuck off %player%§r, you do not have enough Units this shizz!"))
+            .addIngredient('u', ShopItem(econ, balItem, DrugItems().WeedSeed(1), 1000.0, 0.0, "§8Shade E", "%vendor% §8|§r %player%§r get out of here before the cops come!", "", "%vendor% §8|§r Fuck off %player%§r, you do not have enough Units this shizz!"))
+            .addIngredient('x', ShopItem(econ, balItem, DrugItems().CocaSeed(1), 2000.0, 0.0, "§8Shade E", "%vendor% §8|§r %player%§r get out of here before the cops come!", "", "%vendor% §8|§r Fuck off %player%§r, you do not have enough Units this shizz!"))
+            .addIngredient('y', ShopItem(econ, balItem, DrugItems().OpiumFlower(1), 2500.0, 0.0, "§8Shade E", "%vendor% §8|§r %player%§r get out of here before the cops come!", "", "%vendor% §8|§r Fuck off %player%§r, you do not have enough Units this shizz!"))
+            .addIngredient('v', ShopItem(econ, balItem, DrugItems().Shrooms(1), 5000.0, 0.0, "§8Shade E", "%vendor% §8|§r %player%§r get out of here before the cops come!", "", "%vendor% §8|§r Fuck off %player%§r, you do not have enough Units this shizz!"))
+            .addIngredient('w', ShopItem(econ, balItem, DrugItems().Truffles(1), 5000.0, 0.0, "§8Shade E", "%vendor% §8|§r %player%§r get out of here before the cops come!", "", "%vendor% §8|§r Fuck off %player%§r, you do not have enough Units this shizz!"))
             .addIngredient('z', balItem)
             .build()
         return gui

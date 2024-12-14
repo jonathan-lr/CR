@@ -3,8 +3,8 @@
 	"parent": "sugar",
 	"texture_size": [32, 32],
 	"textures": {
-		"0": "item/custom/drugs/coke",
-		"particle": "item/custom/drugs/coke"
+		"0": "item/drugs/coke",
+		"particle": "item/drugs/coke"
 	},
 	"elements": [
 		{

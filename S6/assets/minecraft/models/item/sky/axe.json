@@ -2,12 +2,12 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [8, 8],
 	"textures": {
-		"1": "item/custom/sky/handle",
-		"3": "item/custom/sky/axe/head",
-		"4": "item/custom/sky/crystal",
-		"5": "item/custom/sky/splint",
-		"6": "item/custom/sky/supports",
-		"particle": "item/custom/sky/axe/head"
+		"1": "item/sky/handle",
+		"3": "item/sky/axe/head",
+		"4": "item/sky/crystal",
+		"5": "item/sky/splint",
+		"6": "item/sky/supports",
+		"particle": "item/sky/axe/head"
 	},
 	"elements": [
 		{

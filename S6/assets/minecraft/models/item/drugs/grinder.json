@@ -1,9 +1,9 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "item/custom/drugs/grinder_body",
-		"1": "item/custom/drugs/grinder_top",
-		"particle": "item/custom/drugs/grinder_body"
+		"0": "item/drugs/grinder_body",
+		"1": "item/drugs/grinder_top",
+		"particle": "item/drugs/grinder_body"
 	},
 	"elements": [
 		{

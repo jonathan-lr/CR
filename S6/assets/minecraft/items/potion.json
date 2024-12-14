@@ -1,0 +1,47 @@
+
+{
+  "model": {
+    "type": "select",
+    "property": "custom_model_data",
+    "fallback": {
+      "type": "model",
+      "model": "item/potion",
+	  "tints": [
+	    {
+	      "type": "minecraft:potion",
+          "default": -13083194
+        }
+      ]
+    },
+    "cases": [
+      {
+        "when": "larger",
+        "model": {
+          "type": "model",
+          "model": "item/drugs/larger"
+        }
+      },
+      {
+        "when": "cider",
+        "model": {
+          "type": "model",
+          "model": "item/drugs/cider"
+        }
+      },
+      {
+        "when": "vodka",
+        "model": {
+          "type": "model",
+          "model": "item/drugs/vodka"
+        }
+      },
+      {
+        "when": "wine",
+        "model": {
+          "type": "model",
+          "model": "item/drugs/wine"
+        }
+      }
+    ]
+  }   
+}

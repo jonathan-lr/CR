@@ -1,9 +1,9 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"1": "item/custom/dungeontoken/waterchip",
-		"2": "item/custom/dungeontoken/waterdrtexture",
-		"particle": "item/custom/dungeontoken/waterdrtexture"
+		"1": "item/dungeontoken/waterchip",
+		"2": "item/dungeontoken/waterdrtexture",
+		"particle": "item/dungeontoken/waterdrtexture"
 	},
 	"elements": [
 		{

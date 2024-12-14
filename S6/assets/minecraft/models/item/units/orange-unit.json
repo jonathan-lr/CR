@@ -2,8 +2,8 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-		"1": "item/custom/units/unit-orange",
-		"particle": "item/custom/units/unit-orange"
+		"1": "item/units/unit-orange",
+		"particle": "item/units/unit-orange"
 	},
 	"elements": [
 		{

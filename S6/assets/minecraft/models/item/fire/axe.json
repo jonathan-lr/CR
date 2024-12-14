@@ -2,10 +2,10 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-		"0": "item/custom/fire/handle",
-		"2": "item/custom/fire/axe/pipes",
-		"3": "item/custom/fire/axe/head",
-		"particle": "item/custom/fire/handle"
+		"0": "item/fire/handle",
+		"2": "item/fire/axe/pipes",
+		"3": "item/fire/axe/head",
+		"particle": "item/fire/handle"
 	},
 	"elements": [
 		{

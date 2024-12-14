@@ -2,8 +2,8 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-		"1": "item/custom/lanyard-chain",
-		"2": "item/custom/lanyard-pink"
+		"1": "item/lanyard-chain",
+		"2": "item/lanyard-pink"
 	},
 	"elements": [
 		{

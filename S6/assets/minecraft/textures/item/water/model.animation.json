@@ -1,0 +1,19 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.model.new": {
+			"loop": true,
+			"animation_length": 2,
+			"loop_delay": "1",
+			"bones": {
+				"water": {
+					"position": {
+						"0.0": [0, -2, 0],
+						"1.0": [0, -1, 0],
+						"2.0": [0, -2, 0]
+					}
+				}
+			}
+		}
+	}
+}

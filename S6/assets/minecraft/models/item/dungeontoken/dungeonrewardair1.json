@@ -1,9 +1,9 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"1": "item/custom/dungeontoken/airchip",
-		"2": "item/custom/dungeontoken/airdrtexture",
-		"particle": "item/custom/dungeontoken/airdrtexture"
+		"1": "item/dungeontoken/airchip",
+		"2": "item/dungeontoken/airdrtexture",
+		"particle": "item/dungeontoken/airdrtexture"
 	},
 	"elements": [
 		{

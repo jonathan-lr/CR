@@ -34,10 +34,28 @@ class BrewItem(private val inv : VirtualInventory, private val block: Block) : C
         if (beans!!.type == Material.AIR || fermenting) return
         if (water!!.type == Material.AIR ) return
 
+        var hasMilk = false
+        val notMilk: Boolean
+        if (milk != null) {
+            hasMilk = milk.type == Material.MILK_BUCKET
+            notMilk = (milk.type == Material.MILK_BUCKET || milk.type == Material.AIR)
+        } else {
+            notMilk = true
+        }
+        var hasSugar = false
+        val notSugar: Boolean
+        if (sugar != null) {
+            hasSugar = sugar.type == Material.SUGAR
+            notSugar = (sugar.type == Material.SUGAR || sugar.type == Material.AIR)
+        } else {
+            notSugar = true
+        }
+
         if (beans.type == Material.COCOA_BEANS &&
             beans.amount >= 1 &&
             beans.amount <= 3 &&
-            water.type == Material.POTION
+            water.type == Material.POTION &&
+            notMilk && notSugar
             ) {
 
             nbt.setBoolean("ferment", true)
@@ -63,14 +81,7 @@ class BrewItem(private val inv : VirtualInventory, private val block: Block) : C
                             nbt.setBoolean("ferment", false)
                             player.world.playSound(player.location, Sound.BLOCK_BREWING_STAND_BREW, 0.75f, 1.0f)
 
-                            var hasMilk = false
-                            if (milk != null) {
-                                hasMilk = milk.type == Material.MILK_BUCKET
-                            }
-                            var hasSugar = false
-                            if (sugar != null) {
-                                hasSugar = sugar.type == Material.SUGAR
-                            }
+
                             val coffeeName: String
                             val coffee: ItemStack
 
@@ -117,7 +128,11 @@ class BrewItem(private val inv : VirtualInventory, private val block: Block) : C
 
                             inv.setItemSilently(0, coffee)
                             inv.setItemSilently(1, ItemStack(Material.AIR))
-                            inv.setItemSilently(2, ItemStack(Material.AIR))
+                            if (hasMilk) {
+                                inv.setItemSilently(2, ItemStack(Material.BUCKET))
+                            } else {
+                                inv.setItemSilently(2, ItemStack(Material.AIR))
+                            }
                             inv.setItemSilently(3, ItemStack(Material.AIR))
 
 

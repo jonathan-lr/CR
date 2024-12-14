@@ -2,10 +2,10 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-		"1": "item/custom/fire/pick/head",
-		"2": "item/custom/fire/pick/pips",
-		"3": "item/custom/fire/handle",
-		"particle": "item/custom/fire/handle"
+		"1": "item/fire/pick/head",
+		"2": "item/fire/pick/pips",
+		"3": "item/fire/handle",
+		"particle": "item/fire/handle"
 	},
 	"elements": [
 		{

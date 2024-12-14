@@ -1,9 +1,9 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"1": "item/custom/dungeontoken/earthchip",
-		"2": "item/custom/dungeontoken/earthdrtexture",
-		"particle": "item/custom/dungeontoken/earthdrtexture"
+		"1": "item/dungeontoken/earthchip",
+		"2": "item/dungeontoken/earthdrtexture",
+		"particle": "item/dungeontoken/earthdrtexture"
 	},
 	"elements": [
 		{

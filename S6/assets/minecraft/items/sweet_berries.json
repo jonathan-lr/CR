@@ -1,0 +1,19 @@
+{
+  "model": {
+    "type": "select",
+    "property": "custom_model_data",
+    "fallback": {
+      "type": "model",
+      "model": "item/sweet_berries"
+    },
+    "cases": [
+      {
+        "when": "opium",
+        "model": {
+          "type": "model",
+          "model": "item/drugs/poppy"
+        }
+      }
+    ]
+  }   
+}

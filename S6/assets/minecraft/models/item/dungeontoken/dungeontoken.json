@@ -2,9 +2,9 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [4, 4],
 	"textures": {
-		"0": "item/custom/dungeontoken/tokentexture",
-		"2": "item/custom/dungeontoken/tokenfacetexture",
-		"particle": "item/custom/dungeontoken/tokentexture"
+		"0": "item/dungeontoken/tokentexture",
+		"2": "item/dungeontoken/tokenfacetexture",
+		"particle": "item/dungeontoken/tokentexture"
 	},
 	"elements": [
 		{

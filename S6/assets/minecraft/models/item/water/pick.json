@@ -2,10 +2,10 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [8, 8],
 	"textures": {
-		"0": "item/custom/water/handle",
-		"1": "item/custom/water/pick/head",
-		"2": "item/custom/water/water",
-		"particle": "item/custom/water/handle"
+		"0": "item/water/handle",
+		"1": "item/water/pick/head",
+		"2": "item/water/water",
+		"particle": "item/water/handle"
 	},
 	"elements": [
 		{

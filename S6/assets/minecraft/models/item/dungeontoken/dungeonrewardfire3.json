@@ -1,9 +1,9 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "item/custom/dungeontoken/firedrtexture",
-		"1": "item/custom/dungeontoken/firechip",
-		"particle": "item/custom/dungeontoken/firedrtexture"
+		"0": "item/dungeontoken/firedrtexture",
+		"1": "item/dungeontoken/firechip",
+		"particle": "item/dungeontoken/firedrtexture"
 	},
 	"elements": [
 		{

@@ -2,8 +2,8 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [8, 8],
 	"textures": {
-		"0": "item/custom/cigtexture",
-		"particle": "item/custom/cigtexture"
+		"0": "item/cigtexture",
+		"particle": "item/cigtexture"
 	},
 	"elements": [
 		{
