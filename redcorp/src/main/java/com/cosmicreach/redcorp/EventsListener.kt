@@ -304,7 +304,7 @@ class EventsListener(
             }
 
             // Use Drugs
-            if(Utils().checkID(i, arrayOf(423, 432, 441, 450, 451))) {
+            if(Utils().checkID(i, arrayOf(423, 432, 441))) {
                 when (Utils().getID(i)) {
                     //Spliff
                     423 -> {
@@ -322,20 +322,6 @@ class EventsListener(
                     441 -> {
                         p.world.playSound(p.location, Sound.ENTITY_SNIFFER_SNIFFING, 0.75f, 1.0f)
                         p.addPotionEffect(PotionEffect(PotionEffectType.UNLUCK, 6000, 2, true, false, false))
-                    }
-                    //Shroom
-                    450 -> {
-                        if (event.clickedBlock!!.type == Material.MYCELIUM) { return }
-                        p.world.playSound(p.location, Sound.ENTITY_STRIDER_EAT, 0.75f, 1.0f)
-                        p.addPotionEffect(PotionEffect(PotionEffectType.DARKNESS, 1200, 2, true, false, false))
-                    }
-                    //Truffle
-                    451 -> {
-                        if (event.clickedBlock != null) {
-                            if (event.clickedBlock!!.type == Material.MYCELIUM) { return }
-                        }
-                        p.world.playSound(p.location, Sound.ENTITY_STRIDER_EAT, 0.75f, 1.0f)
-                        p.addPotionEffect(PotionEffect(PotionEffectType.DARKNESS, 1200, 2, true, false, false))
                     }
                 }
                 p.inventory.itemInMainHand.amount -= 1
@@ -440,7 +426,11 @@ class EventsListener(
 
             // Sets Mushroom Data
             if(Utils().checkID(i, arrayOf(450)) || Utils().checkID(i, arrayOf(451))) {
-                if (event.clickedBlock!!.type == Material.MYCELIUM && event.blockFace == BlockFace.UP) {
+                if (event.clickedBlock == null) {
+                    p.world.playSound(p.location, Sound.ENTITY_STRIDER_EAT, 0.75f, 1.0f)
+                    p.addPotionEffect(PotionEffect(PotionEffectType.DARKNESS, 1200, 2, true, false, false))
+                    p.inventory.itemInMainHand.amount -= 1
+                } else if (event.clickedBlock!!.type == Material.MYCELIUM && event.blockFace == BlockFace.UP) {
                     val location = event.clickedBlock!!.location
                     location.y += 1
 
@@ -658,8 +648,21 @@ class EventsListener(
 
     @EventHandler(priority = EventPriority.MONITOR)
     fun onEat(event: PlayerItemConsumeEvent) {
-        event.player.sendMessage("§cCR §8|§r Test eat ${event.eventName}")
-        event.player.sendMessage("§cCR §8|§r Test eat ${event.hand}")
-        event.player.sendMessage("§cCR §8|§r Test eat ${event.item}")
+        if (Utils().checkID(event.item, arrayOf(460, 461, 462, 463))) {
+            when (Utils().getID(event.item)) {
+                460 -> {
+                    event.player.addPotionEffect(PotionEffect(PotionEffectType.NAUSEA, 1200, 1, true, false, false))
+                }
+                461 -> {
+                    event.player.addPotionEffect(PotionEffect(PotionEffectType.NAUSEA, 1200, 1, true, false, false))
+                }
+                462 -> {
+                    event.player.addPotionEffect(PotionEffect(PotionEffectType.NAUSEA, 2400, 1, true, false, false))
+                }
+                463 -> {
+                    event.player.addPotionEffect(PotionEffect(PotionEffectType.NAUSEA, -1, 1, true, false, false))
+                }
+            }
+        }
     }
 }

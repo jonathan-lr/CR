@@ -15,7 +15,7 @@ class DungeonToken(private var econ: Economy) {
 
     fun makeGUI(player: Player): Gui {
         val border = SimpleItem(ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).setDisplayName("§r"))
-        var balItem = BalanceItem(econ, player)
+        val balItem = BalanceItem(econ, player)
         val gui = Gui.normal()
                 .setStructure(
                         "# . . . z . . . #",

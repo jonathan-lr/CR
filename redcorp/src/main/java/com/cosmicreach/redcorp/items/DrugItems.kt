@@ -330,7 +330,7 @@ class DrugItems {
         cm.strings = mutableListOf("larger")
 
         meta.setMaxStackSize(16)
-        meta.basePotionType = PotionType.LEAPING
+        //meta.basePotionType = PotionType.LEAPING
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
         meta.setDisplayName("§e§lʟᴀʀɢᴇʀ")
@@ -352,7 +352,7 @@ class DrugItems {
         cm.strings = mutableListOf("cider")
 
         meta.setMaxStackSize(16)
-        meta.basePotionType = PotionType.FIRE_RESISTANCE
+        //meta.basePotionType = PotionType.FIRE_RESISTANCE
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
         meta.setDisplayName("§6§lᴄɪᴅᴇʀ")
@@ -374,7 +374,7 @@ class DrugItems {
         cm.strings = mutableListOf("wine")
 
         meta.setMaxStackSize(16)
-        meta.basePotionType = PotionType.HEALING
+        //meta.basePotionType = PotionType.HEALING
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
         meta.setDisplayName("§4§lᴡɪɴᴇ")
@@ -396,7 +396,7 @@ class DrugItems {
         cm.strings = mutableListOf("vodka")
 
         meta.setMaxStackSize(16)
-        meta.basePotionType = PotionType.SWIFTNESS
+        //meta.basePotionType = PotionType.SWIFTNESS
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
         meta.setDisplayName("§f§lᴠᴏᴅᴋᴀ")
