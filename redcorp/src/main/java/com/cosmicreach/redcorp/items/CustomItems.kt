@@ -1,10 +1,12 @@
 package com.cosmicreach.redcorp.items
 
 import de.tr7zw.nbtapi.NBT
+import org.bukkit.JukeboxSong
 import org.bukkit.Material
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
+import org.bukkit.inventory.meta.components.JukeboxPlayableComponent
 
 class CustomItems {
     fun MRE (a : Int): ItemStack {
@@ -244,8 +246,6 @@ class CustomItems {
         return item
     }
 
-
-
     fun DebugStick (a : Int): ItemStack {
         val item = ItemStack(Material.STICK, a)
 
@@ -262,6 +262,23 @@ class CustomItems {
         meta.setCustomModelDataComponent(cm)
 
         meta.setDisplayName("§c§lᴅᴇʙᴜɢ sᴛɪᴄᴋ")
+
+        item.setItemMeta(meta)
+        return item
+    }
+
+    fun TestSong (a : Int): ItemStack {
+        val item = ItemStack(Material.MUSIC_DISC_11, a)
+
+        NBT.modify(item) { nbt ->
+            nbt.setInteger("item-id", 666)
+        }
+
+        val meta = item.itemMeta as ItemMeta
+
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+
+        meta.setDisplayName("§c§lTest Song")
 
         item.setItemMeta(meta)
         return item

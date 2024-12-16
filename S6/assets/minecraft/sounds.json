@@ -1,37 +1,50 @@
 {
     "bd.dragging1": {
+		"category": "master",
 		"sounds": [
 			"custom/dragging1"
 		]
-	},   
+	},
 	"bd.dragging2": {
+		"category": "master",
 		"sounds": [
 			"custom/dragging2"
 		]
 	},
     "bd.closing-vault-door": {
+		"category": "master",
 		"sounds": [
 			"custom/closing-vault-door"
 		]
 	},
 	"bd.drawbridge-rattling": {
+		"category": "master",
 		"sounds": [
 			"custom/drawbridge-rattling"
 		]
 	},
 	"bd.thud": {
+		"category": "master",
 		"sounds": [
 			"custom/thud"
 		]
 	},
 	"awp.shoot": {
+		"category": "master",
 		"sounds": [
 			"custom/awp-shot"
 		]
 	},
 	"awp.hit": {
+		"category": "master",
 		"sounds": [
 			"custom/awp-hit"
+		]
+	},
+	"mwm.millet": {
+		"category": "master",
+		"sounds": [
+			"custom/mwm-millet"
 		]
 	}
 }

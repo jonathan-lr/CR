@@ -233,6 +233,50 @@ class NPC(economy: Economy?, private val protocolManager: ProtocolManager?): Com
                     window.open()
                     return false
                 }
+                "shaggy" -> {
+                    player.sendMessage("§2Shaggy §8|§r Hey yooo you got something to sell me")
+                    val window = Window.single()
+                            .setViewer(player)
+                            .setTitle("§2§lShaggy's Collection")
+                            .setGui(WeedStore(econ).makeGUI(player))
+                            .build()
+
+                    window.open()
+                    return false
+                }
+                "toad" -> {
+                    player.sendMessage("§5Toad §8|§r Waaahhooooo you got some mushrooms for me")
+                    val window = Window.single()
+                            .setViewer(player)
+                            .setTitle("§5§lToad's Psilocybin Emporium")
+                            .setGui(MushroomStore(econ).makeGUI(player))
+                            .build()
+
+                    window.open()
+                    return false
+                }
+                "charlie" -> {
+                    player.sendMessage("§6Charlie §8|§r This company is being bled like a stuffed pig Mac, and I got a paper trail to prove it. Check this out, take a look at this.")
+                    val window = Window.single()
+                            .setViewer(player)
+                            .setTitle("§6§lCharlie's Alcohol Intake")
+                            .setGui(AlcoholStore(econ).makeGUI(player))
+                            .build()
+
+                    window.open()
+                    return false
+                }
+                "wong" -> {
+                    player.sendMessage("§fWong §8|§r You like the name? I took it from, uh, my favorite historical character and my second-favorite Szechuan restaurant in Brooklyn. Now tell me what you want, before I gut ya like a pig and feed you to the skin louse!")
+                    val window = Window.single()
+                            .setViewer(player)
+                            .setTitle("§f§lWong's Noodle Business")
+                            .setGui(OpiumStore(econ).makeGUI(player))
+                            .build()
+
+                    window.open()
+                    return false
+                }
             }
         }
         return false

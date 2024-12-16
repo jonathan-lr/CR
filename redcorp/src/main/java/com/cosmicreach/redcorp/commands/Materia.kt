@@ -9,7 +9,7 @@ import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 
 class Materia : CommandExecutor {
-    private var types = arrayOf("mre", "weed", "coke", "poppy", "shroom", "truffle", "grinder", "barrel", "coffee", "ivan", "arlbaro", "hammer", "gavel", "anchor", "scroll", "lanyard", "unit", "penis", "debug", "drugstick")
+    private var types = arrayOf("mre", "weed", "coke", "poppy", "shroom", "truffle", "grinder", "barrel", "coffee", "ivan", "arlbaro", "hammer", "gavel", "anchor", "scroll", "lanyard", "unit", "penis", "debug", "song", "drugstick")
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (sender !is Player) {return false}
@@ -275,6 +275,19 @@ class Materia : CommandExecutor {
                         sender.sendMessage("§cCR §8| §rInvalid Option")
                     }
                 }
+                "song" -> {
+                    if (!sender.hasPermission("redcorp.materia.song")) {
+                        sender.sendMessage("§cCR §8| §rInvalid Permission")
+                        return false
+                    }
+                    val transform = CustomItems().TestSong(item.amount)
+                    if (item.type == transform.type) {
+                        sender.inventory.setItemInMainHand(transform)
+                        sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
+                    } else {
+                        sender.sendMessage("§cCR §8| §rInvalid Option")
+                    }
+                }
                 "drugstick" -> {
                     if (!sender.hasPermission("redcorp.materia.drugstick")) {
                         sender.sendMessage("§cCR §8| §rInvalid Permission")
@@ -360,6 +373,9 @@ class MateriaComplete : TabCompleter {
             }
             if (sender.hasPermission("redcorp.materia.debug")) {
                 returnValue.add("debug")
+            }
+            if (sender.hasPermission("redcorp.materia.song")) {
+                returnValue.add("song")
             }
             if (sender.hasPermission("redcorp.materia.drugstick")) {
                 returnValue.add("drugstick")
