@@ -154,7 +154,7 @@ class DrugItems {
 
         val meta = item.itemMeta as ItemMeta
         val cm = meta.customModelDataComponent
-        val food = meta.food as FoodComponent
+        val food = meta.food
 
 
         food.setCanAlwaysEat(true)

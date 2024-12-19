@@ -3,9 +3,11 @@ package com.cosmicreach.redcorp.items
 import de.tr7zw.nbtapi.NBT
 import org.bukkit.JukeboxSong
 import org.bukkit.Material
+import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
+import org.bukkit.inventory.meta.components.EquippableComponent
 import org.bukkit.inventory.meta.components.JukeboxPlayableComponent
 
 class CustomItems {
@@ -267,18 +269,26 @@ class CustomItems {
         return item
     }
 
-    fun TestSong (a : Int): ItemStack {
-        val item = ItemStack(Material.MUSIC_DISC_11, a)
+    fun TestWing (a : Int): ItemStack {
+        val item = ItemStack(Material.PAPER, a)
 
         NBT.modify(item) { nbt ->
             nbt.setInteger("item-id", 666)
         }
 
         val meta = item.itemMeta as ItemMeta
+        val cm = meta.customModelDataComponent
+        val equip = meta.equippable
+
+        cm.strings = mutableListOf("wing")
+        equip.slot = EquipmentSlot.CHEST
+        meta.isGlider = true
 
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+        meta.setCustomModelDataComponent(cm)
+        meta.setEquippable(equip)
 
-        meta.setDisplayName("§c§lTest Song")
+        meta.setDisplayName("§c§lTest Wing")
 
         item.setItemMeta(meta)
         return item

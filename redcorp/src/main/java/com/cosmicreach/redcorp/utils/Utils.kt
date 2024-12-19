@@ -1,6 +1,8 @@
 package com.cosmicreach.redcorp.utils
 
 import de.tr7zw.nbtapi.NBT
+import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
 class Utils {
@@ -38,5 +40,32 @@ class Utils {
         }
 
         return id
+    }
+
+    fun serializeMagicUnlocked(magicUnlocked: HashMap<Player, Boolean>): String {
+        return magicUnlocked.entries.joinToString(";") {
+            "${it.key.playerListName}=${it.value}"
+        }
+    }
+
+    fun deserializeMagicUnlocked(serializedData: String): HashMap<Player, Boolean> {
+        val magicUnlocked = HashMap<Player, Boolean>()
+        val entries = serializedData.split(";")
+
+        for (entry in entries) {
+            if (entry.isNotBlank()) {
+                val parts = entry.split("=")
+                if (parts.size == 2) {
+                    val playerName = parts[0]
+                    val unlocked = parts[1].toBoolean()
+                    val player = Bukkit.getPlayer(playerName)
+                    if (player != null) {
+                        magicUnlocked[player] = unlocked
+                    }
+                }
+            }
+        }
+
+        return magicUnlocked
     }
 }

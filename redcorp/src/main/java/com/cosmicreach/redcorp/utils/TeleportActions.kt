@@ -33,9 +33,6 @@ class TeleportActions(private val teleportingPlayers: HashMap<Player, Int>, priv
     }
 
     fun runTeleport(p: Player, t: Player) {
-        if (p !is Player) { return }
-        if (t !is Player) { return }
-
         if (teleportingPlayers.containsKey(p)) {
             p.sendMessage("§cCR §8|§r Sorry ${p.displayName} §ryou are already teleporting")
             return
@@ -85,9 +82,6 @@ class TeleportActions(private val teleportingPlayers: HashMap<Player, Int>, priv
     }
 
     fun runTeleportLocation(p: Player, t: Location, type: Int) {
-        if (p !is Player) { return }
-        if (t !is Location) { return }
-
         if (teleportingPlayers.containsKey(p)) {
             p.sendMessage("§cCR §8|§r Sorry ${p.displayName} §ryou are already teleporting")
             return

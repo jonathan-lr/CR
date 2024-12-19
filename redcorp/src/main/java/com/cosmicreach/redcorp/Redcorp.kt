@@ -6,6 +6,7 @@ import com.comphenix.protocol.ProtocolManager
 import com.cosmicreach.redcorp.commands.*
 import com.cosmicreach.redcorp.recipes.Drugs
 import com.cosmicreach.redcorp.utils.TeleportActions
+import com.cosmicreach.redcorp.utils.Utils
 import com.sk89q.worldguard.WorldGuard
 import com.sk89q.worldguard.protection.flags.Flag
 import com.sk89q.worldguard.protection.flags.StateFlag
@@ -34,6 +35,7 @@ class RedCorp : JavaPlugin() {
     private var taggedPlayer = HashMap<Int, Player>()
     private var lastTagged = HashMap<Int, Player>()
     private var passedTimes = HashMap<Int, Int>()
+    private var magicUnlocked = HashMap<Player, Boolean>()
 
     override fun onLoad() {
         logger.info("Registering Flags")
@@ -46,6 +48,12 @@ class RedCorp : JavaPlugin() {
         logger.info("Starting RedCrop Plugin")
 
         instance = this
+
+        // Deserialize Magic
+        val magicData = this.config.getString("configuration.magic")
+        if (magicData != null) {
+            magicUnlocked = Utils().deserializeMagicUnlocked(magicData)
+        }
 
         val rsp = server.servicesManager.getRegistration(Economy::class.java)
         if (rsp != null) {
@@ -72,6 +80,14 @@ class RedCorp : JavaPlugin() {
         //Register commands
         registerCommands()
         logger.info("Finished Registering Commands")
+    }
+
+    override fun onDisable() {
+        // Serialize
+        val serialized = Utils().serializeMagicUnlocked(magicUnlocked)
+        logger.info("Saving Config")
+        this.config.set("configuration.magic", serialized)
+        this.saveConfig()
     }
 
     private fun registerCommands() {
@@ -108,7 +124,7 @@ class RedCorp : JavaPlugin() {
             // you can use the existing flag, but this may cause conflicts - be sure to check type
             val existing: Flag<*>? = registry["deny-teleport-scroll"]
             if (existing is StateFlag) {
-                denyTeleportScroll = existing as StateFlag?
+                denyTeleportScroll = existing
             } else {
                 // types don't match - this is bad news! some other plugin conflicts with you
                 // hopefully this never actually happens
@@ -126,6 +142,10 @@ class RedCorp : JavaPlugin() {
 
     fun getPassedTimes(): HashMap<Int, Int> {
         return passedTimes
+    }
+
+    fun getMagicUnlocked(): HashMap<Player, Boolean> {
+        return magicUnlocked
     }
 
     fun getAgingViewers(): HashMap<Block, MutableList<Window>> {

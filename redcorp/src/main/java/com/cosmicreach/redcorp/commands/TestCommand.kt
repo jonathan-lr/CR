@@ -20,6 +20,11 @@ class TestCommand(private val protocolManager: ProtocolManager?) : CommandExecut
             sender.sendMessage("§cCR §8| §f Item meta: ${sender.inventory.itemInMainHand.itemMeta as ItemMeta} ")
             sender.sendMessage("")
             sender.sendMessage("§cCR §8| §f Item Data: ${sender.inventory.itemInMainHand.data} ")
+            sender.sendMessage("")
+            sender.sendMessage("§cCR §8| §f Item Data: ${sender.inventory.armorContents[0].itemMeta!!.itemModel} ")
+            sender.sendMessage("§cCR §8| §f Item Data: ${sender.inventory.armorContents[1].itemMeta!!.itemModel} ")
+            sender.sendMessage("§cCR §8| §f Item Data: ${sender.inventory.armorContents[2].itemMeta!!.itemModel} ")
+            sender.sendMessage("§cCR §8| §f Item Data: ${sender.inventory.armorContents[3].itemMeta!!.itemModel} ")
             //sender.health = 0.0
         } else {
             sender.sendMessage("§cCR §8| §c${sender.displayName} kindly fuck off")

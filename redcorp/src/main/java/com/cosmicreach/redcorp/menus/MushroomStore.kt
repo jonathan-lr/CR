@@ -20,8 +20,8 @@ class MushroomStore(private var econ: Economy) {
                 "# . . x . y . . #",
                 "# . . . . . . . #")
             .addIngredient('#', border)
-            .addIngredient('x', ShopItem(econ, balItem, DrugItems().Shrooms(1), 100.0, 50.0, "§5Toad"))
-            .addIngredient('y', ShopItem(econ, balItem, DrugItems().Truffles(1), 100.0, 50.0, "§5Toad"))
+            .addIngredient('x', ShopItem(econ, balItem, DrugItems().Shrooms(1), 0.0, 50.0, "§5Toad"))
+            .addIngredient('y', ShopItem(econ, balItem, DrugItems().Truffles(1), 0.0, 50.0, "§5Toad"))
             .addIngredient('z', balItem)
             .build()
         return gui

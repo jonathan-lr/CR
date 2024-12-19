@@ -43,6 +43,7 @@ configuration:
     leggings: 3
     boots: 3
     wings: 3
+  magic: ""
   yorick:
     survival: 'YorickSK'
     creative: '&#6767ab&lYorick'

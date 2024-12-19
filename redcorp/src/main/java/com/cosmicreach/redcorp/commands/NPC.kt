@@ -167,12 +167,41 @@ class NPC(economy: Economy?, private val protocolManager: ProtocolManager?): Com
                     DecideLoot(protocolManager).decideLoot(player, item)
                     return false
                 }
-                "reginald" -> {
-                    player.sendMessage("§cReginald §8|§r Welcome to the Diamond Exchange brother!")
+                "patrick" -> {
+                    val item = player.inventory.itemInMainHand
+                    if (Utils().checkID(item, arrayOf(432))) {
+                        player.sendMessage("§cPatrick Byattyman §8|§r Oooohhh is that for me?")
+                        val window = Window.single()
+                            .setViewer(player)
+                            .setTitle("§c§lPatrick's Prison Wallet")
+                            .setGui(CokeStore(econ).makeGUI(player))
+                            .build()
+
+                        window.open()
+                        return false
+                    } else {
+                        when (ThreadLocalRandom.current().nextInt(0, 4)) {
+                            0 -> player.sendMessage("§cPatrick Byattyman §8|§r Yeah ill trade some Diamonds.")
+                            1 -> player.sendMessage("§cPatrick Byattyman §8|§r Got anything other than the usual shiny gems?")
+                            2 -> player.sendMessage("§cPatrick Byattyman §8|§r Man I could do with some Devils Dandruff!")
+                            3 -> player.sendMessage("§cPatrick Byattyman §8|§r Hey ${player.displayName}, do you wanna build a snowman?")
+                        }
+                        val window = Window.single()
+                            .setViewer(player)
+                            .setTitle("§3§lDiamond Exchange")
+                            .setGui(DiamondExchange(econ, 1).makeGUI(player))
+                            .build()
+
+                        window.open()
+                        return false
+                    }
+                }
+                "sterling" -> {
+                    player.sendMessage("§4Sterling §8|§r Welcome to the Diamond Exchange brother!")
                     val window = Window.single()
                             .setViewer(player)
                             .setTitle("§3§lDiamond Exchange")
-                            .setGui(DiamondExchange(econ).makeGUI(player))
+                            .setGui(DiamondExchange(econ, 2).makeGUI(player))
                             .build()
 
                     window.open()

@@ -10,17 +10,17 @@ import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.SimpleItem
 
-class OpiumStore(private var econ: Economy) {
+class CokeStore(private var econ: Economy) {
     fun makeGUI(player: Player): Gui {
         val border = SimpleItem(ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).setDisplayName("§r"))
         val balItem = BalanceItem(econ, player)
         val gui = Gui.normal()
             .setStructure(
                 "# . . . z . . . #",
-                "# . . x . x . . #",
+                "# . . y . y . . #",
                 "# . . . . . . . #")
             .addIngredient('#', border)
-            .addIngredient('x', ShopItem(econ, balItem, DrugItems().Opium(1), 100.0, 50.0, "§fWong", "%vendor% §8|§r The CCP thanks you for your support!", "%vendor% §8|§r The CCP thanks you for your support!", "%vendor% §8|§r The CCP has no place for poor capitalist scum!", "%vendor% §8|§r The CCP has no place for capitalist scum with no product!"))
+            .addIngredient('y', ShopItem(econ, balItem, DrugItems().Coke(1), 0.0, 50.0, "§cPatrick Byattyman", "", "%vendor% §8|§r OHHHHH YEAH that hit the spot thanks %player%§r!", "", "%vendor% §8|§r Whattttt %player%§r! You ran out of Bolivian Marching Powder!", "%vendor% §8|§r Sorry %player%§r I don't sell any of my fun stuff."))
             .addIngredient('z', balItem)
             .build()
         return gui

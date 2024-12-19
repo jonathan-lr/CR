@@ -16,10 +16,8 @@ class DrugTest {
             }
         }
 
-        if (p.inventory.itemInOffHand != null) {
-            if (illegalDrugs.contains(Utils().getID(p.inventory.itemInOffHand))) {
-                hasDrugs = true
-            }
+        if (illegalDrugs.contains(Utils().getID(p.inventory.itemInOffHand))) {
+            hasDrugs = true
         }
 
         return hasDrugs
