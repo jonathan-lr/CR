@@ -41,6 +41,27 @@
           "type": "model",
           "model": "item/drugs/wine"
         }
+      },
+      {
+        "when": "coffee_small",
+        "model": {
+          "type": "model",
+          "model": "item/coffee/coffee_small"
+        }
+      },
+      {
+        "when": "coffee_medium",
+        "model": {
+          "type": "model",
+          "model": "item/coffee/coffee_medium"
+        }
+      },
+      {
+        "when": "coffee_large",
+        "model": {
+          "type": "model",
+          "model": "item/coffee/coffee_large"
+        }
       }
     ]
   }   

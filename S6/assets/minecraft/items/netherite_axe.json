@@ -34,6 +34,13 @@
           "type": "model",
           "model": "item/fire/axe"
         }
+      },
+      {
+        "when": "hammer",
+        "model": {
+          "type": "model",
+          "model": "item/yorickshammer"
+        }
       }
     ]
   } 
