@@ -1,4 +1,8 @@
 configuration:
+  mysql:
+    url: ''
+    user: ''
+    pass: ''
   air:
     pick: 3
     shovel: 3

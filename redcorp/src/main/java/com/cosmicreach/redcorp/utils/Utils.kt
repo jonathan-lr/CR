@@ -1,5 +1,6 @@
 package com.cosmicreach.redcorp.utils
 
+import com.cosmicreach.redcorp.RedCorp
 import de.tr7zw.nbtapi.NBT
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -48,8 +49,8 @@ class Utils {
         }
     }
 
-    fun deserializeMagicUnlocked(serializedData: String): HashMap<Player, Boolean> {
-        val magicUnlocked = HashMap<Player, Boolean>()
+    fun deserializeMagicUnlocked(serializedData: String) {
+        val magicUnlocked = RedCorp.getPlugin().getMagicUnlocked()
         val entries = serializedData.split(";")
 
         for (entry in entries) {
@@ -66,6 +67,6 @@ class Utils {
             }
         }
 
-        return magicUnlocked
+        return
     }
 }

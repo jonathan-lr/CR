@@ -11,12 +11,16 @@ import com.sk89q.worldguard.WorldGuard
 import com.sk89q.worldguard.protection.flags.Flag
 import com.sk89q.worldguard.protection.flags.StateFlag
 import com.sk89q.worldguard.protection.flags.registry.FlagConflictException
+import com.yourplugin.DatabaseManager
 import net.milkbowl.vault.economy.Economy
+import org.bukkit.Bukkit
 import org.bukkit.block.Block
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
+import org.bukkit.scheduler.BukkitRunnable
 import xyz.xenondevs.invui.inventory.VirtualInventory
 import xyz.xenondevs.invui.window.Window
+import java.sql.Connection
 
 
 class RedCorp : JavaPlugin() {
@@ -36,6 +40,10 @@ class RedCorp : JavaPlugin() {
     private var lastTagged = HashMap<Int, Player>()
     private var passedTimes = HashMap<Int, Int>()
     private var magicUnlocked = HashMap<Player, Boolean>()
+    private var fairiesFound = HashMap<Player, Array<Boolean>>()
+    private lateinit var databaseManager: DatabaseManager
+    private var lastExecutionTime: Long = 0
+    private var worldBorder: Double = 0.0
 
     override fun onLoad() {
         logger.info("Registering Flags")
@@ -49,11 +57,12 @@ class RedCorp : JavaPlugin() {
 
         instance = this
 
-        // Deserialize Magic
-        val magicData = this.config.getString("configuration.magic")
-        if (magicData != null) {
-            magicUnlocked = Utils().deserializeMagicUnlocked(magicData)
-        }
+        val url = this.config.getString("configuration.mysql.url")!!
+        val user = this.config.getString("configuration.mysql.user")!!
+        val pass = this.config.getString("configuration.mysql.pass")!!
+
+        databaseManager = DatabaseManager(url, user, pass, logger)
+        databaseManager.connect()
 
         val rsp = server.servicesManager.getRegistration(Economy::class.java)
         if (rsp != null) {
@@ -80,14 +89,18 @@ class RedCorp : JavaPlugin() {
         //Register commands
         registerCommands()
         logger.info("Finished Registering Commands")
+
+        logger.info("Staring World Border Setup")
+        val world = Bukkit.getWorld("world")
+        if (world != null) {
+            worldBorder = world.worldBorder.size
+        }
+        startHourly()
+        logger.info("Finished World Border Setup")
     }
 
     override fun onDisable() {
-        // Serialize
-        val serialized = Utils().serializeMagicUnlocked(magicUnlocked)
-        logger.info("Saving Config")
-        this.config.set("configuration.magic", serialized)
-        this.saveConfig()
+        databaseManager.disconnect()
     }
 
     private fun registerCommands() {
@@ -132,6 +145,34 @@ class RedCorp : JavaPlugin() {
         }
     }
 
+    private fun startHourly() {
+        lastExecutionTime = System.currentTimeMillis()
+
+        object : BukkitRunnable() {
+            override fun run() {
+                val currentTime = System.currentTimeMillis()
+
+                // Check if one hour (3600000 milliseconds) has passed
+                if (currentTime - lastExecutionTime >= 3600000) {
+                    lastExecutionTime = currentTime // Reset the last execution time
+
+                    // Run your hourly task
+                    logger.info("CR Running Hourly Expansion")
+                    performExpanse()
+                }
+            }
+        }.runTaskTimer(this,0L,1200L )
+    }
+
+    private fun performExpanse() {
+        // Add the logic for your hourly task here
+        Bukkit.broadcastMessage("§cCR §8|§r The World Border hourly expansion has happened!")
+        val world = Bukkit.getWorld("world") ?: return
+        val wb = world.worldBorder
+        worldBorder += 10
+        wb.setSize(worldBorder, 5L)
+    }
+
     fun getTaggedPlayers(): HashMap<Int, Player> {
         return taggedPlayer
     }
@@ -150,6 +191,22 @@ class RedCorp : JavaPlugin() {
 
     fun getAgingViewers(): HashMap<Block, MutableList<Window>> {
         return agingViewers
+    }
+
+    fun getConnection(): Connection? {
+        return databaseManager.getConnection()
+    }
+
+    fun getFairies(): HashMap<Player, Array<Boolean>> {
+        return fairiesFound
+    }
+
+    fun getWorldBorder(): Double {
+        return worldBorder
+    }
+
+    fun setWorldBorder(wb: Double) {
+        worldBorder = wb
     }
 
     companion object {

@@ -1,14 +1,20 @@
 package com.cosmicreach.redcorp.items
 
 import de.tr7zw.nbtapi.NBT
+import org.bukkit.Bukkit
 import org.bukkit.JukeboxSong
 import org.bukkit.Material
+import org.bukkit.entity.Item
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
+import org.bukkit.inventory.meta.SkullMeta
 import org.bukkit.inventory.meta.components.EquippableComponent
 import org.bukkit.inventory.meta.components.JukeboxPlayableComponent
+import org.bukkit.profile.PlayerProfile
+import java.net.URL
+import java.util.UUID
 
 class CustomItems {
     fun MRE (a : Int): ItemStack {
@@ -289,6 +295,25 @@ class CustomItems {
         meta.setEquippable(equip)
 
         meta.setDisplayName("§c§lTest Wing")
+
+        item.setItemMeta(meta)
+        return item
+    }
+
+    fun Fairy (a: Int, id: String): ItemStack {
+        val item = ItemStack(Material.PLAYER_HEAD, a)
+        val profile = Bukkit.createPlayerProfile(UUID.randomUUID())
+        val textures = profile.textures
+        val url = URL("https://textures.minecraft.net/texture/8241989eac173a87489233b11239e54643609de929189b9e10e598b5cc896021")
+        textures.skin = url
+        profile.setTextures(textures)
+
+        NBT.modify(item) { nbt ->
+            nbt.setInteger("item-id", 700+id.toInt())
+        }
+
+        val meta = item.itemMeta as SkullMeta
+        meta.ownerProfile = profile
 
         item.setItemMeta(meta)
         return item

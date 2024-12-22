@@ -2,6 +2,7 @@ package com.cosmicreach.redcorp.commands
 
 import com.comphenix.protocol.ProtocolManager
 import com.cosmicreach.redcorp.menus.*
+import com.cosmicreach.redcorp.npcs.Merlin
 import com.cosmicreach.redcorp.utils.Utils
 import com.cosmicreach.redcorp.utils.DecideLoot
 import com.cosmicreach.redcorp.utils.DrugTest
@@ -18,6 +19,7 @@ class NPC(economy: Economy?, private val protocolManager: ProtocolManager?): Com
     private val econ = economy as Economy
     private var kyleStage = HashMap<Player, Int>()
     private val confirm = HashMap<Player, Boolean>()
+    private val merlinConfirm = HashMap<Player, Boolean>()
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (sender is Player) {
             sender.sendMessage("§cCR §8| §c${sender.displayName} kindly fuck off")
@@ -230,14 +232,7 @@ class NPC(economy: Economy?, private val protocolManager: ProtocolManager?): Com
                     return false
                 }
                 "merlin" -> {
-                    player.sendMessage("§dMerlin §8|§r Need some scrolls traveler?")
-                    val window = Window.single()
-                            .setViewer(player)
-                            .setTitle("§6§lScroll Exchange")
-                            .setGui(Scrolls(econ).makeGUI(player))
-                            .build()
-
-                    window.open()
+                    Merlin(player, econ, merlinConfirm).run()
                     return false
                 }
                 "shade" -> {

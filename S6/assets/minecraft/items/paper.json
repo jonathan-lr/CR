@@ -27,6 +27,13 @@
           "type": "model",
           "model": "item/scroll-home"
         }
+      },
+      {
+        "when": "wing",
+        "model": {
+          "type": "model",
+          "model": "item/wing"
+        }
       }
     ]
   }   

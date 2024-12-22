@@ -416,7 +416,7 @@ class DrugItems {
         val meta = item.itemMeta as PotionMeta
         val cm = meta.customModelDataComponent
 
-        cm.strings = mutableListOf("coffee")
+        cm.strings = mutableListOf("coffee_small")
 
         meta.setMaxStackSize(16)
         meta.basePotionType = PotionType.WEAVING
@@ -437,7 +437,7 @@ class DrugItems {
         val meta = item.itemMeta as PotionMeta
         val cm = meta.customModelDataComponent
 
-        cm.strings = mutableListOf("coffee")
+        cm.strings = mutableListOf("coffee_medium")
 
         meta.setMaxStackSize(16)
         meta.basePotionType = PotionType.WEAVING
@@ -458,7 +458,7 @@ class DrugItems {
         val meta = item.itemMeta as PotionMeta
         val cm = meta.customModelDataComponent
 
-        cm.strings = mutableListOf("coffee")
+        cm.strings = mutableListOf("coffee_large")
 
         meta.setMaxStackSize(16)
         meta.basePotionType = PotionType.WEAVING

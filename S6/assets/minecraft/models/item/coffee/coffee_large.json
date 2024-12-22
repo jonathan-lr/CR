@@ -3,8 +3,8 @@
 	"parent": "coffee_medium",
 	"texture_size": [32, 32],
 	"textures": {
-		"0": "textures/item/coffee/coffee_texture",
-		"particle": "textures/item/coffee/coffee_texture"
+		"0": "item/coffee/coffee_texture",
+		"particle": "item/coffee/coffee_texture"
 	},
 	"elements": [
 		{

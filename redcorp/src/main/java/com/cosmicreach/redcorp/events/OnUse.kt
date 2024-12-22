@@ -1,5 +1,6 @@
 package com.cosmicreach.redcorp.events
 
+import com.cosmicreach.redcorp.RedCorp
 import com.cosmicreach.redcorp.menus.Grinder
 import com.cosmicreach.redcorp.menus.Teleport
 import com.cosmicreach.redcorp.utils.TeleportActions
@@ -12,6 +13,7 @@ import org.bukkit.Sound
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
@@ -42,11 +44,49 @@ class OnUse (
                 420, 430 -> farmlandDrug()
                 440 -> podzolDrug()
                 450, 451 -> myceliumDrug()
+                in 700..720 -> setData()
+            }
+        } else {
+            p = event.player
 
+            if (event.clickedBlock != null) {
+                if(event.clickedBlock!!.type == Material.PLAYER_HEAD) {
+                    if (event.hand == EquipmentSlot.HAND) {
+                        fairy()
+                    }
+                }
             }
         }
 
         return
+    }
+
+    private fun fairy() {
+        val nbt = NBTBlock(event.clickedBlock).data
+        val fairy = nbt.getBoolean("fairy")
+        val fairyId = nbt.getInteger("fairyId") - 700
+
+        if (fairy) {
+            val fairiesFound = RedCorp.getPlugin().getFairies()
+            val hasMagic = RedCorp.getPlugin().getMagicUnlocked()
+            if (hasMagic[p] == true) {
+                p.sendMessage("§cCR §8|§r Your power is beyond this creature!")
+            } else {
+                if (!fairiesFound.containsKey(p)) {
+                    fairiesFound[p] = Array(20) { false }
+                }
+                val playerFairies = fairiesFound[p]
+                if (playerFairies!![fairyId]) {
+                    p.sendMessage("§cCR §8|§r You already found Fairy #${fairyId+1} silly")
+                } else {
+                    p.world.playSound(p.location, Sound.ENTITY_ALLAY_DEATH, 0.75f, 1.0f)
+                    playerFairies[fairyId] = true
+                    fairiesFound[p] = playerFairies
+                    p.sendMessage("§cCR §8|§r You found Fairy #${fairyId+1} you have found ${playerFairies.count { it }}/20")
+                }
+                //p.sendMessage("debug ${playerFairies.joinToString(", ")}")
+            }
+        }
     }
 
     private fun gavel() {
@@ -89,12 +129,14 @@ class OnUse (
     private fun debug() {
         val nbt = NBTBlock(event.clickedBlock).data
 
-        Bukkit.broadcastMessage("§cCR §8|§r debug weed ${nbt.getBoolean("weed")}")
-        Bukkit.broadcastMessage("§cCR §8|§r debug coke ${nbt.getBoolean("coke")}")
-        Bukkit.broadcastMessage("§cCR §8|§r debug popy ${nbt.getBoolean("poppy")}")
-        Bukkit.broadcastMessage("§cCR §8|§r debug barrel ${nbt.getBoolean("barrel")}")
-        Bukkit.broadcastMessage("§cCR §8|§r debug ferment ${nbt.getBoolean("ferment")}")
-        Bukkit.broadcastMessage("§cCR §8|§r debug shroom ${nbt.getBoolean("shroom")}")
+        p.sendMessage("§cCR §8|§r debug weed ${nbt.getBoolean("weed")}")
+        p.sendMessage("§cCR §8|§r debug coke ${nbt.getBoolean("coke")}")
+        p.sendMessage("§cCR §8|§r debug popy ${nbt.getBoolean("poppy")}")
+        p.sendMessage("§cCR §8|§r debug barrel ${nbt.getBoolean("barrel")}")
+        p.sendMessage("§cCR §8|§r debug ferment ${nbt.getBoolean("ferment")}")
+        p.sendMessage("§cCR §8|§r debug shroom ${nbt.getBoolean("shroom")}")
+        p.sendMessage("§cCR §8|§r debug truffle ${nbt.getBoolean("truffle")}")
+        p.sendMessage("§cCR §8|§r debug fairy ${nbt.getBoolean("fairy")}")
     }
 
     private fun playerTeleport() {
@@ -175,6 +217,10 @@ class OnUse (
             440 -> nbt.setBoolean("poppy", true)
             450 -> nbt.setBoolean("shroom", true)
             451 -> nbt.setBoolean("truffle", true)
+            in 700..720 -> {
+                nbt.setBoolean("fairy", true)
+                nbt.setInteger("fairyId", id)
+            }
         }
     }
 

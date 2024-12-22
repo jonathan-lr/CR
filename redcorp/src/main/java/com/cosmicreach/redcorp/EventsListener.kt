@@ -1,5 +1,6 @@
 package com.cosmicreach.redcorp
 
+import com.cosmicreach.redcorp.db.Magic
 import com.cosmicreach.redcorp.events.*
 import com.cosmicreach.redcorp.utils.TeleportActions
 import org.bukkit.*
@@ -146,11 +147,15 @@ class EventsListener(
     @EventHandler(priority = EventPriority.MONITOR)
     fun onJoin(event: PlayerJoinEvent) {
         val magicUnlocked = RedCorp.getPlugin().getMagicUnlocked()
-        if (!magicUnlocked.containsKey(event.player)) {
+        val connection = RedCorp.getPlugin().getConnection()!!
+
+        val result = Magic(connection).getPlayer(event.player.uniqueId)
+
+        if (result == null) {
+            Magic(connection).addPlayer(event.player.uniqueId)
             magicUnlocked[event.player] = false
-            Bukkit.broadcastMessage("§cCR §8|§r ${event.player.displayName} has been added to magic list")
         } else {
-            Bukkit.broadcastMessage("§cCR §8|§r ${event.player.displayName} was already in the magic list")
+            magicUnlocked[event.player] = result
         }
     }
 }

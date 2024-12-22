@@ -7,7 +7,10 @@ import org.bukkit.event.world.StructureGrowEvent
 class OnGrow (private val event : StructureGrowEvent) {
 
     fun run() {
-        if (event.species == TreeType.RED_MUSHROOM) {
+        val ogNbt = NBTBlock(event.location.block).data
+        val shroom = ogNbt.getBoolean("shroom")
+        val truffle = ogNbt.getBoolean("truffle")
+        if (shroom && event.species == TreeType.RED_MUSHROOM) {
             event.blocks.forEach {
                 val block = it.block
                 val nbt = NBTBlock(block).data
@@ -15,7 +18,7 @@ class OnGrow (private val event : StructureGrowEvent) {
                 nbt.setBoolean("shroom", true)
             }
         }
-        if (event.species == TreeType.BROWN_MUSHROOM) {
+        if (truffle && event.species == TreeType.BROWN_MUSHROOM) {
             event.blocks.forEach {
                 val block = it.block
                 val nbt = NBTBlock(block).data

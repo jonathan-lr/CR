@@ -22,6 +22,7 @@ class OnBreak (private val event : BlockBreakEvent) {
             Material.RED_MUSHROOM_BLOCK, Material.BROWN_MUSHROOM_BLOCK, Material.MUSHROOM_STEM -> breakMush()
             Material.BARREL -> agingBarrel()
             Material.BREWING_STAND -> coffeeMachine()
+            Material.PLAYER_HEAD -> drugBreak()
             else -> {}
         }
 
@@ -59,7 +60,7 @@ class OnBreak (private val event : BlockBreakEvent) {
     }
 
     private fun drugBreak () {
-        if (nbt.getBoolean("poppy") || nbt.getBoolean("shroom") || nbt.getBoolean("truffle")) {
+        if (nbt.getBoolean("poppy") || nbt.getBoolean("shroom") || nbt.getBoolean("truffle") || nbt.getBoolean("fairy")) {
             event.isDropItems = false
             b.drops.clear()
         }

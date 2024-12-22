@@ -42,11 +42,11 @@ class FermentItem(private val inv : VirtualInventory, private val block: Block) 
             }
             //gui.closeForAllViewers()
 
-            var count = 5
+            var count = 60
             object : BukkitRunnable() {
                 override fun run() {
                     when (count) {
-                        5 -> {
+                        60 -> {
                             player.world.playSound(player.location, Sound.BLOCK_BREWING_STAND_BREW, 0.75f, 1.0f)
                             player.sendMessage("§cCR §8|§r Starting Ferment")
                         }

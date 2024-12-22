@@ -1,5 +1,7 @@
 package com.cosmicreach.redcorp.menus
 
+import com.cosmicreach.redcorp.RedCorp
+import com.cosmicreach.redcorp.db.StockEx
 import com.cosmicreach.redcorp.menus.items.BalanceItem
 import com.cosmicreach.redcorp.menus.items.ShopItem
 import net.milkbowl.vault.economy.Economy
@@ -11,31 +13,36 @@ import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.SimpleItem
 
 class DiamondExchange(private var econ: Economy, private var type: Int) {
+    private val connection = RedCorp.getPlugin().getConnection()!!
 
     fun makeGUI(player: Player): Gui {
         val border = SimpleItem(ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).setDisplayName("§r"))
-        var balItem = BalanceItem(econ, player)
+        val balItem = BalanceItem(econ, player)
         if (type == 1) {
+            val diamond = StockEx(connection).getInfo("diamond_p")
+            val diamondB = StockEx(connection).getInfo("diamond_block_p")
             val gui = Gui.normal()
                 .setStructure(
                     "# . . . z . . . #",
                     "# . x . . . y . #",
                     "# . . . . . . . #")
                 .addIngredient('#', border)
-                .addIngredient('x', ShopItem(econ, balItem, ItemStack(Material.DIAMOND, 1), 100.0, 98.0, "§cPatrick Byattyman"))
-                .addIngredient('y', ShopItem(econ, balItem, ItemStack(Material.DIAMOND_BLOCK, 1), 900.0, 882.0, "§cPatrick Byattyman"))
+                .addIngredient('x', ShopItem(econ, balItem, ItemStack(Material.DIAMOND, 1), diamond.sellPrice, diamond.buyPrice, "§cPatrick Byattyman"))
+                .addIngredient('y', ShopItem(econ, balItem, ItemStack(Material.DIAMOND_BLOCK, 1), diamondB.sellPrice, diamondB.buyPrice, "§cPatrick Byattyman"))
                 .addIngredient('z', balItem)
                 .build()
             return gui
         } else {
+            val diamond = StockEx(connection).getInfo("diamond_s")
+            val diamondB = StockEx(connection).getInfo("diamond_block_s")
             val gui = Gui.normal()
                 .setStructure(
                     "# . . . z . . . #",
                     "# . x . . . y . #",
                     "# . . . . . . . #")
                 .addIngredient('#', border)
-                .addIngredient('x', ShopItem(econ, balItem, ItemStack(Material.DIAMOND, 1), 102.0, 100.0, "§6Sterling"))
-                .addIngredient('y', ShopItem(econ, balItem, ItemStack(Material.DIAMOND_BLOCK, 1), 918.0, 900.0, "§6Sterling"))
+                .addIngredient('x', ShopItem(econ, balItem, ItemStack(Material.DIAMOND, 1), diamond.sellPrice, diamond.buyPrice, "§6Sterling"))
+                .addIngredient('y', ShopItem(econ, balItem, ItemStack(Material.DIAMOND_BLOCK, 1), diamondB.sellPrice, diamondB.buyPrice, "§6Sterling"))
                 .addIngredient('z', balItem)
                 .build()
             return gui
