@@ -6,11 +6,8 @@ import com.comphenix.protocol.ProtocolManager
 import com.cosmicreach.redcorp.commands.*
 import com.cosmicreach.redcorp.recipes.Drugs
 import com.cosmicreach.redcorp.utils.TeleportActions
-import com.cosmicreach.redcorp.utils.Utils
 import com.sk89q.worldguard.WorldGuard
-import com.sk89q.worldguard.protection.flags.Flag
 import com.sk89q.worldguard.protection.flags.StateFlag
-import com.sk89q.worldguard.protection.flags.registry.FlagConflictException
 import com.yourplugin.DatabaseManager
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.Bukkit
@@ -25,7 +22,6 @@ import java.sql.Connection
 
 class RedCorp : JavaPlugin() {
     private var config = getConfig()
-    private var denyTeleportScroll: StateFlag? = null
     private var teleportingPlayers = HashMap<Player, Int>()
     private var teleportStarter = HashMap<Player, Player>()
     private var teleportSolo = HashMap<Player, Int>()
@@ -44,11 +40,12 @@ class RedCorp : JavaPlugin() {
     private lateinit var databaseManager: DatabaseManager
     private var lastExecutionTime: Long = 0
     private var worldBorder: Double = 0.0
+    private val playerRegions = mutableMapOf<Player, Set<String>>()
 
     override fun onLoad() {
         logger.info("Registering Flags")
         //Register Flags
-        registerFlag()
+        RedCorpFlags.registerFlags()
         logger.info("Finished Registering Flags")
     }
 
@@ -74,7 +71,7 @@ class RedCorp : JavaPlugin() {
         config.options().copyDefaults(true);
         saveConfig()
 
-        val teleportActions = TeleportActions(teleportingPlayers, particleTeleport, denyTeleportScroll, teleportStarter, teleportSolo)
+        val teleportActions = TeleportActions(teleportingPlayers, particleTeleport, teleportStarter, teleportSolo)
 
         logger.info("Registering Listeners")
         //Register event listeners
@@ -123,26 +120,6 @@ class RedCorp : JavaPlugin() {
         getCommand("addrelic")?.setExecutor(AddRelic(this, config))
         getCommand("addrelic")?.tabCompleter = AddRelicComplete()
         //getCommand("setnicks")?.setExecutor(SetNicks(this, config))
-    }
-
-    private fun registerFlag() {
-        val registry = WorldGuard.getInstance().flagRegistry
-        try {
-            // create a flag with the name "my-custom-flag", defaulting to true
-            val flag = StateFlag("deny-teleport-scroll", true)
-            registry.register(flag)
-            denyTeleportScroll = flag // only set our field if there was no error
-        } catch (e: FlagConflictException) {
-            // some other plugin registered a flag by the same name already.
-            // you can use the existing flag, but this may cause conflicts - be sure to check type
-            val existing: Flag<*>? = registry["deny-teleport-scroll"]
-            if (existing is StateFlag) {
-                denyTeleportScroll = existing
-            } else {
-                // types don't match - this is bad news! some other plugin conflicts with you
-                // hopefully this never actually happens
-            }
-        }
     }
 
     private fun startHourly() {
@@ -209,11 +186,52 @@ class RedCorp : JavaPlugin() {
         worldBorder = wb
     }
 
+    fun getPlayerRegions(): MutableMap<Player, Set<String>> {
+        return playerRegions
+    }
+
+    fun getFlags(): RedCorpFlags {
+        return RedCorpFlags
+    }
+
+    fun getEcon(): Economy?{
+        return economy
+    }
+
     companion object {
         private lateinit var instance: RedCorp
 
         fun getPlugin(): RedCorp {
             return instance
+        }
+    }
+}
+
+object RedCorpFlags {
+    var CHECK_DRUGS: StateFlag = StateFlag("check-for-drugs", false)
+    var DENY_TP: StateFlag = StateFlag("deny-teleport-scroll", false)
+
+    fun registerFlags() {
+        val registry = WorldGuard.getInstance().flagRegistry
+        try {
+            registry.register(CHECK_DRUGS)
+        } catch (e: Exception) {
+            val existing = registry["check-for-drugs"]
+            if (existing is StateFlag) {
+                CHECK_DRUGS = existing
+            } else {
+                throw IllegalStateException("Unexpected flag type!")
+            }
+        }
+        try {
+            registry.register(DENY_TP)
+        } catch (e: Exception) {
+            val existing = registry["deny-teleport-scroll"]
+            if (existing is StateFlag) {
+                DENY_TP = existing
+            } else {
+                throw IllegalStateException("Unexpected flag type!")
+            }
         }
     }
 }

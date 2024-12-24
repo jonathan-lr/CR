@@ -2,6 +2,7 @@ package com.cosmicreach.redcorp.commands
 
 import com.comphenix.protocol.ProtocolManager
 import com.cosmicreach.redcorp.menus.*
+import com.cosmicreach.redcorp.npcs.Cops
 import com.cosmicreach.redcorp.npcs.Merlin
 import com.cosmicreach.redcorp.utils.Utils
 import com.cosmicreach.redcorp.utils.DecideLoot
@@ -233,6 +234,11 @@ class NPC(economy: Economy?, private val protocolManager: ProtocolManager?): Com
                 }
                 "merlin" -> {
                     Merlin(player, econ, merlinConfirm).run()
+                    return false
+                }
+                in (1..20).map { "cop-$it" } -> {
+                    val copNumber = args[1].removePrefix("cop-").toInt()
+                    Cops(copNumber, player).run()
                     return false
                 }
                 "shade" -> {

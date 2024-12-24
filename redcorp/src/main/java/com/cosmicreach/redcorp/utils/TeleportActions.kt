@@ -12,7 +12,7 @@ import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
 
 
-class TeleportActions(private val teleportingPlayers: HashMap<Player, Int>, private val particleTeleport: HashMap<Player, ParticleManager>, private val denyTeleportScroll: StateFlag?, private val teleportStarter: HashMap<Player, Player>, private val teleportSolo: HashMap<Player, Int>) {
+class TeleportActions(private val teleportingPlayers: HashMap<Player, Int>, private val particleTeleport: HashMap<Player, ParticleManager>, private val teleportStarter: HashMap<Player, Player>, private val teleportSolo: HashMap<Player, Int>) {
     fun available(player: Player): MutableList<Player> {
         val players = Bukkit.getServer().onlinePlayers
         val list = mutableListOf<Player>()
@@ -115,14 +115,19 @@ class TeleportActions(private val teleportingPlayers: HashMap<Player, Int>, priv
     }
 
     private fun testRegion(location: Location): Boolean {
-        val container = WorldGuard.getInstance().platform.regionContainer
-        val query = container.createQuery()
-        val set = query.getApplicableRegions(BukkitAdapter.adapt(location))
-        if (set != null) {
-            return set.testState(null, denyTeleportScroll)
-        } else {
-            return false
+        val world = BukkitAdapter.adapt(location.world)
+        val regionManager = WorldGuard.getInstance().platform.regionContainer[world]
+        val flags = RedCorp.getPlugin().getFlags()
+        var shouldBlock = true
+        if (regionManager != null) {
+            val regions = regionManager.getApplicableRegions(BukkitAdapter.adapt(location).toVector().toBlockPoint())
+            for (region in regions) {
+                if (region.getFlag(flags.DENY_TP) == StateFlag.State.ALLOW) {
+                    shouldBlock = false
+                }
+            }
         }
+        return shouldBlock
     }
 
     private fun teleport(p: Player, t: Player) {

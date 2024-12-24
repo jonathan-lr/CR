@@ -49,8 +49,15 @@ class OnHit (private val event : EntityDamageByEntityEvent) {
                 }
 
                 if (Utils().checkID(item, arrayOf(402))) {
+                    val econ = RedCorp.getPlugin().getEcon()
                     if (DrugTest().doTest(taggie)) {
-                        Bukkit.broadcastMessage("§cCR §8|§r AHHHHHHHH ${taggie.displayName} HAS DRUGS!!!!!")
+                        DrugTest().arrestPlayer(taggie)
+                        taggie.sendMessage("§cCR §8|§r ${tagger.displayName}§r has arrested you!")
+                        tagger.sendMessage("§cCR §8|§r You have been awarded ${econ!!.format(100.0)} for a job well done!")
+                        econ.depositPlayer(tagger, 100.0)
+                    } else {
+                        taggie.sendMessage("§cCR §8|§r ${tagger.displayName}§r tried to arrest you but you had nothing illegal on you they will be punished!")
+                        tagger.sendMessage("§cCR §8|§r You have been fined ${econ!!.format(25.0)} for pestering a civilian!")
                     }
                 }
             }
