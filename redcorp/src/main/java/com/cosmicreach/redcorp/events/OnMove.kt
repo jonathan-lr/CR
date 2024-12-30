@@ -9,9 +9,14 @@ import com.sk89q.worldguard.WorldGuard
 import com.sk89q.worldguard.protection.ApplicableRegionSet
 import com.sk89q.worldguard.protection.flags.StateFlag
 import org.bukkit.Bukkit
+import org.bukkit.Location
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerMoveEvent
+import java.lang.Math.toRadians
 import java.util.concurrent.ThreadLocalRandom
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
 
 class OnMove (private val event : PlayerMoveEvent) {
 
@@ -100,32 +105,43 @@ class OnMove (private val event : PlayerMoveEvent) {
                 }
             }
 
-            for (regionId in exitedRegions) {
-                p.sendMessage("You exited region: $regionId")
-            }
+            //for (regionId in exitedRegions) {
+            //    p.sendMessage("You exited region: $regionId")
+            //}
         }
         return
     }
 
     private fun doCops (p: Player) {
         if (DrugTest().doTest(p)) {
-            when (ThreadLocalRandom.current().nextInt(0, 10)) {
-                0 -> p.sendMessage("§cCR §8|§r Option 0 Nothing")
-                1 -> p.sendMessage("§cCR §8|§r Option 1 Nothing")
-                2 -> p.sendMessage("§cCR §8|§r Option 2 Nothing")
-                3 -> p.sendMessage("§cCR §8|§r Option 3 Nothing")
-                4 -> p.sendMessage("§cCR §8|§r Option 4 1 COP")
-                5 -> p.sendMessage("§cCR §8|§r Option 5 2 COPS")
-                6 -> p.sendMessage("§cCR §8|§r Option 6 4 COPS")
-                7 -> p.sendMessage("§cCR §8|§r Option 7 6 COPS")
-                8 -> p.sendMessage("§cCR §8|§r Option 8 8 COPS")
-                9 -> p.sendMessage("§cCR §8|§r Option 9 ALL COPS")
+            when (ThreadLocalRandom.current().nextInt(0, 3)) {
+                0 -> {/*Do Nothing*/}
+                1,2 -> {
+                    spawnBosses(p) // Spawn the appropriate number of bosses based on the case
+                }
             }
-            //val loc = p.location
-            //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "boss spawn world ${(loc.x + 4.0).toInt()} ${loc.y.toInt()} ${loc.z.toInt()} Test")
-            //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "boss spawn world ${(loc.x - 4.0).toInt()} ${loc.y.toInt()} ${loc.z.toInt()} Test")
-            //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "boss spawn world ${loc.x.toInt()} ${loc.y.toInt()} ${(loc.z + 4.0).toInt()} Test")
-            //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "boss spawn world ${loc.x.toInt()} ${loc.y.toInt()} ${(loc.z - 4.0).toInt()} Test")
+        }
+    }
+
+    private fun spawnBosses(p: Player) {
+        val bossCount = ThreadLocalRandom.current().nextInt(1, 11) // Random number of bosses (1 to 10)
+        val loc = p.location
+        val world = p.world
+
+        // Calculate direction towards (0, 0)
+        val directionToOrigin = atan2(-loc.z, -loc.x) // Angle in radians pointing toward (0, 0)
+
+        // Spread bosses in a cone toward the (0, 0) coordinate
+        for (i in 1..bossCount) {
+            val angleOffset = toRadians(ThreadLocalRandom.current().nextDouble(-30.0, 30.0)) // Random offset in a 60° cone
+            val distance = ThreadLocalRandom.current().nextDouble(5.0, 15.0) // Random distance from the player
+
+            val spawnX = loc.x + distance * cos(directionToOrigin + angleOffset)
+            val spawnZ = loc.z + distance * sin(directionToOrigin + angleOffset)
+            val surfaceY = world.getHighestBlockAt(spawnX.toInt(), spawnZ.toInt()).y + 2.0 // Get surface level
+
+            // Dispatch command to spawn the boss
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "boss spawn world ${spawnX.toInt()} ${surfaceY.toInt()} ${spawnZ.toInt()} cop_$i")
         }
     }
 }

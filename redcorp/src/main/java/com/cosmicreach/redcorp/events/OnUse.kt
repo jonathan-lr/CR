@@ -6,7 +6,6 @@ import com.cosmicreach.redcorp.menus.Teleport
 import com.cosmicreach.redcorp.utils.TeleportActions
 import com.cosmicreach.redcorp.utils.Utils
 import de.tr7zw.nbtapi.NBTBlock
-import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -44,7 +43,18 @@ class OnUse (
                 420, 430 -> farmlandDrug()
                 440 -> podzolDrug()
                 450, 451 -> myceliumDrug()
+                473 -> woodDrug()
                 in 700..720 -> setData()
+            }
+
+            if(event.item!!.type == Material.BONE_MEAL && event.clickedBlock != null) {
+                val b = event.clickedBlock
+                val nbt = NBTBlock(b).data
+
+                if (nbt.getBoolean("weed") || nbt.getBoolean("coke") || nbt.getBoolean("poppy") || nbt.getBoolean("coffeeBean")) {
+                    event.isCancelled = true
+                    p.sendMessage("§cCR §8|§r Sorry these plants don't like bonemeal!")
+                }
             }
         } else {
             p = event.player
@@ -192,6 +202,32 @@ class OnUse (
         } else {
             event.isCancelled = true
             p.sendMessage("§cCR §8|§r This must be placed on mycelium :)")
+        }
+    }
+
+    private fun woodDrug() {
+        if (event.clickedBlock!!.type == Material.JUNGLE_LOG && (event.blockFace == BlockFace.NORTH || event.blockFace == BlockFace.SOUTH || event.blockFace == BlockFace.EAST || event.blockFace == BlockFace.WEST)) {
+            val location = event.clickedBlock!!.location
+            if (event.blockFace == BlockFace.NORTH) {
+                location.z -= 1
+            }
+            if (event.blockFace == BlockFace.SOUTH) {
+                location.z += 1
+            }
+            if (event.blockFace == BlockFace.EAST) {
+                location.x += 1
+            }
+            if (event.blockFace == BlockFace.WEST) {
+                location.x -= 1
+            }
+
+            val block = location.block
+            val nbt = NBTBlock(block).data
+
+            nbt.setBoolean("coffeeBean", true)
+        } else {
+            event.isCancelled = true
+            p.sendMessage("§cCR §8|§r This must be placed on jungle log :)")
         }
     }
 

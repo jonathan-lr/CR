@@ -2,6 +2,8 @@ package com.cosmicreach.redcorp.menus.items
 
 import com.cosmicreach.redcorp.RedCorp
 import com.cosmicreach.redcorp.items.DrugItems
+import com.cosmicreach.redcorp.utils.Utils
+import de.tr7zw.nbtapi.NBT
 import de.tr7zw.nbtapi.NBTBlock
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -11,6 +13,9 @@ import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
+import org.bukkit.inventory.meta.PotionMeta
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
 import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.inventory.VirtualInventory
@@ -55,6 +60,7 @@ class BrewItem(private val inv : VirtualInventory, private val block: Block) : C
             beans.amount >= 1 &&
             beans.amount <= 3 &&
             water.type == Material.POTION &&
+            Utils().checkID(beans, arrayOf(473)) &&
             notMilk && notSugar
             ) {
 
@@ -122,7 +128,39 @@ class BrewItem(private val inv : VirtualInventory, private val block: Block) : C
                                 }
                             }
 
-                            val meta = coffee.itemMeta as ItemMeta
+                            NBT.modify(coffee) { nbt ->
+                                nbt.setBoolean("hasSugar", hasSugar)
+                                nbt.setBoolean("hasMilk", hasMilk)
+                            }
+
+                            val meta = coffee.itemMeta as PotionMeta
+                            when (beans.amount) {
+                                1 -> {
+                                    val duration = when {
+                                        hasSugar && hasMilk -> 12000
+                                        hasSugar || hasMilk -> 6000
+                                        else -> 3600
+                                    }
+                                    meta.addCustomEffect(PotionEffect(PotionEffectType.HASTE, duration, 0, true, false, false), true)
+                                }
+                                2 -> {
+                                    val duration = when {
+                                        hasSugar && hasMilk -> 12000
+                                        hasSugar || hasMilk -> 6000
+                                        else -> 3600
+                                    }
+                                    meta.addCustomEffect(PotionEffect(PotionEffectType.HASTE, duration, 1, true, false, false), true)
+                                }
+                                3 -> {
+                                    val duration = when {
+                                        hasSugar && hasMilk -> 12000
+                                        hasSugar || hasMilk -> 6000
+                                        else -> 3600
+                                    }
+                                    meta.addCustomEffect(PotionEffect(PotionEffectType.HASTE, duration, 2, true, false, false), true)
+                                }
+                            }
+
                             meta.setDisplayName(coffeeName)
                             coffee.setItemMeta(meta)
 

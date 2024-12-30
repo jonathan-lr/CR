@@ -3,6 +3,8 @@ package com.cosmicreach.redcorp.events
 import com.cosmicreach.redcorp.RedCorp
 import com.cosmicreach.redcorp.menus.AgingBarrel
 import com.cosmicreach.redcorp.menus.CoffeeMachine
+import com.cosmicreach.redcorp.utils.DrugTest
+import com.cosmicreach.redcorp.utils.Utils
 import de.tr7zw.nbtapi.NBTBlock
 import org.bukkit.block.Block
 import org.bukkit.entity.Player
@@ -19,6 +21,14 @@ class OnInventory (private val event : InventoryOpenEvent, private val agingBarr
 
         if (event.inventory.type == InventoryType.BREWING) {
             brewing()
+        }
+
+        if (event.inventory.type == InventoryType.ENDER_CHEST || event.inventory.type == InventoryType.SHULKER_BOX ) {
+            val p = event.player as Player
+            if(DrugTest().doWiderTest(p)) {
+                event.isCancelled = true
+                p.sendMessage("§cCR §8|§r Sorry ${p.displayName} §ryou cant open this while holding illegal substances!")
+            }
         }
     }
 

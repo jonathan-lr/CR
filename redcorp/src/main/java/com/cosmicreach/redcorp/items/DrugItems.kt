@@ -7,6 +7,8 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.inventory.meta.PotionMeta
 import org.bukkit.inventory.meta.components.FoodComponent
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
 import org.bukkit.potion.PotionType
 
 class DrugItems {
@@ -330,7 +332,8 @@ class DrugItems {
         cm.strings = mutableListOf("larger")
 
         meta.setMaxStackSize(16)
-        //meta.basePotionType = PotionType.LEAPING
+        meta.addCustomEffect(PotionEffect(PotionEffectType.NAUSEA, 1200, 0, true, false, false), true)
+        meta.addCustomEffect(PotionEffect(PotionEffectType.STRENGTH, 200, 0, true, false, false), true)
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
         meta.setDisplayName("§e§lʟᴀʀɢᴇʀ")
@@ -352,7 +355,7 @@ class DrugItems {
         cm.strings = mutableListOf("cider")
 
         meta.setMaxStackSize(16)
-        //meta.basePotionType = PotionType.FIRE_RESISTANCE
+        meta.addCustomEffect(PotionEffect(PotionEffectType.NAUSEA, 1200, 0, true, false, false), true)
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
         meta.setDisplayName("§6§lᴄɪᴅᴇʀ")
@@ -374,7 +377,7 @@ class DrugItems {
         cm.strings = mutableListOf("wine")
 
         meta.setMaxStackSize(16)
-        //meta.basePotionType = PotionType.HEALING
+        meta.addCustomEffect(PotionEffect(PotionEffectType.NAUSEA, 2400, 0, true, false, false), true)
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
         meta.setDisplayName("§4§lᴡɪɴᴇ")
@@ -396,7 +399,7 @@ class DrugItems {
         cm.strings = mutableListOf("vodka")
 
         meta.setMaxStackSize(16)
-        //meta.basePotionType = PotionType.SWIFTNESS
+        meta.addCustomEffect(PotionEffect(PotionEffectType.NAUSEA, -1, 0, true, false, false), true)
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
         meta.setDisplayName("§f§lᴠᴏᴅᴋᴀ")
@@ -406,6 +409,26 @@ class DrugItems {
     }
 
     // Coffee Stuff
+    fun CoffeeBean (a : Int): ItemStack {
+        val item = ItemStack(Material.COCOA_BEANS, a)
+
+        NBT.modify(item) { nbt ->
+            nbt.setInteger("item-id", 473) // Ik it should be 470 but I did this later
+        }
+
+        val meta = item.itemMeta as ItemMeta
+        val cm = meta.customModelDataComponent
+
+        cm.strings = mutableListOf("coffee")
+
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+        meta.setCustomModelDataComponent(cm)
+        meta.setDisplayName("§f§lᴄᴏғғᴇᴇ ʙᴇᴀɴs")
+        item.setItemMeta(meta)
+
+        return item
+    }
+
     fun weakCoffee (a : Int): ItemStack {
         val item = ItemStack(Material.POTION, a)
 
@@ -419,7 +442,6 @@ class DrugItems {
         cm.strings = mutableListOf("coffee_small")
 
         meta.setMaxStackSize(16)
-        meta.basePotionType = PotionType.WEAVING
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
         item.setItemMeta(meta)
@@ -440,7 +462,6 @@ class DrugItems {
         cm.strings = mutableListOf("coffee_medium")
 
         meta.setMaxStackSize(16)
-        meta.basePotionType = PotionType.WEAVING
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
         item.setItemMeta(meta)
@@ -461,7 +482,6 @@ class DrugItems {
         cm.strings = mutableListOf("coffee_large")
 
         meta.setMaxStackSize(16)
-        meta.basePotionType = PotionType.WEAVING
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
         item.setItemMeta(meta)

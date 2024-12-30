@@ -6,7 +6,8 @@ import org.bukkit.entity.Player
 import java.util.concurrent.ThreadLocalRandom
 
 class DrugTest {
-    private var illegalDrugs = mutableListOf(421, 422, 423, 432, 441, 450, 451)
+    private var illegalDrugs = mutableListOf(421, 422, 423, 431, 432, 441, 450, 451)
+    private var illegalDrugsPlus = mutableListOf(240, 421, 422, 423, 430, 431, 432, 440, 441, 450, 451)
 
     fun doTest(p: Player): Boolean {
         var hasDrugs = false
@@ -20,6 +21,24 @@ class DrugTest {
         }
 
         if (illegalDrugs.contains(Utils().getID(p.inventory.itemInOffHand))) {
+            hasDrugs = true
+        }
+
+        return hasDrugs
+    }
+
+    fun doWiderTest(p: Player): Boolean {
+        var hasDrugs = false
+
+        p.inventory.forEach {
+            if (it != null) {
+                if (illegalDrugsPlus.contains(Utils().getID(it))) {
+                    hasDrugs = true
+                }
+            }
+        }
+
+        if (illegalDrugsPlus.contains(Utils().getID(p.inventory.itemInOffHand))) {
             hasDrugs = true
         }
 

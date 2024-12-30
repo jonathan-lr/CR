@@ -5,11 +5,14 @@ import com.cosmicreach.redcorp.events.*
 import com.cosmicreach.redcorp.utils.TeleportActions
 import org.bukkit.*
 import org.bukkit.block.Block
+import org.bukkit.boss.DragonBattle
+import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.inventory.InventoryClickEvent
@@ -139,10 +142,38 @@ class EventsListener(
         return
     }
 
+    /*
     @EventHandler(priority = EventPriority.MONITOR)
     fun onEat(event: PlayerItemConsumeEvent) {
         OnEat(event).run()
-    }
+    }*/
+
+    /*
+    @EventHandler(priority = EventPriority.HIGHEST)
+    fun onMob(event: CreatureSpawnEvent) {
+        val world = event.location.world
+        val cd = RedCorp.getPlugin().getCancelDragon()
+
+        if (world != null && world.name == "world_the_end" && event.entityType == EntityType.ENDER_DRAGON && cd) {
+            event.isCancelled = true
+            val db = world.enderDragonBattle
+            if (db != null) {
+                db.setRespawnPhase(DragonBattle.RespawnPhase.END)
+                db.bossBar.removeAll()
+                db.bossBar.isVisible = false
+                Bukkit.broadcastMessage("§cCR §8|§r Stuff ${db.respawnPhase.name}")
+            }
+
+            Bukkit.broadcastMessage("§cCR §8|§r Dragon Cancel will do custom dragon here")
+            Bukkit.broadcastMessage("/boss spawn world_the_end 0 130 0 testguard")
+            RedCorp.getPlugin().setCancelDragon(false)
+        } else if (world != null && world.name == "world_the_end" && event.entityType == EntityType.ENDER_DRAGON) {
+            val db = world.enderDragonBattle
+            if (db != null) {
+                Bukkit.broadcastMessage("§cCR §8|§r Stuff ${db.respawnPhase.name}")
+            }
+        }
+    }*/
 
     @EventHandler(priority = EventPriority.MONITOR)
     fun onJoin(event: PlayerJoinEvent) {

@@ -3,6 +3,7 @@ package com.cosmicreach.redcorp.events
 import com.cosmicreach.redcorp.items.DrugItems
 import de.tr7zw.nbtapi.NBTBlock
 import de.tr7zw.nbtapi.NBTCompound
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.block.data.Ageable
@@ -17,6 +18,7 @@ class OnBreak (private val event : BlockBreakEvent) {
 
         when (b.type) {
             Material.WHEAT -> weedBreak()
+            Material.COCOA -> coffeeBreak()
             Material.BEETROOTS -> cokeBreak()
             Material.SWEET_BERRY_BUSH, Material.RED_MUSHROOM, Material.BROWN_MUSHROOM -> drugBreak()
             Material.RED_MUSHROOM_BLOCK, Material.BROWN_MUSHROOM_BLOCK, Material.MUSHROOM_STEM -> breakMush()
@@ -39,6 +41,20 @@ class OnBreak (private val event : BlockBreakEvent) {
 
                 b.world.dropItemNaturally(b.location, DrugItems().Weed(1))
                 b.world.dropItemNaturally(b.location, DrugItems().WeedSeed(Random.nextInt(1, 3)))
+            }
+        }
+        nbt.clearNBT()
+    }
+
+    private fun coffeeBreak () {
+        val temp = nbt.getBoolean("coffeeBean")
+        val blockAge = b.blockData as Ageable
+        if (blockAge.age == blockAge.maximumAge) {
+            if (temp) {
+                event.isDropItems = false
+                b.drops.clear()
+
+                b.world.dropItemNaturally(b.location, DrugItems().CoffeeBean(Random.nextInt(1, 4)))
             }
         }
         nbt.clearNBT()
