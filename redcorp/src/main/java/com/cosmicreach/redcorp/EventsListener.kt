@@ -3,17 +3,19 @@ package com.cosmicreach.redcorp
 import com.cosmicreach.redcorp.db.Magic
 import com.cosmicreach.redcorp.events.*
 import com.cosmicreach.redcorp.utils.TeleportActions
+import com.cosmicreach.redcorp.utils.Utils
+import de.tr7zw.nbtapi.NBTBlock
 import org.bukkit.*
 import org.bukkit.block.Block
-import org.bukkit.boss.DragonBattle
-import org.bukkit.entity.EntityType
+import org.bukkit.block.data.Directional
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
-import org.bukkit.event.entity.CreatureSpawnEvent
+import org.bukkit.event.block.BlockDispenseEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityShootBowEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
@@ -21,6 +23,7 @@ import org.bukkit.event.inventory.PrepareItemCraftEvent
 import org.bukkit.event.player.*
 import org.bukkit.event.player.PlayerAdvancementDoneEvent
 import org.bukkit.event.world.StructureGrowEvent
+import org.bukkit.scheduler.BukkitRunnable
 import xyz.xenondevs.invui.inventory.VirtualInventory
 
 
@@ -59,28 +62,28 @@ class EventsListener(
         return
     }
 
-    /* :todo implement bow model and id for checking
-       :todo implement play hit on target hit at hit source
     @EventHandler(priority = EventPriority.MONITOR)
     fun onShootBow(event : EntityShootBowEvent) {
         if (event.entity is Player) {
             val player = event.entity as Player
-            event.projectile.isSilent = true
-            player.stopSound(SoundCategory.PLAYERS)
-            object : BukkitRunnable() {
-                override fun run() {
-                    player.stopSound(SoundCategory.PLAYERS)
-                }
-            }.runTaskLater(plugin, 1L)
+            if (event.bow?.let { Utils().getID(it) } == 800) {
+                event.projectile.isSilent = true
+                player.stopSound(SoundCategory.PLAYERS)
+                object : BukkitRunnable() {
+                    override fun run() {
+                        player.stopSound(SoundCategory.PLAYERS)
+                    }
+                }.runTaskLater(RedCorp.getPlugin(), 1L)
 
-            object : BukkitRunnable() {
-                override fun run() {
-                    player.playSound(player.location, "awp.shoot", 1f, 1f)
-                    player.playSound(player.location, "awp.hit", 1f, 1f)
-                }
-            }.runTaskLater(plugin, 2L)
+                object : BukkitRunnable() {
+                    override fun run() {
+                        player.world.playSound(player.location, "awp.shoot", 1f, 1f)
+                        //player.playSound(player.location, "awp.hit", 1f, 1f)
+                    }
+                }.runTaskLater(RedCorp.getPlugin(), 2L)
+            }
         }
-    }*/
+    }
 
     @EventHandler(priority = EventPriority.MONITOR)
     fun onCraft(event : PrepareItemCraftEvent) {
@@ -148,32 +151,21 @@ class EventsListener(
         OnEat(event).run()
     }*/
 
-    /*
-    @EventHandler(priority = EventPriority.HIGHEST)
-    fun onMob(event: CreatureSpawnEvent) {
-        val world = event.location.world
-        val cd = RedCorp.getPlugin().getCancelDragon()
-
-        if (world != null && world.name == "world_the_end" && event.entityType == EntityType.ENDER_DRAGON && cd) {
-            event.isCancelled = true
-            val db = world.enderDragonBattle
-            if (db != null) {
-                db.setRespawnPhase(DragonBattle.RespawnPhase.END)
-                db.bossBar.removeAll()
-                db.bossBar.isVisible = false
-                Bukkit.broadcastMessage("§cCR §8|§r Stuff ${db.respawnPhase.name}")
-            }
-
-            Bukkit.broadcastMessage("§cCR §8|§r Dragon Cancel will do custom dragon here")
-            Bukkit.broadcastMessage("/boss spawn world_the_end 0 130 0 testguard")
-            RedCorp.getPlugin().setCancelDragon(false)
-        } else if (world != null && world.name == "world_the_end" && event.entityType == EntityType.ENDER_DRAGON) {
-            val db = world.enderDragonBattle
-            if (db != null) {
-                Bukkit.broadcastMessage("§cCR §8|§r Stuff ${db.respawnPhase.name}")
+    @EventHandler(priority = EventPriority.MONITOR)
+    fun onDispense(event: BlockDispenseEvent) {
+        if (event.item.type == Material.BONE_MEAL) {
+            val block = event.block
+            val dispenser = block.blockData as Directional
+            val direction = dispenser.facing
+            val targetBlock = block.location.add(direction.direction).block
+            val nbt = NBTBlock(targetBlock).data
+            if (nbt.getBoolean("weed") || nbt.getBoolean("coke") || nbt.getBoolean("poppy") || nbt.getBoolean("coffeeBean")) {
+                Bukkit.broadcastMessage("§cCR §8|§r Someone tried to be cheeky and lost their dispenser :)")
+                event.isCancelled = true
+                block.type = Material.AIR
             }
         }
-    }*/
+    }
 
     @EventHandler(priority = EventPriority.MONITOR)
     fun onJoin(event: PlayerJoinEvent) {

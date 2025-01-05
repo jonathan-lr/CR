@@ -36,6 +36,8 @@ class RedCorp : JavaPlugin() {
     private var lastTagged = HashMap<Int, Player>()
     private var passedTimes = HashMap<Int, Int>()
     private var magicUnlocked = HashMap<Player, Boolean>()
+    private var gambleLock = HashMap<Player, Boolean>()
+    private var purchaseAmount = HashMap<Player, Int>()
     private var fairiesFound = HashMap<Player, Array<Boolean>>()
     private lateinit var databaseManager: DatabaseManager
     private var lastExecutionTime: Long = 0
@@ -196,6 +198,18 @@ class RedCorp : JavaPlugin() {
 
     fun getEcon(): Economy?{
         return economy
+    }
+
+    fun getGrinderPlayers(): HashMap<Player, VirtualInventory> {
+        return grinderPlayers
+    }
+
+    fun getGambleLock(): HashMap<Player, Boolean> {
+        return gambleLock
+    }
+
+    fun getPurchaseAmount(): HashMap<Player, Int> {
+        return purchaseAmount
     }
 
     companion object {

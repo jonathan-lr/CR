@@ -174,8 +174,13 @@ class NPC(economy: Economy?, private val protocolManager: ProtocolManager?): Com
                     return false
                 }
                 "patrick" -> {
-                    val item = player.inventory.itemInMainHand
-                    if (Utils().checkID(item, arrayOf(432))) {
+                    var hasCoke = false
+                    player.inventory.forEach {
+                        if(Utils().checkID(it, arrayOf(432))) {
+                            hasCoke = true
+                        }
+                    }
+                    if (hasCoke) {
                         player.sendMessage("§cPatrick Byattyman §8|§r Oooohhh is that for me?")
                         val window = Window.single()
                             .setViewer(player)
@@ -203,7 +208,7 @@ class NPC(economy: Economy?, private val protocolManager: ProtocolManager?): Com
                     }
                 }
                 "sterling" -> {
-                    player.sendMessage("§4Sterling §8|§r Welcome to the Diamond Exchange brother!")
+                    player.sendMessage("§6Sterling §8|§r Welcome to the Diamond Exchange brother!")
                     val window = Window.single()
                             .setViewer(player)
                             .setTitle("§3§lDiamond Exchange")
@@ -319,11 +324,22 @@ class NPC(economy: Economy?, private val protocolManager: ProtocolManager?): Com
                     return false
                 }
                 "cassian" -> {
-                    player.sendMessage("§#b55519Cassian §8|§r What can I get for you Java the hutt?")
+                    player.sendMessage("§aCassian §8|§r What can I get for you Java the hutt?")
                     val window = Window.single()
                             .setViewer(player)
-                            .setTitle("§#b55519§lCassian's Barista")
+                            .setTitle("§a§lCassian's Barista")
                             .setGui(CoffeeShop(econ).makeGUI(player))
+                            .build()
+
+                    window.open()
+                    return false
+                }
+                "gamble" -> {
+                    player.sendMessage("§2Gamble-Tron §8|§r Bing bing bing!")
+                    val window = Window.single()
+                            .setViewer(player)
+                            .setTitle("§2Fruit Gamble")
+                            .setGui(FruitGamble(econ).makeGUI(player))
                             .build()
 
                     window.open()

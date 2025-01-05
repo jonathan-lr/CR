@@ -134,7 +134,7 @@ class OnMove (private val event : PlayerMoveEvent) {
         // Spread bosses in a cone toward the (0, 0) coordinate
         for (i in 1..bossCount) {
             val angleOffset = toRadians(ThreadLocalRandom.current().nextDouble(-30.0, 30.0)) // Random offset in a 60° cone
-            val distance = ThreadLocalRandom.current().nextDouble(5.0, 15.0) // Random distance from the player
+            val distance = ThreadLocalRandom.current().nextDouble(7.0, 12.0) // Random distance from the player
 
             val spawnX = loc.x + distance * cos(directionToOrigin + angleOffset)
             val spawnZ = loc.z + distance * sin(directionToOrigin + angleOffset)

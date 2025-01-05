@@ -4,10 +4,13 @@ import com.cosmicreach.redcorp.RedCorp
 import com.cosmicreach.redcorp.menus.AgingBarrel
 import com.cosmicreach.redcorp.menus.CoffeeMachine
 import com.cosmicreach.redcorp.utils.DrugTest
-import com.cosmicreach.redcorp.utils.Utils
 import de.tr7zw.nbtapi.NBTBlock
 import org.bukkit.block.Block
+import org.bukkit.entity.ChestBoat
+import org.bukkit.entity.ChestedHorse
 import org.bukkit.entity.Player
+import org.bukkit.entity.minecart.HopperMinecart
+import org.bukkit.entity.minecart.StorageMinecart
 import org.bukkit.event.inventory.InventoryOpenEvent
 import org.bukkit.event.inventory.InventoryType
 import xyz.xenondevs.invui.inventory.VirtualInventory
@@ -23,7 +26,7 @@ class OnInventory (private val event : InventoryOpenEvent, private val agingBarr
             brewing()
         }
 
-        if (event.inventory.type == InventoryType.ENDER_CHEST || event.inventory.type == InventoryType.SHULKER_BOX ) {
+        if (event.inventory.type == InventoryType.ENDER_CHEST || event.inventory.type == InventoryType.SHULKER_BOX || event.inventory.holder is ChestedHorse || event.inventory.holder is ChestBoat || event.inventory.holder is StorageMinecart || event.inventory.holder is HopperMinecart) {
             val p = event.player as Player
             if(DrugTest().doWiderTest(p)) {
                 event.isCancelled = true

@@ -318,4 +318,25 @@ class CustomItems {
         item.setItemMeta(meta)
         return item
     }
+
+    fun Awp (a: Int): ItemStack {
+        val item = ItemStack(Material.BOW, a)
+
+        NBT.modify(item) { nbt ->
+            nbt.setInteger("item-id", 800)
+        }
+
+        val meta = item.itemMeta as ItemMeta
+        val cm = meta.customModelDataComponent
+
+        cm.strings = mutableListOf("awp")
+
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+        meta.setCustomModelDataComponent(cm)
+
+        meta.setDisplayName("§9§lᴀᴡᴘ")
+
+        item.setItemMeta(meta)
+        return item
+    }
 }

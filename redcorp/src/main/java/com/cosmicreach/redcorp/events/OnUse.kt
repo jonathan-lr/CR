@@ -176,19 +176,25 @@ class OnUse (
     }
 
     private fun farmlandDrug() {
-        if (event.clickedBlock!!.type == Material.FARMLAND) {
-            setData()
-        } else {
-            p.sendMessage("§cCR §8|§r This must be placed on farmland :)")
+        val block = event.clickedBlock
+        if (block != null) {
+            if (block.type == Material.FARMLAND) {
+                setData()
+            } else {
+                p.sendMessage("§cCR §8|§r This must be placed on farmland :)")
+            }
         }
     }
 
     private fun podzolDrug() {
-        if (event.clickedBlock!!.type == Material.PODZOL && event.blockFace == BlockFace.UP) {
-            setData()
-        } else {
-            event.isCancelled = true
-            p.sendMessage("§cCR §8|§r This must be placed on podzol :)")
+        val block = event.clickedBlock
+        if (block != null) {
+            if (block.type == Material.PODZOL && event.blockFace == BlockFace.UP) {
+                setData()
+            } else {
+                event.isCancelled = true
+                p.sendMessage("§cCR §8|§r This must be placed on podzol :)")
+            }
         }
     }
 
@@ -207,24 +213,7 @@ class OnUse (
 
     private fun woodDrug() {
         if (event.clickedBlock!!.type == Material.JUNGLE_LOG && (event.blockFace == BlockFace.NORTH || event.blockFace == BlockFace.SOUTH || event.blockFace == BlockFace.EAST || event.blockFace == BlockFace.WEST)) {
-            val location = event.clickedBlock!!.location
-            if (event.blockFace == BlockFace.NORTH) {
-                location.z -= 1
-            }
-            if (event.blockFace == BlockFace.SOUTH) {
-                location.z += 1
-            }
-            if (event.blockFace == BlockFace.EAST) {
-                location.x += 1
-            }
-            if (event.blockFace == BlockFace.WEST) {
-                location.x -= 1
-            }
-
-            val block = location.block
-            val nbt = NBTBlock(block).data
-
-            nbt.setBoolean("coffeeBean", true)
+            setData()
         } else {
             event.isCancelled = true
             p.sendMessage("§cCR §8|§r This must be placed on jungle log :)")
@@ -234,7 +223,16 @@ class OnUse (
 
     private fun setData() {
         val location = event.clickedBlock!!.location
-        location.y += 1
+
+        when (event.blockFace) {
+            BlockFace.UP -> location.y += 1
+            BlockFace.DOWN -> location.y -= 1
+            BlockFace.NORTH -> location.z -= 1
+            BlockFace.SOUTH -> location.z += 1
+            BlockFace.WEST -> location.x -= 1
+            BlockFace.EAST -> location.x += 1
+            else -> return // Handle cases where blockFace is invalid or unexpected
+        }
 
         val block = location.block
         val nbt = NBTBlock(block).data
@@ -253,6 +251,7 @@ class OnUse (
             440 -> nbt.setBoolean("poppy", true)
             450 -> nbt.setBoolean("shroom", true)
             451 -> nbt.setBoolean("truffle", true)
+            473 -> nbt.setBoolean("coffeeBean", true)
             in 700..720 -> {
                 nbt.setBoolean("fairy", true)
                 nbt.setInteger("fairyId", id)
