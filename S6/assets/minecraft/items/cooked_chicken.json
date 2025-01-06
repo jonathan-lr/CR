@@ -1,0 +1,19 @@
+{
+  "model": {
+    "type": "select",
+    "property": "custom_model_data",
+    "fallback": {
+      "type": "model",
+      "model": "item/cooked_chicken"
+    },
+    "cases": [
+      {
+        "when": "kip",
+        "model": {
+          "type": "model",
+          "model": "item/kip"
+        }
+      }
+    ]
+  }   
+}

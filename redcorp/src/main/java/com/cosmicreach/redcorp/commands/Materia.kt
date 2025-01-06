@@ -2,434 +2,148 @@ package com.cosmicreach.redcorp.commands
 
 import com.cosmicreach.redcorp.items.CustomItems
 import com.cosmicreach.redcorp.items.DrugItems
+import com.cosmicreach.redcorp.items.PlayerItems
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 
 class Materia : CommandExecutor {
-    private var types = arrayOf("mre", "weed", "coke", "poppy", "shroom", "truffle", "grinder", "barrel", "coffee", "ivan", "arlbaro", "hammer", "gavel", "anchor", "scroll", "lanyard", "unit", "penis", "debug", "test", "drugstick", "fairy", "awp")
+    private val itemTransformers: Map<String, (List<String>) -> ItemStack> = mapOf(
+        "anchor" to { args: List<String> -> CustomItems().TeleportAnchor(args.getOrNull(0)?.toIntOrNull() ?: 1) },
+        "arlbaro" to { args: List<String> -> PlayerItems().Arlbaro(args.getOrNull(0)?.toIntOrNull() ?: 1) },
+        "awp" to { args: List<String> -> PlayerItems().Awp(args.getOrNull(0)?.toIntOrNull() ?: 1) },
+        "barrel" to { args: List<String> -> DrugItems().AgingBarrel(args.getOrNull(0)?.toIntOrNull() ?: 1) },
+        "card" to { args: List<String> ->
+            val suit = args.getOrElse(1) { "joker" }
+            val number = args.getOrElse(2) { "ace" }
+            CustomItems().Card(args.getOrNull(0)?.toIntOrNull() ?: 1, suit, number)
+        },
+        "coffee" to { args: List<String> -> DrugItems().CoffieMachine(args.getOrNull(0)?.toIntOrNull() ?: 1) },
+        "coke" to { args: List<String> -> DrugItems().CocaSeed(args.getOrNull(0)?.toIntOrNull() ?: 1) },
+        "debug" to { args: List<String> -> CustomItems().DebugStick(args.getOrNull(0)?.toIntOrNull() ?: 1) },
+        "drugstick" to { args: List<String> -> DrugItems().DrugStick(args.getOrNull(0)?.toIntOrNull() ?: 1) },
+        "fairy" to { args: List<String> ->
+            val id = args.getOrElse(1) { "0" }
+            CustomItems().Fairy(args.getOrNull(0)?.toIntOrNull() ?: 1, id)
+        },
+        "gavel" to { args: List<String> -> CustomItems().Gavel(args.getOrNull(0)?.toIntOrNull() ?: 1) },
+        "grinder" to { args: List<String> -> DrugItems().Grinder(args.getOrNull(0)?.toIntOrNull() ?: 1) },
+        "hammer" to { args: List<String> -> PlayerItems().Hammer(args.getOrNull(0)?.toIntOrNull() ?: 1) },
+        "ivan" to { args: List<String> -> CustomItems().IvansBeats(args.getOrNull(0)?.toIntOrNull() ?: 1) },
+        "kip" to { args: List<String> -> PlayerItems().Kip(args.getOrNull(0)?.toIntOrNull() ?: 1) },
+        "lanyard" to { args: List<String> ->
+            val color = args.getOrElse(1) { "red" }
+            PlayerItems().Lanyard(args.getOrNull(0)?.toIntOrNull() ?: 1, color)
+        },
+        "mre" to { args: List<String> -> PlayerItems().MRE((args.getOrNull(0)?.toIntOrNull() ?: 1)) },
+        "penis" to { args: List<String> -> CustomItems().Penis((args.getOrNull(0)?.toIntOrNull() ?: 1)) },
+        "poppy" to { args: List<String> -> DrugItems().OpiumFlower((args.getOrNull(0)?.toIntOrNull() ?: 1)) },
+        "scroll" to { args: List<String> ->
+            val type = args.getOrElse(1) { "teleport" }
+            CustomItems().Scroll(args.getOrNull(0)?.toIntOrNull() ?: 1, type)
+        },
+        "shroom" to { args: List<String> -> DrugItems().Shrooms(args.getOrNull(0)?.toIntOrNull() ?: 1) },
+        "test" to { args: List<String> -> CustomItems().TestWing(args.getOrNull(0)?.toIntOrNull() ?: 1) },
+        "truffle" to { args: List<String> -> DrugItems().Truffles(args.getOrNull(0)?.toIntOrNull() ?: 1) },
+        "unit" to { args: List<String> ->
+            val color = args.getOrElse(1) { "red" }
+            CustomItems().Unit(args.getOrNull(0)?.toIntOrNull() ?: 1, color)
+        },
+        "weed" to { args: List<String> -> DrugItems().WeedSeed(args.getOrNull(0)?.toIntOrNull() ?: 1) }
+    )
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
-        if (sender !is Player) {return false}
-        if (sender.hasPermission("redcorp.materia")) {
-            if (args.isEmpty()) {
-                sender.sendMessage("§cCR §8| §c${sender.displayName} requires 1 argument")
-                return false
-            }
+        if (sender !is Player) return false
 
-            if (types.indexOf(args[0]) == -1) {
-                sender.sendMessage("§cCR §8| §c${sender.displayName} invalid item argument")
-                return false
-            }
-
-            val item = sender.inventory.itemInMainHand
-            when (args[0]) {
-                "weed" -> {
-                    if (!sender.hasPermission("redcorp.materia.weed")) {
-                        sender.sendMessage("§cCR §8| §rInvalid Permission")
-                        return false
-                    }
-                    val transform = DrugItems().WeedSeed(item.amount)
-                    if (item.type == transform.type) {
-                        sender.inventory.setItemInMainHand(transform)
-                        sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
-                    } else {
-                        sender.sendMessage("§cCR §8| §rInvalid Option")
-                    }
-                }
-                "coke" -> {
-                    if (!sender.hasPermission("redcorp.materia.coke")) {
-                        sender.sendMessage("§cCR §8| §rInvalid Permission")
-                        return false
-                    }
-                    val transform = DrugItems().CocaSeed(item.amount)
-                    if (item.type == transform.type) {
-                        sender.inventory.setItemInMainHand(transform)
-                        sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
-                    } else {
-                        sender.sendMessage("§cCR §8| §rInvalid Option")
-                    }
-                }
-                "poppy" -> {
-                    if (!sender.hasPermission("redcorp.materia.poppy")) {
-                        sender.sendMessage("§cCR §8| §rInvalid Permission")
-                        return false
-                    }
-                    val transform = DrugItems().OpiumFlower(item.amount)
-                    if (item.type == transform.type) {
-                        sender.inventory.setItemInMainHand(transform)
-                        sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
-                    } else {
-                        sender.sendMessage("§cCR §8| §rInvalid Option")
-                    }
-                }
-                "shroom" -> {
-                    if (!sender.hasPermission("redcorp.materia.shroom")) {
-                        sender.sendMessage("§cCR §8| §rInvalid Permission")
-                        return false
-                    }
-                    val transform = DrugItems().Shrooms(item.amount)
-                    if (item.type == transform.type) {
-                        sender.inventory.setItemInMainHand(transform)
-                        sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
-                    } else {
-                        sender.sendMessage("§cCR §8| §rInvalid Option")
-                    }
-                }
-                "truffle" -> {
-                    if (!sender.hasPermission("redcorp.materia.truffle")) {
-                        sender.sendMessage("§cCR §8| §rInvalid Permission")
-                        return false
-                    }
-                    val transform = DrugItems().Truffles(item.amount)
-                    if (item.type == transform.type) {
-                        sender.inventory.setItemInMainHand(transform)
-                        sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
-                    } else {
-                        sender.sendMessage("§cCR §8| §rInvalid Option")
-                    }
-                }
-                "grinder" -> {
-                    if (!sender.hasPermission("redcorp.materia.grinder")) {
-                        sender.sendMessage("§cCR §8| §rInvalid Permission")
-                        return false
-                    }
-                    val transform = DrugItems().Grinder(item.amount)
-                    if (item.type == transform.type) {
-                        sender.inventory.setItemInMainHand(transform)
-                        sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
-                    } else {
-                        sender.sendMessage("§cCR §8| §rInvalid Option")
-                    }
-                }
-                "barrel" -> {
-                    if (!sender.hasPermission("redcorp.materia.barrel")) {
-                        sender.sendMessage("§cCR §8| §rInvalid Permission")
-                        return false
-                    }
-                    val transform = DrugItems().AgingBarrel(item.amount)
-                    if (item.type == transform.type) {
-                        sender.inventory.setItemInMainHand(transform)
-                        sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
-                    } else {
-                        sender.sendMessage("§cCR §8| §rInvalid Option")
-                    }
-                }
-                "coffee" -> {
-                    if (!sender.hasPermission("redcorp.materia.coffee")) {
-                        sender.sendMessage("§cCR §8| §rInvalid Permission")
-                        return false
-                    }
-                    val transform = DrugItems().CoffieMachine(item.amount)
-                    if (item.type == transform.type) {
-                        sender.inventory.setItemInMainHand(transform)
-                        sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
-                    } else {
-                        sender.sendMessage("§cCR §8| §rInvalid Option")
-                    }
-                }
-                "mre" -> {
-                    if (!sender.hasPermission("redcorp.materia.mre")) {
-                        sender.sendMessage("§cCR §8| §rInvalid Permission")
-                        return false
-                    }
-                    val transform = CustomItems().MRE(item.amount)
-                    if (item.type == transform.type) {
-                        sender.inventory.setItemInMainHand(transform)
-                        sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
-                    } else {
-                        sender.sendMessage("§cCR §8| §rInvalid Option")
-                    }
-                }
-                "arlbaro" -> {
-                    if (!sender.hasPermission("redcorp.materia.arlbaro")) {
-                        sender.sendMessage("§cCR §8| §rInvalid Permission")
-                        return false
-                    }
-                    val transform = CustomItems().Arlbaro(item.amount)
-                    if (item.type == transform.type) {
-                        sender.inventory.setItemInMainHand(transform)
-                        sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
-                    } else {
-                        sender.sendMessage("§cCR §8| §rInvalid Option")
-                    }
-                }
-                "hammer" -> {
-                    if (!sender.hasPermission("redcorp.materia.hammer")) {
-                        sender.sendMessage("§cCR §8| §rInvalid Permission")
-                        return false
-                    }
-                    val transform = CustomItems().Hammer(item.amount)
-                    if (item.type == transform.type) {
-                        sender.inventory.setItemInMainHand(transform)
-                        sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
-                    } else {
-                        sender.sendMessage("§cCR §8| §rInvalid Option")
-                    }
-                }
-                "ivan" -> {
-                    if (!sender.hasPermission("redcorp.materia.ivan")) {
-                        sender.sendMessage("§cCR §8| §rInvalid Permission")
-                        return false
-                    }
-                    val transform = CustomItems().IvansBeats(item.amount)
-                    if (item.type == transform.type) {
-                        sender.inventory.setItemInMainHand(transform)
-                        sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
-                    } else {
-                        sender.sendMessage("§cCR §8| §rInvalid Option")
-                    }
-                }
-                "gavel" -> {
-                    if (!sender.hasPermission("redcorp.materia.gavel")) {
-                        sender.sendMessage("§cCR §8| §rInvalid Permission")
-                        return false
-                    }
-                    val transform = CustomItems().Gavel(item.amount)
-                    if (item.type == transform.type) {
-                        sender.inventory.setItemInMainHand(transform)
-                        sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
-                    } else {
-                        sender.sendMessage("§cCR §8| §rInvalid Option")
-                    }
-                }
-                "scroll" -> {
-                    if (sender.hasPermission("redcorp.materia.scroll")) {
-                        var transform = CustomItems().TeleportScroll(item.amount)
-                        when(args[1]) {
-                            "death" -> transform = CustomItems().DeathScroll(item.amount)
-                            "home" -> transform = CustomItems().HomeScroll(item.amount)
-                        }
-                        if (item.type == transform.type) {
-                            sender.inventory.setItemInMainHand(transform)
-                            sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
-                        } else {
-                            sender.sendMessage("§cCR §8| §rInvalid Option")
-                        }
-                    }
-                }
-                "anchor" -> {
-                    if (!sender.hasPermission("redcorp.materia.anchor")) {
-                        sender.sendMessage("§cCR §8| §rInvalid Permission")
-                        return false
-                    }
-                    val transform = CustomItems().TeleportAnchor(item.amount)
-                    if (item.type == transform.type) {
-                        sender.inventory.setItemInMainHand(transform)
-                        sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
-                    } else {
-                        sender.sendMessage("§cCR §8| §rInvalid Option")
-                    }
-                }
-                "lanyard" -> {
-                    if (!sender.hasPermission("redcorp.materia.lanyard")) {
-                        sender.sendMessage("§cCR §8| §rInvalid Permission")
-                        return false
-                    }
-                    val transform = CustomItems().Lanyard(item.amount, args[1])
-                    if (item.type == transform.type) {
-                        sender.inventory.setItemInMainHand(transform)
-                        sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
-                    } else {
-                        sender.sendMessage("§cCR §8| §rInvalid Option")
-                    }
-                }
-                "unit" -> {
-                    if (!sender.hasPermission("redcorp.materia.unit")) {
-                        sender.sendMessage("§cCR §8| §rInvalid Permission")
-                        return false
-                    }
-                    val transform = CustomItems().Unit(item.amount, args[1])
-                    if (item.type == transform.type) {
-                        sender.inventory.setItemInMainHand(transform)
-                        sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
-                    } else {
-                        sender.sendMessage("§cCR §8| §rInvalid Option")
-                    }
-                }
-                "penis" -> {
-                    if (!sender.hasPermission("redcorp.materia.penis")) {
-                        sender.sendMessage("§cCR §8| §rInvalid Permission")
-                        return false
-                    }
-                    val transform = CustomItems().Penis(item.amount)
-                    if (item.type == transform.type) {
-                        sender.inventory.setItemInMainHand(transform)
-                        sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
-                    } else {
-                        sender.sendMessage("§cCR §8| §rInvalid Option")
-                    }
-                }
-                "debug" -> {
-                    if (!sender.hasPermission("redcorp.materia.debug")) {
-                        sender.sendMessage("§cCR §8| §rInvalid Permission")
-                        return false
-                    }
-                    val transform = CustomItems().DebugStick(item.amount)
-                    if (item.type == transform.type) {
-                        sender.inventory.setItemInMainHand(transform)
-                        sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
-                    } else {
-                        sender.sendMessage("§cCR §8| §rInvalid Option")
-                    }
-                }
-                "test" -> {
-                    if (!sender.hasPermission("redcorp.materia.test")) {
-                        sender.sendMessage("§cCR §8| §rInvalid Permission")
-                        return false
-                    }
-                    val transform = CustomItems().TestWing(item.amount)
-                    if (item.type == transform.type) {
-                        sender.inventory.setItemInMainHand(transform)
-                        sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
-                    } else {
-                        sender.sendMessage("§cCR §8| §rInvalid Option")
-                    }
-                }
-                "drugstick" -> {
-                    if (!sender.hasPermission("redcorp.materia.drugstick")) {
-                        sender.sendMessage("§cCR §8| §rInvalid Permission")
-                        return false
-                    }
-                    val transform = DrugItems().DrugStick(item.amount)
-                    if (item.type == transform.type) {
-                        sender.inventory.setItemInMainHand(transform)
-                        sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
-                    } else {
-                        sender.sendMessage("§cCR §8| §rInvalid Option")
-                    }
-                }
-                "fairy" -> {
-                    if (!sender.hasPermission("redcorp.materia.fairy")) {
-                        sender.sendMessage("§cCR §8| §rInvalid Permission")
-                        return false
-                    }
-                    val transform = CustomItems().Fairy(item.amount, args[1])
-                    if (item.type == transform.type) {
-                        sender.inventory.setItemInMainHand(transform)
-                        sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
-                    } else {
-                        sender.sendMessage("§cCR §8| §rInvalid Option")
-                    }
-                }
-                "awp" -> {
-                    if (!sender.hasPermission("redcorp.materia.awp")) {
-                        sender.sendMessage("§cCR §8| §rInvalid Permission")
-                        return false
-                    }
-                    val transform = CustomItems().Awp(item.amount)
-                    if (item.type == transform.type) {
-                        sender.inventory.setItemInMainHand(transform)
-                        sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
-                    } else {
-                        sender.sendMessage("§cCR §8| §rInvalid Option")
-                    }
-                }
-            }
-
-
-
-        } else {
+        if (!sender.hasPermission("redcorp.materia")) {
             sender.sendMessage("§cCR §8| §c${sender.displayName} kindly fuck off")
             return false
         }
-        return false
+
+        if (args.isEmpty()) {
+            sender.sendMessage("§cCR §8| §c${sender.displayName} requires 1 argument")
+            return false
+        }
+
+        val itemType = args[0]
+        val transformer = itemTransformers[itemType]
+
+        if (transformer == null || !sender.hasPermission("redcorp.materia.$itemType")) {
+            sender.sendMessage("§cCR §8| §c${sender.displayName} invalid or unauthorized item argument")
+            return false
+        }
+
+        val item = sender.inventory.itemInMainHand
+
+        try {
+            val transformedItem = transformer(args.toList())
+
+            if (item.type == transformedItem.type) {
+                sender.inventory.setItemInMainHand(transformedItem)
+                sender.sendMessage("§cCR §8| §rPerforming Materia on §c${item.type} §rby ${item.amount}")
+            } else {
+                sender.sendMessage("§cCR §8| §rInvalid Item for Materia")
+            }
+        } catch (e: Exception) {
+            sender.sendMessage("§cCR §8| §rAn error occurred while performing Materia: ${e.message}")
+        }
+
+        return true
     }
 }
 
 class MateriaComplete : TabCompleter {
+    private val itemPermissions = mapOf(
+        "anchor" to "redcorp.materia.anchor",
+        "arlbaro" to "redcorp.materia.arlbaro",
+        "awp" to "redcorp.materia.awp",
+        "barrel" to "redcorp.materia.barrel",
+        "card" to "redcorp.materia.card",
+        "coffee" to "redcorp.materia.coffee",
+        "coke" to "redcorp.materia.coke",
+        "debug" to "redcorp.materia.debug",
+        "drugstick" to "redcorp.materia.drugstick",
+        "fairy" to "redcorp.materia.fairy",
+        "gavel" to "redcorp.materia.gavel",
+        "grinder" to "redcorp.materia.grinder",
+        "hammer" to "redcorp.materia.hammer",
+        "ivan" to "redcorp.materia.ivan",
+        "kip" to "redcorp.materia.kip",
+        "lanyard" to "redcorp.materia.lanyard",
+        "mre" to "redcorp.materia.mre",
+        "penis" to "redcorp.materia.penis",
+        "poppy" to "redcorp.materia.poppy",
+        "scroll" to "redcorp.materia.scroll",
+        "shroom" to "redcorp.materia.shroom",
+        "test" to "redcorp.materia.test",
+        "truffle" to "redcorp.materia.truffle",
+        "unit" to "redcorp.materia.unit",
+        "weed" to "redcorp.materia.weed"
+    )
+
     override fun onTabComplete(sender: CommandSender, command: Command, label: String, args: Array<out String>): MutableList<String>? {
-        if (args.size == 1) {
-            val returnValue = mutableListOf<String>()
-            if (sender.hasPermission("redcorp.materia.mre")) {
-                returnValue.add("mre")
-            }
-            if (sender.hasPermission("redcorp.materia.weed")) {
-                returnValue.add("weed")
-            }
-            if (sender.hasPermission("redcorp.materia.coke")) {
-                returnValue.add("coke")
-            }
-            if (sender.hasPermission("redcorp.materia.poppy")) {
-                returnValue.add("poppy")
-            }
-            if (sender.hasPermission("redcorp.materia.shroom")) {
-                returnValue.add("shroom")
-            }
-            if (sender.hasPermission("redcorp.materia.truffle")) {
-                returnValue.add("truffle")
-            }
-            if (sender.hasPermission("redcorp.materia.grinder")) {
-                returnValue.add("grinder")
-            }
-            if (sender.hasPermission("redcorp.materia.barrel")) {
-                returnValue.add("barrel")
-            }
-            if (sender.hasPermission("redcorp.materia.coffee")) {
-                returnValue.add("coffee")
-            }
-            if (sender.hasPermission("redcorp.materia.arlbaro")) {
-                returnValue.add("arlbaro")
-            }
-            if (sender.hasPermission("redcorp.materia.hammer")) {
-                returnValue.add("hammer")
-            }
-            if (sender.hasPermission("redcorp.materia.ivan")) {
-                returnValue.add("ivan")
-            }
-            if (sender.hasPermission("redcorp.materia.gavel")) {
-                returnValue.add("gavel")
-            }
-            if (sender.hasPermission("redcorp.materia.anchor")) {
-                returnValue.add("anchor")
-            }
-            if (sender.hasPermission("redcorp.materia.scroll")) {
-                returnValue.add("scroll")
-            }
-            if (sender.hasPermission("redcorp.materia.lanyard")) {
-                returnValue.add("lanyard")
-            }
-            if (sender.hasPermission("redcorp.materia.unit")) {
-                returnValue.add("unit")
-            }
-            if (sender.hasPermission("redcorp.materia.penis")) {
-                returnValue.add("penis")
-            }
-            if (sender.hasPermission("redcorp.materia.debug")) {
-                returnValue.add("debug")
-            }
-            if (sender.hasPermission("redcorp.materia.test")) {
-                returnValue.add("test")
-            }
-            if (sender.hasPermission("redcorp.materia.drugstick")) {
-                returnValue.add("drugstick")
-            }
-            if (sender.hasPermission("redcorp.materia.fairy")) {
-                returnValue.add("fairy")
-            }
-            if (sender.hasPermission("redcorp.materia.awp")) {
-                returnValue.add("awp")
-            }
-            return returnValue
+        if (args.isEmpty() || args.size == 1) {
+            return itemPermissions.keys.filter { sender.hasPermission(itemPermissions[it]!!) }.toMutableList()
         }
 
         if (args.size == 2) {
-            if (sender.hasPermission("redcorp.materia.lanyard")) {
-                if (args[0] == "lanyard") {
-                    return mutableListOf("red", "orange", "pink", "green", "blue")
-                }
+            return when (args[0]) {
+                "lanyard", "unit" -> mutableListOf("blue", "green", "orange", "pink", "red")
+                "scroll" -> mutableListOf("death", "home", "teleport")
+                "card" -> mutableListOf("clubs", "diamonds", "hearts", "spades", "joker", "back")
+                else -> null
             }
-            if (sender.hasPermission("redcorp.materia.unit")) {
-                if (args[0] == "unit") {
-                    return mutableListOf("red", "orange", "pink", "green", "blue")
-                }
-            }
-            if (sender.hasPermission("redcorp.materia.scroll")) {
-                if (args[0] == "scroll") {
-                    return mutableListOf("teleport", "death", "home")
-                }
+        }
+
+        if (args.size == 3) {
+            return when (args[1]) {
+                "clubs", "diamonds", "hearts", "spades" -> mutableListOf("2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king", "ace")
+                "joker" -> mutableListOf("black", "red")
+                "back" -> mutableListOf("back")
+                else -> null
             }
         }
 

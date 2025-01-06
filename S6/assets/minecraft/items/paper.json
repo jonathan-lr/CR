@@ -29,10 +29,388 @@
         }
       },
       {
-        "when": "wing",
+        "when": "c2",
         "model": {
           "type": "model",
-          "model": "item/wing"
+          "model": "item/cards/c2"
+        }
+      },
+      {
+        "when": "c3",
+        "model": {
+          "type": "model",
+          "model": "item/cards/c3"
+        }
+      },
+      {
+        "when": "c4",
+        "model": {
+          "type": "model",
+          "model": "item/cards/c4"
+        }
+      },
+      {
+        "when": "c5",
+        "model": {
+          "type": "model",
+          "model": "item/cards/c5"
+        }
+      },
+      {
+        "when": "c6",
+        "model": {
+          "type": "model",
+          "model": "item/cards/c6"
+        }
+      },
+      {
+        "when": "c7",
+        "model": {
+          "type": "model",
+          "model": "item/cards/c7"
+        }
+      },
+      {
+        "when": "c8",
+        "model": {
+          "type": "model",
+          "model": "item/cards/c8"
+        }
+      },
+      {
+        "when": "c9",
+        "model": {
+          "type": "model",
+          "model": "item/cards/c9"
+        }
+      },
+      {
+        "when": "c10",
+        "model": {
+          "type": "model",
+          "model": "item/cards/c10"
+        }
+      },
+      {
+        "when": "cace",
+        "model": {
+          "type": "model",
+          "model": "item/cards/ca"
+        }
+      },
+      {
+        "when": "cjack",
+        "model": {
+          "type": "model",
+          "model": "item/cards/cj"
+        }
+      },
+      {
+        "when": "cking",
+        "model": {
+          "type": "model",
+          "model": "item/cards/ck"
+        }
+      },
+      {
+        "when": "cqueen",
+        "model": {
+          "type": "model",
+          "model": "item/cards/cq"
+        }
+      },
+      {
+        "when": "d2",
+        "model": {
+          "type": "model",
+          "model": "item/cards/d2"
+        }
+      },
+      {
+        "when": "d3",
+        "model": {
+          "type": "model",
+          "model": "item/cards/d3"
+        }
+      },
+      {
+        "when": "d4",
+        "model": {
+          "type": "model",
+          "model": "item/cards/d4"
+        }
+      },
+      {
+        "when": "d5",
+        "model": {
+          "type": "model",
+          "model": "item/cards/d5"
+        }
+      },
+      {
+        "when": "d6",
+        "model": {
+          "type": "model",
+          "model": "item/cards/d6"
+        }
+      },
+      {
+        "when": "d7",
+        "model": {
+          "type": "model",
+          "model": "item/cards/d7"
+        }
+      },
+      {
+        "when": "d8",
+        "model": {
+          "type": "model",
+          "model": "item/cards/d8"
+        }
+      },
+      {
+        "when": "d9",
+        "model": {
+          "type": "model",
+          "model": "item/cards/d9"
+        }
+      },
+      {
+        "when": "d10",
+        "model": {
+          "type": "model",
+          "model": "item/cards/d10"
+        }
+      },
+      {
+        "when": "dace",
+        "model": {
+          "type": "model",
+          "model": "item/cards/da"
+        }
+      },
+      {
+        "when": "djack",
+        "model": {
+          "type": "model",
+          "model": "item/cards/dj"
+        }
+      },
+      {
+        "when": "dking",
+        "model": {
+          "type": "model",
+          "model": "item/cards/dk"
+        }
+      },
+      {
+        "when": "dqueen",
+        "model": {
+          "type": "model",
+          "model": "item/cards/dq"
+        }
+      },
+	        {
+        "when": "h2",
+        "model": {
+          "type": "model",
+          "model": "item/cards/h2"
+        }
+      },
+      {
+        "when": "h3",
+        "model": {
+          "type": "model",
+          "model": "item/cards/h3"
+        }
+      },
+      {
+        "when": "h4",
+        "model": {
+          "type": "model",
+          "model": "item/cards/h4"
+        }
+      },
+      {
+        "when": "h5",
+        "model": {
+          "type": "model",
+          "model": "item/cards/h5"
+        }
+      },
+      {
+        "when": "h6",
+        "model": {
+          "type": "model",
+          "model": "item/cards/h6"
+        }
+      },
+      {
+        "when": "h7",
+        "model": {
+          "type": "model",
+          "model": "item/cards/h7"
+        }
+      },
+      {
+        "when": "h8",
+        "model": {
+          "type": "model",
+          "model": "item/cards/h8"
+        }
+      },
+      {
+        "when": "h9",
+        "model": {
+          "type": "model",
+          "model": "item/cards/h9"
+        }
+      },
+      {
+        "when": "h10",
+        "model": {
+          "type": "model",
+          "model": "item/cards/h10"
+        }
+      },
+      {
+        "when": "hace",
+        "model": {
+          "type": "model",
+          "model": "item/cards/ha"
+        }
+      },
+      {
+        "when": "hjack",
+        "model": {
+          "type": "model",
+          "model": "item/cards/hj"
+        }
+      },
+      {
+        "when": "hking",
+        "model": {
+          "type": "model",
+          "model": "item/cards/hk"
+        }
+      },
+      {
+        "when": "hqueen",
+        "model": {
+          "type": "model",
+          "model": "item/cards/hq"
+        }
+      },
+	  {
+        "when": "s2",
+        "model": {
+          "type": "model",
+          "model": "item/cards/s2"
+        }
+      },
+      {
+        "when": "s3",
+        "model": {
+          "type": "model",
+          "model": "item/cards/s3"
+        }
+      },
+      {
+        "when": "s4",
+        "model": {
+          "type": "model",
+          "model": "item/cards/s4"
+        }
+      },
+      {
+        "when": "s5",
+        "model": {
+          "type": "model",
+          "model": "item/cards/s5"
+        }
+      },
+      {
+        "when": "s6",
+        "model": {
+          "type": "model",
+          "model": "item/cards/s6"
+        }
+      },
+      {
+        "when": "s7",
+        "model": {
+          "type": "model",
+          "model": "item/cards/s7"
+        }
+      },
+      {
+        "when": "s8",
+        "model": {
+          "type": "model",
+          "model": "item/cards/s8"
+        }
+      },
+      {
+        "when": "s9",
+        "model": {
+          "type": "model",
+          "model": "item/cards/s9"
+        }
+      },
+      {
+        "when": "s10",
+        "model": {
+          "type": "model",
+          "model": "item/cards/s10"
+        }
+      },
+      {
+        "when": "sace",
+        "model": {
+          "type": "model",
+          "model": "item/cards/sa"
+        }
+      },
+      {
+        "when": "sjack",
+        "model": {
+          "type": "model",
+          "model": "item/cards/sj"
+        }
+      },
+      {
+        "when": "sking",
+        "model": {
+          "type": "model",
+          "model": "item/cards/sk"
+        }
+      },
+      {
+        "when": "squeen",
+        "model": {
+          "type": "model",
+          "model": "item/cards/sq"
+        }
+      },
+      {
+        "when": "jblack",
+        "model": {
+          "type": "model",
+          "model": "item/cards/joker"
+        }
+      },
+      {
+        "when": "jred",
+        "model": {
+          "type": "model",
+          "model": "item/cards/jokerr"
+        }
+      },
+      {
+        "when": "bback",
+        "model": {
+          "type": "model",
+          "model": "item/cards/back"
         }
       }
     ]

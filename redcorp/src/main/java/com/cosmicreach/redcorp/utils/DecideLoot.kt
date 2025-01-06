@@ -285,13 +285,13 @@ class DecideLoot(private val protocolManager: ProtocolManager?) {
                     6 -> {
                         world.playSound(player.location, Sound.ENTITY_VILLAGER_AMBIENT, 0.75f, 1.0f)
                         Bukkit.broadcastMessage("§cCR §8|§r ${player.displayName} §fused a ${types[vault]} Key §rand got 1 §3Teleport Scrolls")
-                        val reward = CustomItems().TeleportScroll(1)
+                        val reward = CustomItems().Scroll(1, "teleport")
                         player.inventory.addItem(reward)
                     }
                     7 -> {
                         world.playSound(player.location, Sound.ENTITY_VILLAGER_AMBIENT, 0.75f, 1.0f)
                         Bukkit.broadcastMessage("§cCR §8|§r ${player.displayName} §fused a ${types[vault]} Key §rand got 3 §3Teleport Scrolls")
-                        val reward = CustomItems().TeleportScroll(3)
+                        val reward = CustomItems().Scroll(3, "teleport")
                         player.inventory.addItem(reward)
                     }
                     8 -> {

@@ -17,57 +17,6 @@ import java.net.URL
 import java.util.UUID
 
 class CustomItems {
-    fun MRE (a : Int): ItemStack {
-        val item = ItemStack(Material.COOKED_PORKCHOP, a)
-        val meta = item.itemMeta as ItemMeta
-        val cm = meta.customModelDataComponent
-
-        cm.strings = mutableListOf("mre")
-
-        meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§4§lʀᴇᴅ§8ᴄᴏʀᴘ §f§lᴍʀᴇ")
-
-        val lore = listOf("§4§lRed§8Corp§f's sinister sustenance: A pork-packed MRE,", "§fA vile delicacy born of darkness,", "§fSating their hunger for power, one bite at a time.")
-        meta.lore = lore
-        item.setItemMeta(meta)
-
-        return item
-    }
-
-    fun Arlbaro (a : Int): ItemStack {
-        val item = ItemStack(Material.COOKIE, a)
-        val meta = item.itemMeta as ItemMeta
-        val cm = meta.customModelDataComponent
-
-        cm.strings = mutableListOf("arlbaro")
-
-        meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§c§lᴀʀʟʙᴀʀᴏ ʀᴇᴅ")
-
-        val lore = listOf("§fFumar §4acorta la vida")
-        meta.lore = lore
-        item.setItemMeta(meta)
-
-        return item
-    }
-
-    fun Hammer (a : Int): ItemStack {
-        val item = ItemStack(Material.WOODEN_AXE, a)
-        val meta = item.itemMeta as ItemMeta
-        val cm = meta.customModelDataComponent
-
-        cm.strings = mutableListOf("hammer")
-
-        meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§6§lʏᴏʀɪᴄᴋ's ʜᴀᴍᴍᴇʀ")
-
-        val lore = listOf("§fWhen found, return to Yorick")
-        meta.lore = lore
-        item.setItemMeta(meta)
-
-        return item
-    }
-
     fun IvansBeats (a : Int): ItemStack {
         val item = ItemStack(Material.BEETROOT, a)
 
@@ -111,70 +60,46 @@ class CustomItems {
         return item
     }
 
-    fun TeleportScroll (a : Int): ItemStack {
+    fun Scroll (a : Int, type: String): ItemStack {
         val item = ItemStack(Material.PAPER, a)
 
         NBT.modify(item) { nbt ->
-            nbt.setInteger("item-id", 3)
+            when (type) {
+                "teleport" -> nbt.setInteger("item-id", 3)
+                "home" -> nbt.setInteger("item-id", 5)
+                "death" -> nbt.setInteger("item-id", 6)
+            }
         }
 
         val meta = item.itemMeta as ItemMeta
         val cm = meta.customModelDataComponent
 
-        cm.strings = mutableListOf("scroll-teleport")
-
-        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
-        meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§3§lᴛᴇʟᴇᴘᴏʀᴛ sᴄʀᴏʟʟ")
-
-        val lore = listOf("§fAllows teleport to player")
-        meta.lore = lore
-        item.setItemMeta(meta)
-
-        return item
-    }
-
-    fun DeathScroll (a : Int): ItemStack {
-        val item = ItemStack(Material.PAPER, a)
-
         NBT.modify(item) { nbt ->
-            nbt.setInteger("item-id", 5)
+            when (type) {
+                "teleport" -> {
+                    cm.strings = mutableListOf("scroll-teleport")
+                    meta.setDisplayName("§3§lᴛᴇʟᴇᴘᴏʀᴛ sᴄʀᴏʟʟ")
+                    val lore = listOf("§fAllows teleport to player")
+                    meta.lore = lore
+                }
+                "home" -> {
+                    cm.strings = mutableListOf("scroll-home")
+                    meta.setDisplayName("§3§lʜᴏᴍᴇ sᴄʀᴏʟʟ")
+                    val lore = listOf("§fAllows teleport to their bed")
+                    meta.lore = lore
+                }
+                "death" -> {
+                    cm.strings = mutableListOf("scroll-death")
+                    meta.setDisplayName("§3§lᴅᴇᴀᴛʜ sᴄʀᴏʟʟ")
+                    val lore = listOf("§fAllows teleport to death location")
+                    meta.lore = lore
+                }
+            }
         }
 
-        val meta = item.itemMeta as ItemMeta
-        val cm = meta.customModelDataComponent
-
-        cm.strings = mutableListOf("scroll-death")
-
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§3§lᴅᴇᴀᴛʜ sᴄʀᴏʟʟ")
 
-        val lore = listOf("§fAllows teleport to death location")
-        meta.lore = lore
-        item.setItemMeta(meta)
-
-        return item
-    }
-
-    fun HomeScroll (a : Int): ItemStack {
-        val item = ItemStack(Material.PAPER, a)
-
-        NBT.modify(item) { nbt ->
-            nbt.setInteger("item-id", 6)
-        }
-
-        val meta = item.itemMeta as ItemMeta
-        val cm = meta.customModelDataComponent
-
-        cm.strings = mutableListOf("scroll-home")
-
-        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
-        meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§3§lʜᴏᴍᴇ sᴄʀᴏʟʟ")
-
-        val lore = listOf("§fAllows teleport to their bed")
-        meta.lore = lore
         item.setItemMeta(meta)
 
         return item
@@ -214,23 +139,6 @@ class CustomItems {
         meta.setDisplayName("§3§lᴘᴇɴᴜs")
 
         val lore = listOf("§fLol its kinda funny")
-        meta.lore = lore
-        item.setItemMeta(meta)
-
-        return item
-    }
-
-    fun Lanyard (a : Int, type: String): ItemStack {
-        val item = ItemStack(Material.NAME_TAG, a)
-        val meta = item.itemMeta as ItemMeta
-        val cm = meta.customModelDataComponent
-
-        cm.strings = mutableListOf("${type}-lanyard")
-
-        meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§c§l${type.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }} §f§lʟᴀɴʏᴀʀᴅ")
-
-        val lore = listOf("§fUsed by the CCP for security")
         meta.lore = lore
         item.setItemMeta(meta)
 
@@ -319,24 +227,91 @@ class CustomItems {
         return item
     }
 
-    fun Awp (a: Int): ItemStack {
-        val item = ItemStack(Material.BOW, a)
+    fun Card(a: Int, suit: String, number: String): ItemStack {
+        val item = ItemStack(Material.PAPER, a)
+        val itemMeta = item.itemMeta as ItemMeta
 
-        NBT.modify(item) { nbt ->
-            nbt.setInteger("item-id", 800)
+        val cardInfo = getCardInfo(suit, number)
+        if (cardInfo != null) {
+            val (itemId, displayName, modelData) = cardInfo
+            NBT.modify(item) { nbt -> nbt.setInteger("item-id", itemId) }
+
+            val cm = itemMeta.customModelDataComponent
+            cm.strings = mutableListOf(modelData)
+
+            itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+            itemMeta.setCustomModelDataComponent(cm)
+            itemMeta.setDisplayName(displayName)
+
+            item.setItemMeta(itemMeta)
         }
 
-        val meta = item.itemMeta as ItemMeta
-        val cm = meta.customModelDataComponent
-
-        cm.strings = mutableListOf("awp")
-
-        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
-        meta.setCustomModelDataComponent(cm)
-
-        meta.setDisplayName("§9§lᴀᴡᴘ")
-
-        item.setItemMeta(meta)
         return item
+    }
+
+    private fun getCardInfo(suit: String, number: String): Triple<Int, String, String>? {
+        val displayNamePrefix = when (suit) {
+            "clubs" -> "§9§l"
+            "diamonds" -> "§b§l"
+            "hearts" -> "§c§l"
+            "spades" -> "§2§l"
+            "joker" -> "§4§l"
+            "back" -> "§f§l"
+            else -> return null
+        }
+
+        val cardName = when (number) {
+            "2" -> "2 Of ${suit.capitalize()}"
+            "3" -> "3 Of ${suit.capitalize()}"
+            "4" -> "4 Of ${suit.capitalize()}"
+            "5" -> "5 Of ${suit.capitalize()}"
+            "6" -> "6 Of ${suit.capitalize()}"
+            "7" -> "7 Of ${suit.capitalize()}"
+            "8" -> "8 Of ${suit.capitalize()}"
+            "9" -> "9 Of ${suit.capitalize()}"
+            "10" -> "10 Of ${suit.capitalize()}"
+            "jack" -> "Jack Of ${suit.capitalize()}"
+            "queen" -> "Queen Of ${suit.capitalize()}"
+            "king" -> "King Of ${suit.capitalize()}"
+            "ace" -> "Ace Of ${suit.capitalize()}"
+            "red" -> "Red Joker"
+            "black" -> "Black Joker"
+            "back" -> "Unknown Card"
+            else -> return null
+        }
+
+        val itemBaseId = when (suit) {
+            "clubs" -> 800
+            "diamonds" -> 820  // Start at 820 for diamonds
+            "hearts" -> 840    // Start at 840 for hearts
+            "spades" -> 860    // Start at 860 for spades
+            "joker" -> 880     // Start at 880 for jokers
+            "back" -> 883     // Start at 880 for jokers
+            else -> return null
+        }
+
+        val numberIdOffset = when (number) {
+            "2" -> 0
+            "3" -> 1
+            "4" -> 2
+            "5" -> 3
+            "6" -> 4
+            "7" -> 5
+            "8" -> 6
+            "9" -> 7
+            "10" -> 8
+            "jack" -> 9
+            "queen" -> 10
+            "king" -> 11
+            "ace" -> 12
+            "red" -> 0
+            "black" -> 1
+            "back" -> 0
+            else -> return null
+        }
+
+        val itemId = itemBaseId + numberIdOffset
+
+        return Triple(itemId, "$displayNamePrefix$cardName", "${suit.first()}$number")
     }
 }

@@ -38,11 +38,11 @@ class OnMove (private val event : PlayerMoveEvent) {
 
                     if (teleportSolo[p] == 1) {
                         p.sendMessage("§cCR §8|§r ${p.displayName} §rreturning scroll")
-                        p.inventory.addItem(CustomItems().DeathScroll(1))
+                        p.inventory.addItem(CustomItems().Scroll(1, "death"))
                         teleportSolo.remove(p)
                     } else {
                         p.sendMessage("§cCR §8|§r ${p.displayName} §rreturning scroll")
-                        p.inventory.addItem(CustomItems().HomeScroll(1))
+                        p.inventory.addItem(CustomItems().Scroll(1, "home"))
                         teleportSolo.remove(p)
                     }
 
@@ -63,12 +63,12 @@ class OnMove (private val event : PlayerMoveEvent) {
 
                             if (teleportStarter.containsKey(p)) {
                                 p.sendMessage("§cCR §8|§r ${p.displayName} §rreturning scroll")
-                                p.inventory.addItem(CustomItems().TeleportScroll(1))
+                                p.inventory.addItem(CustomItems().Scroll(1, "teleport"))
                                 teleportStarter.remove(p)
                             } else {
                                 if (teleportStarter.containsKey(t)) {
                                     t.sendMessage("§cCR §8|§r ${t.displayName} §rreturning scroll")
-                                    t.inventory.addItem(CustomItems().TeleportScroll(1))
+                                    t.inventory.addItem(CustomItems().Scroll(1, "teleport"))
                                     teleportStarter.remove(t)
                                 }
                             }

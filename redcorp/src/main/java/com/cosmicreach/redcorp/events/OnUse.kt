@@ -104,26 +104,29 @@ class OnUse (
     }
 
     private fun useDrugs() {
-        when (id) {
-            //Spliff
-            423 -> {
-                p.world.playSound(p.location, Sound.ENTITY_BREEZE_INHALE, 0.2f, 1.0f)
-                p.world.playSound(p.location, Sound.ENTITY_BLAZE_BURN, 0.2f, 1.0f)
-                p.addPotionEffect(PotionEffect(PotionEffectType.HUNGER, 1200, 1, true, false, false))
-                p.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 1200, 2, true, false, false))
+        if (event.hand == EquipmentSlot.HAND) {
+            when (id) {
+                //Spliff
+                423 -> {
+                    p.world.playSound(p.location, Sound.ENTITY_BREEZE_INHALE, 0.2f, 1.0f)
+                    p.world.playSound(p.location, Sound.ENTITY_BLAZE_BURN, 0.2f, 1.0f)
+                    p.addPotionEffect(PotionEffect(PotionEffectType.HUNGER, 1200, 1, true, false, false))
+                    p.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 1200, 2, true, false, false))
+                }
+                //Coke
+                432 -> {
+                    p.world.playSound(p.location, Sound.ENTITY_SNIFFER_SNIFFING, 0.75f, 1.0f)
+                    p.addPotionEffect(PotionEffect(PotionEffectType.SPEED, 1200, 2, true, false, false))
+                }
+                //Opium
+                441 -> {
+                    p.world.playSound(p.location, Sound.ENTITY_SNIFFER_SNIFFING, 0.75f, 1.0f)
+                    p.addPotionEffect(PotionEffect(PotionEffectType.UNLUCK, 6000, 2, true, false, false))
+                }
             }
-            //Coke
-            432 -> {
-                p.world.playSound(p.location, Sound.ENTITY_SNIFFER_SNIFFING, 0.75f, 1.0f)
-                p.addPotionEffect(PotionEffect(PotionEffectType.SPEED, 1200, 2, true, false, false))
-            }
-            //Opium
-            441 -> {
-                p.world.playSound(p.location, Sound.ENTITY_SNIFFER_SNIFFING, 0.75f, 1.0f)
-                p.addPotionEffect(PotionEffect(PotionEffectType.UNLUCK, 6000, 2, true, false, false))
-            }
+
+            p.inventory.itemInMainHand.amount -= 1
         }
-        p.inventory.itemInMainHand.amount -= 1
     }
 
     private fun grinder() {

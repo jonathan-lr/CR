@@ -25,9 +25,9 @@ class Scrolls(private var econ: Economy) {
         val amount = SimpleItem(ItemBuilder(ItemStack(Material.EMERALD, values[pruchaseAmount.getOrDefault(player, 0)])).setDisplayName("§rYou will purchase #${values[pruchaseAmount.getOrDefault(player, 0)]} items"))
         var balItem = BalanceItem(econ, player)
 
-        val tScrollItem = ShopItem(player, econ, balItem, ItemStack(CustomItems().TeleportScroll(1)), scrollT.sellPrice, scrollT.buyPrice, "§dMerlin")
-        val dScrollItem = ShopItem(player, econ, balItem, ItemStack(CustomItems().DeathScroll(1)), scrollD.sellPrice, scrollD.buyPrice, "§dMerlin")
-        val hScrollItem = ShopItem(player, econ, balItem, ItemStack(CustomItems().HomeScroll(1)), scrollH.sellPrice, scrollH.buyPrice, "§dMerlin")
+        val tScrollItem = ShopItem(player, econ, balItem, ItemStack(CustomItems().Scroll(1, "teleport")), scrollT.sellPrice, scrollT.buyPrice, "§dMerlin")
+        val dScrollItem = ShopItem(player, econ, balItem, ItemStack(CustomItems().Scroll(1, "death")), scrollD.sellPrice, scrollD.buyPrice, "§dMerlin")
+        val hScrollItem = ShopItem(player, econ, balItem, ItemStack(CustomItems().Scroll(1, "home")), scrollH.sellPrice, scrollH.buyPrice, "§dMerlin")
 
         val gui = Gui.normal()
                 .setStructure(
