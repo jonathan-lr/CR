@@ -1,6 +1,7 @@
 package com.cosmicreach.redcorp.events
 
 import com.cosmicreach.redcorp.items.DrugItems
+import com.cosmicreach.redcorp.items.GreenhouseItems
 import de.tr7zw.nbtapi.NBTBlock
 import de.tr7zw.nbtapi.NBTCompound
 import org.bukkit.Bukkit
@@ -25,10 +26,27 @@ class OnBreak (private val event : BlockBreakEvent) {
             Material.BARREL -> agingBarrel()
             Material.BREWING_STAND -> coffeeMachine()
             Material.PLAYER_HEAD -> fairyBreak()
+            Material.GREEN_STAINED_GLASS -> greenhouseBreak(true)
+            Material.BLACK_STAINED_GLASS -> greenhouseBreak(false)
             else -> {}
         }
 
         return
+    }
+
+    private fun greenhouseBreak(entrance: Boolean) {
+        val isGreenhouse = nbt.getBoolean("greenhouse")
+        if (!isGreenhouse) return
+        val greenhouseOwner = nbt.getUUID("greenhouse-owner")
+        event.isDropItems = false
+        b.drops.clear()
+
+        if (entrance) {
+            b.world.dropItemNaturally(b.location, GreenhouseItems().GreenhouseEntrance(greenhouseOwner!!))
+        } else {
+            b.world.dropItemNaturally(b.location, GreenhouseItems().GreenhouseExit(greenhouseOwner!!))
+        }
+        nbt.clearNBT()
     }
 
     private fun weedBreak () {
@@ -129,13 +147,13 @@ class OnBreak (private val event : BlockBreakEvent) {
             event.isDropItems = false
             b.drops.clear()
 
-            b.world.dropItemNaturally(b.location, DrugItems().Shrooms(1))
+            b.world.dropItemNaturally(b.location, DrugItems().Shrooms(Random.nextInt(0, 1)))
         }
         if (truffle) {
             event.isDropItems = false
             b.drops.clear()
 
-            b.world.dropItemNaturally(b.location, DrugItems().Truffles(1))
+            b.world.dropItemNaturally(b.location, DrugItems().Truffles(Random.nextInt(0, 1)))
         }
 
         nbt.clearNBT()

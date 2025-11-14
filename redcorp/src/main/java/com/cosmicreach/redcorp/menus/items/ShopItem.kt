@@ -1,6 +1,7 @@
 package com.cosmicreach.redcorp.menus.items
 
 import com.cosmicreach.redcorp.RedCorp
+import com.cosmicreach.redcorp.db.StockEx
 import com.cosmicreach.redcorp.utils.Utils
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.entity.Player
@@ -27,6 +28,7 @@ class ShopItem(
     private var vendorStock: String = "%vendor% §8|§r Sorry %player%§r, %item%§r is currently out of stock."
 ) : AbstractItem() {
     private val values = listOf(1, 4, 8, 16, 32, 64)
+    private val connection = RedCorp.getPlugin().getConnection()!!
 
     override fun getItemProvider(): ItemProvider {
         val amount = RedCorp.getPlugin().getPurchaseAmount()
@@ -60,38 +62,60 @@ class ShopItem(
     private fun handleBuy(player: Player) {
         var gotItem = false
         val amount = RedCorp.getPlugin().getPurchaseAmount()
+        val requiredAmount = values[amount.getOrDefault(player, 0)]
+
         if (buyPrice > 0.0) {
+            var totalAvailable = 0
+            val stacksToUpdate = mutableListOf<ItemStack>()
+
+            // First pass: Calculate the total available items and track stacks to update
             player.inventory.forEach { item ->
-                if (item == null) { return@forEach }
-                if (item.type !== shopItem.type) { return@forEach }
+                if (item == null || item.type != shopItem.type) return@forEach
 
                 if (Utils().getID(shopItem) > 0) {
                     if (Utils().checkID(item, arrayOf(Utils().getID(shopItem)))) {
-                        if (item.amount >= values[amount.getOrDefault(player, 0)]) {
-                            player.sendMessage(replacePlaceholders(vendorCompleteBuy, player))
-                            item.amount -= values[amount.getOrDefault(player, 0)]
-                            econ.depositPlayer(player, buyPrice*values[amount.getOrDefault(player, 0)])
-                            balItem.refreshBal()
-                            gotItem = true
-                        } else {
-                            player.sendMessage("§cCR §8|§r Not enough items")
-                        }
-                        return
+                        totalAvailable += item.amount
+                        stacksToUpdate.add(item)
                     }
                 } else {
-                    if (item.amount >= values[amount.getOrDefault(player, 0)]) {
-                        player.sendMessage(replacePlaceholders(vendorCompleteBuy, player))
-                        item.amount -= values[amount.getOrDefault(player, 0)]
-                        econ.depositPlayer(player, buyPrice*values[amount.getOrDefault(player, 0)])
-                        balItem.refreshBal()
-                        gotItem = true
-                    } else {
-                        player.sendMessage("§cCR §8|§r Not enough items")
-                    }
-                    return
+                    totalAvailable += item.amount
+                    stacksToUpdate.add(item)
                 }
-                return@forEach
             }
+
+            // Check if there are enough items
+            if (totalAvailable >= requiredAmount) {
+                var remainingToDeduct = requiredAmount
+
+                // Second pass: Deduct items from stacks
+                for (stack in stacksToUpdate) {
+                    if (remainingToDeduct <= 0) break
+
+                    if (stack.amount <= remainingToDeduct) {
+                        remainingToDeduct -= stack.amount
+                        stack.amount = 0 // Remove all items from this stack
+                    } else {
+                        stack.amount -= remainingToDeduct
+                        remainingToDeduct = 0 // All required items deducted
+                    }
+                }
+
+                // Log the sale and reward the player
+                StockEx(connection).logSale(
+                    shopItem,
+                    player,
+                    buyPrice * requiredAmount,
+                    requiredAmount,
+                    "playerSell"
+                )
+                player.sendMessage(replacePlaceholders(vendorCompleteBuy, player))
+                econ.depositPlayer(player, buyPrice * requiredAmount)
+                balItem.refreshBal()
+                gotItem = true
+            } else {
+                player.sendMessage("§cCR §8|§r Not enough items")
+            }
+
             if (!gotItem) {
                 player.sendMessage(replacePlaceholders(vendorFailBuy, player))
             }
@@ -109,6 +133,7 @@ class ShopItem(
                 player.inventory.addItem(shopItem)
                 econ.withdrawPlayer(player, sellPrice*values[amount.getOrDefault(player, 0)])
                 balItem.refreshBal()
+                StockEx(connection).logSale(shopItem, player, sellPrice*values[amount.getOrDefault(player, 0)], values[amount.getOrDefault(player, 0)], "playerBuy")
             } else {
                 player.sendMessage(replacePlaceholders(vendorFailSell, player))
             }

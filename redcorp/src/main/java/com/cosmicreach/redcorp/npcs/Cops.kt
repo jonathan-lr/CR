@@ -25,12 +25,8 @@ class Cops(
         if (DrugTest().doTest(p)) {
             p.sendMessage("§9${cops[cop-1]} §8|§r Gotcha ${p.displayName}§r, time for some prison time!")
             DrugTest().arrestPlayer(p)
-            for (i in 1..10) {
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "boss butcher world cop_${i}")
-            }
         } else {
             p.sendMessage("§9${cops[cop-1]} §8|§r Sorry ${p.displayName}§r, please continue your day")
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "boss butcher world cop_${cop}")
         }
     }
 }

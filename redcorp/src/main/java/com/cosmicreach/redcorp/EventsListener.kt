@@ -1,7 +1,9 @@
 package com.cosmicreach.redcorp
 
+import com.cosmicreach.redcorp.db.Greenhouse
 import com.cosmicreach.redcorp.db.Magic
 import com.cosmicreach.redcorp.events.*
+import com.cosmicreach.redcorp.utils.DrugTest
 import com.cosmicreach.redcorp.utils.TeleportActions
 import com.cosmicreach.redcorp.utils.Utils
 import de.tr7zw.nbtapi.NBTBlock
@@ -15,9 +17,11 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockDispenseEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.entity.EntityShootBowEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
 import org.bukkit.event.inventory.PrepareItemCraftEvent
 import org.bukkit.event.player.*
@@ -54,6 +58,10 @@ class EventsListener(
     @EventHandler(priority = EventPriority.MONITOR)
     fun onAnvil(event : InventoryClickEvent) {
         OnAnvil(event).run(extendedIds)
+        val p = event.whoClicked
+        if (p is Player) {
+            HandleInvChange(p).run()
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -100,6 +108,7 @@ class EventsListener(
     @EventHandler(priority = EventPriority.MONITOR)
     fun onDrop(event : PlayerDropItemEvent) {
         OnDrop(event).run()
+        HandleInvChange(event.player).run()
         return
     }
 
@@ -145,6 +154,24 @@ class EventsListener(
         return
     }
 
+    @EventHandler(priority = EventPriority.MONITOR)
+    fun onInvClose(event: InventoryCloseEvent) {
+        val p = event.player
+        if (p is Player) {
+            HandleInvChange(p).run()
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    fun pickupItem(event: EntityPickupItemEvent) {
+        if (event.entity is Player) {
+            val p = event.entity as Player
+            if (DrugTest().itemTest(event.item.itemStack)) {
+                Utils().setScore(p, "has_drugs", 1)
+            }
+        }
+    }
+
     /*
     @EventHandler(priority = EventPriority.MONITOR)
     fun onEat(event: PlayerItemConsumeEvent) {
@@ -180,5 +207,26 @@ class EventsListener(
         } else {
             magicUnlocked[event.player] = result
         }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    fun onWorldChange(event: PlayerChangedWorldEvent) {
+        val connection = RedCorp.getPlugin().getConnection()!!
+        val player = event.player
+
+        val greenhouseTracking = RedCorp.getPlugin().getGreenhouseTracker()
+
+        if (!greenhouseTracking.containsKey(player)) return
+
+        val playerHome = greenhouseTracking.get(player)
+
+        val loc = player.location
+        val locString = "${loc.world?.name},${loc.x},${loc.y},${loc.z},${loc.yaw},${loc.pitch}"
+
+        val data = Greenhouse(connection).addGreenhouse(player.uniqueId, locString, locString, playerHome!!)
+
+        greenhouseTracking.remove(player)
+
+        player.sendMessage("Saved greenhouse location: $data")
     }
 }

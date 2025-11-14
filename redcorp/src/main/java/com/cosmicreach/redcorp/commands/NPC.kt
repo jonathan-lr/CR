@@ -1,6 +1,5 @@
 package com.cosmicreach.redcorp.commands
 
-import com.comphenix.protocol.ProtocolManager
 import com.cosmicreach.redcorp.menus.*
 import com.cosmicreach.redcorp.npcs.Cops
 import com.cosmicreach.redcorp.npcs.Merlin
@@ -17,7 +16,7 @@ import org.bukkit.entity.Player
 import xyz.xenondevs.invui.window.Window
 import java.util.concurrent.ThreadLocalRandom
 
-class NPC(economy: Economy?, private val protocolManager: ProtocolManager?): CommandExecutor {
+class NPC(economy: Economy?): CommandExecutor {
     private val econ = economy as Economy
     private var kyleStage = HashMap<Player, Int>()
     private val confirm = HashMap<Player, Boolean>()
@@ -170,14 +169,16 @@ class NPC(economy: Economy?, private val protocolManager: ProtocolManager?): Com
 
                     player.sendMessage("§cJeramey §8|§r Alright lets crack the vault open")
                     player.inventory.itemInMainHand.amount -= 1
-                    DecideLoot(protocolManager).decideLoot(player, item)
+                    DecideLoot().decideLoot(player, item)
                     return false
                 }
                 "patrick" -> {
                     var hasCoke = false
                     player.inventory.forEach {
-                        if(Utils().checkID(it, arrayOf(432))) {
-                            hasCoke = true
+                        if (it != null) {
+                            if(Utils().checkID(it, arrayOf(432))) {
+                                hasCoke = true
+                            }
                         }
                     }
                     if (hasCoke) {
@@ -341,6 +342,28 @@ class NPC(economy: Economy?, private val protocolManager: ProtocolManager?): Com
                             .setTitle("§2Fruit Gamble")
                             .setGui(FruitGamble(econ).makeGUI(player))
                             .build()
+
+                    window.open()
+                    return false
+                }
+                "shipment" -> {
+                    player.sendMessage("§2Shipment §8|§r Testing")
+                    val window = Window.single()
+                        .setViewer(player)
+                        .setTitle("§2Start Shipments")
+                        .setGui(Shipment(econ).makeGUI(player))
+                        .build()
+
+                    window.open()
+                    return false
+                }
+                "shipmentSubmit" -> {
+                    player.sendMessage("§2Shipment §8|§r Testing")
+                    val window = Window.single()
+                        .setViewer(player)
+                        .setTitle("§2Start Shipments")
+                        .setGui(ShipmentSubmit(econ).makeGUI(player))
+                        .build()
 
                     window.open()
                     return false

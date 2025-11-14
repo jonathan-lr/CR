@@ -1,7 +1,7 @@
 package com.cosmicreach.redcorp.commands
 
-import com.comphenix.protocol.ProtocolManager
 import com.cosmicreach.redcorp.RedCorp
+import com.cosmicreach.redcorp.db.Greenhouse
 import com.cosmicreach.redcorp.utils.Utils
 import org.bukkit.*
 import org.bukkit.block.Block
@@ -18,10 +18,47 @@ import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.scheduler.BukkitRunnable
 import kotlin.math.sqrt
 
-class TestCommand(private val protocolManager: ProtocolManager?) : CommandExecutor {
+class TestCommand() : CommandExecutor {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
+        val connection = RedCorp.getPlugin().getConnection()!!
         if (sender !is Player) { return false }
         if (sender.hasPermission("redcorp.dev")) {
+            val test = Greenhouse(connection).getGreenhouse(sender.uniqueId)
+
+            if (test != null) {
+                val parts: List<String>
+
+                sender.sendMessage("Test", sender.world.name)
+                if (sender.world.name == "world") {
+                    parts = test.home.split(",")
+                    sender.sendMessage("Teleported to your Greenhouse")
+                } else {
+                    parts = test.exitl.split(",")
+                    sender.sendMessage("Teleported to Insomnis")
+                }
+
+                val world = Bukkit.getWorld(parts[0])
+                val x = parts[1].toDouble()
+                val y = parts[2].toDouble()
+                val z = parts[3].toDouble()
+                val yaw = parts[4].toFloat()
+                val pitch = parts[5].toFloat()
+
+                val location = Location(world, x, y, z, yaw, pitch)
+
+                sender.teleport(location)
+            } else {
+                val loc = sender.location
+                val locString = "${loc.world?.name},${loc.x},${loc.y},${loc.z},${loc.yaw},${loc.pitch}"
+
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "sudo ${sender.playerListName} island create greenhouse")
+
+                val greenhouseTracking = RedCorp.getPlugin().getGreenhouseTracker()
+
+                greenhouseTracking.put(sender, locString)
+            }
+
+
             /*sender.sendMessage("§cCR §8| §f${sender.displayName} nothing here")
             sender.sendMessage("")
             sender.sendMessage("§cCR §8| §f Item id: ${ Utils().getID(sender.inventory.itemInMainHand)} ")

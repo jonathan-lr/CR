@@ -66,8 +66,8 @@ class CustomItems {
         NBT.modify(item) { nbt ->
             when (type) {
                 "teleport" -> nbt.setInteger("item-id", 3)
-                "home" -> nbt.setInteger("item-id", 5)
-                "death" -> nbt.setInteger("item-id", 6)
+                "death" -> nbt.setInteger("item-id", 5)
+                "home" -> nbt.setInteger("item-id", 6)
             }
         }
 
@@ -138,6 +138,11 @@ class CustomItems {
         meta.setCustomModelDataComponent(cm)
         meta.setDisplayName("§3§lᴘᴇɴᴜs")
 
+        // Test Food
+        val food = meta.food
+        food.setCanAlwaysEat(true)
+        meta.setFood(food)
+
         val lore = listOf("§fLol its kinda funny")
         meta.lore = lore
         item.setItemMeta(meta)
@@ -154,6 +159,11 @@ class CustomItems {
 
         meta.setCustomModelDataComponent(cm)
         meta.setDisplayName("§c§lᴜɴɪᴛs")
+
+        // Test Food
+        val food = meta.food
+        food.setCanAlwaysEat(true)
+        meta.setFood(food)
 
         val lore = listOf("§fCurrency of Insomnis")
         meta.lore = lore

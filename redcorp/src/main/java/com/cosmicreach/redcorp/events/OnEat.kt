@@ -12,6 +12,7 @@ class OnEat (private val event : PlayerItemConsumeEvent) {
         if (Utils().checkID(event.item, arrayOf(460, 461, 462, 463, 470, 471, 472))) {
             var hasMilk = false
             var hasSugar = false
+
             NBT.get(event.item) { nbt ->
                 hasMilk = nbt.getBoolean("hasMilk")
                 hasSugar = nbt.getBoolean("hasSugar")

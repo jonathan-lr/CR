@@ -1,9 +1,5 @@
 package com.cosmicreach.redcorp.utils
 
-import com.comphenix.protocol.PacketType
-import com.comphenix.protocol.ProtocolManager
-import com.comphenix.protocol.events.PacketContainer
-import com.comphenix.protocol.wrappers.BlockPosition
 import com.cosmicreach.redcorp.RedCorp
 import com.cosmicreach.redcorp.items.*
 import org.bukkit.*
@@ -19,7 +15,7 @@ import kotlin.math.cos
 import kotlin.math.pow
 import kotlin.math.sin
 
-class DecideLoot(private val protocolManager: ProtocolManager?) {
+class DecideLoot() {
     private var types = arrayOf("§7Air", "§cFire", "§9Water", "§2Earth")
     private var typesConf = arrayOf("air", "fire", "water", "earth")
     private var items = arrayOf("Pick", "Shovel", "Hoe", "Axe", "Sword", "Helmet", "Chestplate", "Leggings", "Boots", "Wings")
@@ -50,11 +46,11 @@ class DecideLoot(private val protocolManager: ProtocolManager?) {
 
     fun openChest(p: Player, vault: Int, drop: Int) {
         val block = Location(p.world, endPoint.x, 91.0, endPoint.y).block
-        val testPacket = PacketContainer(PacketType.Play.Server.BLOCK_ACTION)
-        testPacket.blockPositionModifier.write(0, BlockPosition(block.x, block.y, block.z));
-        testPacket.integers.write(0, 1)
-        testPacket.integers.write(0, 1)
-        testPacket.blocks.write(0, block.type)
+        //val testPacket = PacketContainer(PacketType.Play.Server.BLOCK_ACTION)
+        //testPacket.blockPositionModifier.write(0, BlockPosition(block.x, block.y, block.z));
+        //testPacket.integers.write(0, 1)
+        //testPacket.integers.write(0, 1)
+        //testPacket.blocks.write(0, block.type)
         val loc = block.location
         val interpolatedPoints = interpolateOutwardInwardCurve(startPoint, endPoint, peakPoint, numPoints)
 
@@ -67,7 +63,7 @@ class DecideLoot(private val protocolManager: ProtocolManager?) {
                     try {
                         block.world.players.forEach {
                             if (it.location.distanceSquared(loc) < 4096) {
-                                protocolManager?.sendServerPacket(it, testPacket)
+                                //protocolManager?.sendServerPacket(it, testPacket)
                             }
                         }
                     } catch (e: InvocationTargetException) {
@@ -88,11 +84,11 @@ class DecideLoot(private val protocolManager: ProtocolManager?) {
         var count2 = 0
         val numPoints = 32
         val block = Location(p.world, endPoint.x, 91.0, endPoint.y).block
-        val testPacket = PacketContainer(PacketType.Play.Server.BLOCK_ACTION)
-        testPacket.blockPositionModifier.write(0, BlockPosition(block.x, block.y, block.z));
-        testPacket.integers.write(0, 0)
-        testPacket.integers.write(0, 0)
-        testPacket.blocks.write(0, block.type)
+        //val testPacket = PacketContainer(PacketType.Play.Server.BLOCK_ACTION)
+        //testPacket.blockPositionModifier.write(0, BlockPosition(block.x, block.y, block.z));
+        //testPacket.integers.write(0, 0)
+        //testPacket.integers.write(0, 0)
+        //testPacket.blocks.write(0, block.type)
         val loc = block.location
         object : BukkitRunnable() {
             override fun run() {
@@ -120,7 +116,7 @@ class DecideLoot(private val protocolManager: ProtocolManager?) {
                         try {
                             block.world.players.forEach {
                                 if (it.location.distanceSquared(loc) < 4096) {
-                                    protocolManager?.sendServerPacket(it, testPacket)
+                                    //protocolManager?.sendServerPacket(it, testPacket)
                                 }
                             }
                         } catch (e: InvocationTargetException) {

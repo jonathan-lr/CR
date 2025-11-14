@@ -34,6 +34,18 @@ class DatabaseManager(
     }
 
     fun getConnection(): Connection? {
+        if (connection == null || !isConnectionValid()) {
+            println("Re-establishing the database connection...")
+            connect()
+        }
         return connection
+    }
+
+    private fun isConnectionValid(): Boolean {
+        return try {
+            connection?.isValid(2) == true // Timeout of 2 seconds
+        } catch (e: SQLException) {
+            false
+        }
     }
 }

@@ -5,6 +5,7 @@ import de.tr7zw.nbtapi.NBT
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import java.util.UUID
 
 class Utils {
     fun checkID(item: ItemStack, ids: Array<Int>): Boolean {
@@ -43,6 +44,18 @@ class Utils {
         return id
     }
 
+    fun getGreenhouseUUID(item: ItemStack): UUID? {
+        var id : UUID? = null
+
+        if (!item.hasItemMeta()) { return id }
+
+        NBT.get(item) { nbt ->
+            id = nbt.getUUID("player-id")!!
+        }
+
+        return id
+    }
+
     fun serializeMagicUnlocked(magicUnlocked: HashMap<Player, Boolean>): String {
         return magicUnlocked.entries.joinToString(";") {
             "${it.key.playerListName}=${it.value}"
@@ -68,5 +81,16 @@ class Utils {
         }
 
         return
+    }
+
+    fun setScore(player: Player, objectiveName: String, value: Int) {
+        val scoreboard = player.server.scoreboardManager?.mainScoreboard
+        var objective = scoreboard?.getObjective(objectiveName)
+
+        if (objective == null) {
+            objective = scoreboard?.registerNewObjective(objectiveName, "dummy", objectiveName)
+        }
+
+        objective?.getScore(player.name)?.score = value
     }
 }

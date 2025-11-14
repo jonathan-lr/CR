@@ -135,8 +135,7 @@ class Zarek(
                 if (index >= crystalLocations.size) {
                     // Final actions
                     destroyGroundCrystals(world, crystalLocations.subList(0, 4))
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "boss spawn world_the_end 0 120 0 testguard")
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "execute in minecraft:the_end run bossbar set minecraft:firebelly players @a[x=0,y=60,z=0,distance=..200]")
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mm mobs spawn Firebelly 1 world_the_end,0,120,0")
                     val crystals = world.getEntitiesByClass(EnderCrystal::class.java)
                     crystals.forEach { crystal ->
                         if (crystal.beamTarget == beam) {

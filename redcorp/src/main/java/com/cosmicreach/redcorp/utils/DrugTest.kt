@@ -4,6 +4,7 @@ import com.cosmicreach.redcorp.RedCorp
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.BundleMeta
 import xyz.xenondevs.invui.inventory.get
 import java.util.concurrent.ThreadLocalRandom
@@ -31,6 +32,10 @@ class DrugTest {
         Material.WHITE_BUNDLE
         // Add other colored bundle types as needed
     )
+
+    fun itemTest(item: ItemStack): Boolean {
+        return illegalDrugs.contains(Utils().getID(item))
+    }
 
     fun doTest(p: Player): Boolean {
         var hasDrugs = false
@@ -148,6 +153,8 @@ class DrugTest {
             if (illegalDrugsPlus.contains(Utils().getID(p.inventory.itemInOffHand))) {
                 p.inventory.itemInOffHand.amount = 0
             }
+
+            Utils().setScore(p, "has_drugs", 0)
         }
     }
 }

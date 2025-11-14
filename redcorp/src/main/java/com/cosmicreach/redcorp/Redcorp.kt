@@ -1,8 +1,6 @@
 package com.cosmicreach.redcorp
 
 import com.cosmicreach.redcorp.commands.TestCommand
-import com.comphenix.protocol.ProtocolLibrary
-import com.comphenix.protocol.ProtocolManager
 import com.cosmicreach.redcorp.commands.*
 import com.cosmicreach.redcorp.recipes.Drugs
 import com.cosmicreach.redcorp.utils.TeleportActions
@@ -11,6 +9,7 @@ import com.sk89q.worldguard.protection.flags.StateFlag
 import com.yourplugin.DatabaseManager
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.Bukkit
+import org.bukkit.Location
 import org.bukkit.block.Block
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
@@ -27,15 +26,16 @@ class RedCorp : JavaPlugin() {
     private var teleportSolo = HashMap<Player, Int>()
     private var particlePlayers = HashMap<Player, ParticleManager>()
     private var grinderPlayers = HashMap<Player, VirtualInventory>()
+    private var shipmentPlayers = HashMap<Player, VirtualInventory>()
     private var agingBarrels = HashMap<Block, VirtualInventory>()
     private val agingViewers = HashMap<Block, MutableList<Window>>()
     private var particleTeleport = HashMap<Player, ParticleManager>()
     private var economy: Economy? = null
-    private var protocolManager: ProtocolManager? = null
     private var taggedPlayer = HashMap<Int, Player>()
     private var lastTagged = HashMap<Int, Player>()
     private var passedTimes = HashMap<Int, Int>()
     private var magicUnlocked = HashMap<Player, Boolean>()
+    private var greenhouseTracker = HashMap<Player, String>()
     private var gambleLock = HashMap<Player, Boolean>()
     private var purchaseAmount = HashMap<Player, Int>()
     private var fairiesFound = HashMap<Player, Array<Boolean>>()
@@ -67,8 +67,6 @@ class RedCorp : JavaPlugin() {
         if (rsp != null) {
             economy = rsp.provider
         };
-
-        protocolManager = ProtocolLibrary.getProtocolManager()
 
         config.options().copyDefaults(true);
         saveConfig()
@@ -103,14 +101,14 @@ class RedCorp : JavaPlugin() {
     }
 
     private fun registerCommands() {
-        getCommand("testcommand")?.setExecutor(TestCommand(protocolManager))
+        getCommand("testcommand")?.setExecutor(TestCommand())
 
         getCommand("togglegod")?.setExecutor(GodMode(config))
         getCommand("getrelic")?.setExecutor(GetRelic())
         getCommand("getrelic")?.tabCompleter = GetRelicComplete()
         getCommand("getToken")?.setExecutor(GetToken())
         getCommand("getToken")?.tabCompleter = GetTokenComplete()
-        getCommand("NPC")?.setExecutor(NPC(economy, protocolManager))
+        getCommand("NPC")?.setExecutor(NPC(economy))
         getCommand("getReward")?.setExecutor(GetReward())
         getCommand("toggleparticle")?.setExecutor(ToggleParticle(particlePlayers))
         //getCommand("nick")?.setExecutor(Nick())
@@ -154,6 +152,14 @@ class RedCorp : JavaPlugin() {
 
     fun getTaggedPlayers(): HashMap<Int, Player> {
         return taggedPlayer
+    }
+
+    fun getShipmentPlayers(): HashMap<Player, VirtualInventory> {
+        return shipmentPlayers
+    }
+
+    fun getGreenhouseTracker(): HashMap<Player, String> {
+        return greenhouseTracker
     }
 
     fun getLastTagged(): HashMap<Int, Player> {

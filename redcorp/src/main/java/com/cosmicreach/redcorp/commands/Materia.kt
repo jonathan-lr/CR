@@ -2,7 +2,10 @@ package com.cosmicreach.redcorp.commands
 
 import com.cosmicreach.redcorp.items.CustomItems
 import com.cosmicreach.redcorp.items.DrugItems
+import com.cosmicreach.redcorp.items.GreenhouseItems
 import com.cosmicreach.redcorp.items.PlayerItems
+import de.tr7zw.nbtapi.NBTCompound
+import org.bukkit.block.Block
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -52,11 +55,15 @@ class Materia : CommandExecutor {
             val color = args.getOrElse(1) { "red" }
             CustomItems().Unit(args.getOrNull(0)?.toIntOrNull() ?: 1, color)
         },
-        "weed" to { args: List<String> -> DrugItems().WeedSeed(args.getOrNull(0)?.toIntOrNull() ?: 1) }
+        "weed" to { args: List<String> -> DrugItems().WeedSeed(args.getOrNull(0)?.toIntOrNull() ?: 1) },
+        "greenhouseEntrance" to { args: List<String> -> GreenhouseItems().GreenhouseEntrance(p.uniqueId) },
+        "greenhouseExit" to { args: List<String> -> GreenhouseItems().GreenhouseExit(p.uniqueId) },
     )
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (sender !is Player) return false
+
+        p = sender
 
         if (!sender.hasPermission("redcorp.materia")) {
             sender.sendMessage("§cCR §8| §c${sender.displayName} kindly fuck off")
@@ -79,7 +86,9 @@ class Materia : CommandExecutor {
         val item = sender.inventory.itemInMainHand
 
         try {
-            val transformedItem = transformer(args.toList())
+            val params = args.toMutableList()
+            params[0] = item.amount.toString()
+            val transformedItem = transformer(params)
 
             if (item.type == transformedItem.type) {
                 sender.inventory.setItemInMainHand(transformedItem)
@@ -92,6 +101,10 @@ class Materia : CommandExecutor {
         }
 
         return true
+    }
+
+    companion object {
+        private lateinit var p: Player
     }
 }
 

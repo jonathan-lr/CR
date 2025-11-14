@@ -141,7 +141,7 @@ class OnMove (private val event : PlayerMoveEvent) {
             val surfaceY = world.getHighestBlockAt(spawnX.toInt(), spawnZ.toInt()).y + 2.0 // Get surface level
 
             // Dispatch command to spawn the boss
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "boss spawn world ${spawnX.toInt()} ${surfaceY.toInt()} ${spawnZ.toInt()} cop_$i")
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mm mobs spawn cop_$i 1 world,${spawnX.toInt()},${surfaceY.toInt()},${spawnZ.toInt()}")
         }
     }
 }

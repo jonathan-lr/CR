@@ -1,16 +1,19 @@
 package com.cosmicreach.redcorp.events
 
 import com.cosmicreach.redcorp.RedCorp
+import com.cosmicreach.redcorp.db.Greenhouse
 import com.cosmicreach.redcorp.menus.Grinder
 import com.cosmicreach.redcorp.menus.Teleport
 import com.cosmicreach.redcorp.utils.TeleportActions
 import com.cosmicreach.redcorp.utils.Utils
 import de.tr7zw.nbtapi.NBTBlock
+import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
+import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
@@ -18,6 +21,7 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import xyz.xenondevs.invui.inventory.VirtualInventory
 import xyz.xenondevs.invui.window.Window
+import java.sql.Connection
 
 class OnUse (
     private val event : PlayerInteractEvent,
@@ -26,6 +30,7 @@ class OnUse (
 ) {
 
     fun run() {
+        connection = RedCorp.getPlugin().getConnection()!!
         if (event.item !== null) {
             p = event.player
             i = event.item!!
@@ -40,6 +45,7 @@ class OnUse (
                 3 -> playerTeleport()
                 5 -> deathTeleport()
                 6 -> homeTeleport()
+                201, 202 -> greenhouse()
                 420, 430 -> farmlandDrug()
                 440 -> podzolDrug()
                 450, 451 -> myceliumDrug()
@@ -63,6 +69,82 @@ class OnUse (
                 if(event.clickedBlock!!.type == Material.PLAYER_HEAD) {
                     if (event.hand == EquipmentSlot.HAND) {
                         fairy()
+                    }
+                }
+
+                if(event.clickedBlock!!.type == Material.GREEN_STAINED_GLASS) {
+                    if (event.action != Action.RIGHT_CLICK_BLOCK) return
+                    if (event.hand == EquipmentSlot.HAND) {
+                        val nbt = NBTBlock(event.clickedBlock).data
+                        val isGreenhouse = nbt.getBoolean("greenhouse")
+                        val greenhouseOwner = nbt.getUUID("greenhouse-owner")
+
+                        if (isGreenhouse) {
+                            if (greenhouseOwner != null) {
+                                val greenhouse = Greenhouse(connection).getGreenhouse(greenhouseOwner)
+
+                                if (greenhouse != null) {
+                                    val parts: List<String>
+                                    if (greenhouseOwner == p.uniqueId) {
+                                        parts = greenhouse.home.split(",")
+                                    } else {
+                                        parts = greenhouse.visit.split(",")
+                                    }
+
+                                    val world = Bukkit.getWorld(parts[0])
+                                    val x = parts[1].toDouble()
+                                    val y = parts[2].toDouble()
+                                    val z = parts[3].toDouble()
+                                    val yaw = parts[4].toFloat()
+                                    val pitch = parts[5].toFloat()
+
+                                    val location = Location(world, x, y, z, yaw, pitch)
+
+                                    p.teleport(location)
+                                } else {
+                                    val loc = p.location
+                                    val locString = "${loc.world?.name},${loc.x},${loc.y},${loc.z},${loc.yaw},${loc.pitch}"
+
+                                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "sudo ${p.playerListName} island create greenhouse")
+
+                                    val greenhouseTracking = RedCorp.getPlugin().getGreenhouseTracker()
+
+                                    greenhouseTracking.put(p, locString)
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if(event.clickedBlock!!.type == Material.BLACK_STAINED_GLASS) {
+                    if (event.action != Action.RIGHT_CLICK_BLOCK) return
+                    if (event.hand == EquipmentSlot.HAND) {
+                        val nbt = NBTBlock(event.clickedBlock).data
+                        val isGreenhouse = nbt.getBoolean("greenhouse")
+                        val greenhouseOwner = nbt.getUUID("greenhouse-owner")
+
+                        if (isGreenhouse) {
+                            if (greenhouseOwner != null) {
+                                val greenhouse = Greenhouse(connection).getGreenhouse(greenhouseOwner)
+
+                                if (greenhouse != null) {
+                                    val parts = greenhouse.exitl.split(",")
+
+                                    val world = Bukkit.getWorld(parts[0])
+                                    val x = parts[1].toDouble()
+                                    val y = parts[2].toDouble()
+                                    val z = parts[3].toDouble()
+                                    val yaw = parts[4].toFloat()
+                                    val pitch = parts[5].toFloat()
+
+                                    val location = Location(world, x, y, z, yaw, pitch)
+
+                                    p.teleport(location)
+                                } else {
+                                    p.sendMessage("§cCR §8|§r Something has gone wrong call Zach he can fix it")
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -150,6 +232,8 @@ class OnUse (
         p.sendMessage("§cCR §8|§r debug shroom ${nbt.getBoolean("shroom")}")
         p.sendMessage("§cCR §8|§r debug truffle ${nbt.getBoolean("truffle")}")
         p.sendMessage("§cCR §8|§r debug fairy ${nbt.getBoolean("fairy")}")
+        p.sendMessage("§cCR §8|§r debug greenhouse ${nbt.getBoolean("greenhouse")}")
+        p.sendMessage("§cCR §8|§r debug greenhouseOwner ${nbt.getUUID("greenhouse-owner")}")
     }
 
     private fun playerTeleport() {
@@ -175,6 +259,46 @@ class OnUse (
             teleportActions.runTeleportLocation(p, p.respawnLocation!!, 2)
         } else {
             p.sendMessage("§cCR §8|§r Sorry ${p.displayName} §rwe cant find your bed location")
+        }
+    }
+
+
+    private fun greenhouse() {
+        val block = event.clickedBlock
+        if (block != null) {
+            if (id == 201) {
+                if (block.location.world?.name == "world") {
+                    setData()
+                    val owner = Utils().getGreenhouseUUID(i)
+                    val greenhouse = Greenhouse(connection).getGreenhouse(owner!!)
+
+                    if (greenhouse != null) {
+                        val loc = p.location
+                        val locString = "${loc.world?.name},${loc.x},${loc.y},${loc.z},${loc.yaw},${loc.pitch}"
+                        Greenhouse(connection).updateExit(owner, locString)
+                        p.sendMessage("§cCR §8|§r Set greenhouse exit location to ${p.location}")
+                    }
+                } else {
+                    event.isCancelled = true
+                    p.sendMessage("§cCR §8|§r Sorry ${p.displayName} §rthis must be placed in the overworld")
+                }
+            } else {
+                if (block.location.world?.name == "greenhouse") {
+                    setData()
+                    val owner = Utils().getGreenhouseUUID(i)
+                    val greenhouse = Greenhouse(connection).getGreenhouse(owner!!)
+
+                    if (greenhouse != null) {
+                        val loc = p.location
+                        val locString = "${loc.world?.name},${loc.x},${loc.y},${loc.z},${loc.yaw},${loc.pitch}"
+                        Greenhouse(connection).updateHome(owner, locString)
+                        p.sendMessage("§cCR §8|§r Set greenhouse home location to ${p.location}")
+                    }
+                } else {
+                    event.isCancelled = true
+                    p.sendMessage("§cCR §8|§r Sorry ${p.displayName} §rthis must be placed in your greenhouse")
+                }
+            }
         }
     }
 
@@ -241,6 +365,16 @@ class OnUse (
         val nbt = NBTBlock(block).data
 
         when (id) {
+            201 -> {
+                val owner = Utils().getGreenhouseUUID(i)
+                nbt.setBoolean("greenhouse", true)
+                nbt.setUUID("greenhouse-owner", owner)
+            }
+            202 -> {
+                val owner = Utils().getGreenhouseUUID(i)
+                nbt.setBoolean("greenhouse", true)
+                nbt.setUUID("greenhouse-owner", owner)
+            }
             401 -> {
                 nbt.setBoolean("barrel", true)
                 nbt.setBoolean("ferment", false)
@@ -266,5 +400,6 @@ class OnUse (
         private lateinit var p: Player
         private lateinit var i: ItemStack
         private var id: Int = 0
+        private lateinit var connection: Connection
     }
 }
