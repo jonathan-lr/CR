@@ -19,7 +19,7 @@ class GreenhouseItems {
         val meta = item.itemMeta as ItemMeta
         val cm = meta.customModelDataComponent
 
-        cm.strings = mutableListOf("grenenhouse")
+        cm.strings = mutableListOf("greenhouse")
 
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
@@ -44,7 +44,7 @@ class GreenhouseItems {
         val meta = item.itemMeta as ItemMeta
         val cm = meta.customModelDataComponent
 
-        cm.strings = mutableListOf("grenenhouse")
+        cm.strings = mutableListOf("greenhouse")
 
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)

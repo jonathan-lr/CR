@@ -4,6 +4,7 @@ import com.cosmicreach.redcorp.items.CustomItems
 import com.cosmicreach.redcorp.items.DrugItems
 import com.cosmicreach.redcorp.items.GreenhouseItems
 import com.cosmicreach.redcorp.items.PlayerItems
+import com.cosmicreach.redcorp.items.ShipmentItems
 import de.tr7zw.nbtapi.NBTCompound
 import org.bukkit.block.Block
 import org.bukkit.command.Command
@@ -32,9 +33,14 @@ class Materia : CommandExecutor {
             val id = args.getOrElse(1) { "0" }
             CustomItems().Fairy(args.getOrNull(0)?.toIntOrNull() ?: 1, id)
         },
+        "shipment" to { args: List<String> ->
+            val id = args.getOrElse(1) { "0" }
+            ShipmentItems().ShipmentBox(args.getOrNull(0)?.toIntOrNull() ?: 1, id)
+        },
         "gavel" to { args: List<String> -> CustomItems().Gavel(args.getOrNull(0)?.toIntOrNull() ?: 1) },
         "grinder" to { args: List<String> -> DrugItems().Grinder(args.getOrNull(0)?.toIntOrNull() ?: 1) },
         "hammer" to { args: List<String> -> PlayerItems().Hammer(args.getOrNull(0)?.toIntOrNull() ?: 1) },
+        "hammerN" to { args: List<String> -> PlayerItems().Hammer2(args.getOrNull(0)?.toIntOrNull() ?: 1) },
         "ivan" to { args: List<String> -> CustomItems().IvansBeats(args.getOrNull(0)?.toIntOrNull() ?: 1) },
         "kip" to { args: List<String> -> PlayerItems().Kip(args.getOrNull(0)?.toIntOrNull() ?: 1) },
         "lanyard" to { args: List<String> ->
@@ -123,6 +129,7 @@ class MateriaComplete : TabCompleter {
         "gavel" to "redcorp.materia.gavel",
         "grinder" to "redcorp.materia.grinder",
         "hammer" to "redcorp.materia.hammer",
+        "hammerN" to "redcorp.materia.hammerN",
         "ivan" to "redcorp.materia.ivan",
         "kip" to "redcorp.materia.kip",
         "lanyard" to "redcorp.materia.lanyard",
@@ -134,7 +141,10 @@ class MateriaComplete : TabCompleter {
         "test" to "redcorp.materia.test",
         "truffle" to "redcorp.materia.truffle",
         "unit" to "redcorp.materia.unit",
-        "weed" to "redcorp.materia.weed"
+        "weed" to "redcorp.materia.weed",
+        "greenhouseEntrance" to "redcorp.materia.ghentrance",
+        "greenhouseExit" to "redcorp.materia.ghexit",
+        "shipment" to "redcorp.materia.shipment"
     )
 
     override fun onTabComplete(sender: CommandSender, command: Command, label: String, args: Array<out String>): MutableList<String>? {

@@ -1,5 +1,6 @@
 package com.cosmicreach.redcorp.items
 
+import com.cosmicreach.redcorp.utils.Utils
 import de.tr7zw.nbtapi.NBT
 import org.bukkit.Material
 import org.bukkit.inventory.ItemFlag
@@ -148,24 +149,19 @@ class DrugItems {
     }
 
     fun Spliff (a : Int): ItemStack {
-        val item = ItemStack(Material.BLAZE_ROD, a)
+        var item = ItemStack(Material.BLAZE_ROD, a)
 
         NBT.modify(item) { nbt ->
             nbt.setInteger("item-id", 423)
         }
 
+        item = Utils().makeEdibleWithComponents(item, canAlwaysEat = true, saturation = 0f, nutrition = 0, consumeTime = 5.0, animation = "bow", sound = "minecraft:entity.breeze.inhale")
+
         val meta = item.itemMeta as ItemMeta
         val cm = meta.customModelDataComponent
-        val food = meta.food
-
-
-        food.setCanAlwaysEat(true)
-        food.nutrition = 1
-        food.saturation = 1.0F
 
         cm.strings = mutableListOf("weed")
 
-        meta.setFood(food)
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
 
         meta.setCustomModelDataComponent(cm)
@@ -217,11 +213,13 @@ class DrugItems {
     }
 
     fun Coke (a : Int): ItemStack {
-        val item = ItemStack(Material.SUGAR, a)
+        var item = ItemStack(Material.SUGAR, a)
 
         NBT.modify(item) { nbt ->
             nbt.setInteger("item-id", 432)
         }
+
+        item = Utils().makeEdibleWithComponents(item, canAlwaysEat = true, saturation = 0f, nutrition = 0, consumeTime = 5.0, animation = "toot_horn", sound = "minecraft:entity.sniffer.sniffing")
 
         val meta = item.itemMeta as ItemMeta
         val cm = meta.customModelDataComponent
@@ -238,11 +236,13 @@ class DrugItems {
 
     // Opium Stuff
     fun OpiumFlower (a : Int): ItemStack {
-        val item = ItemStack(Material.SWEET_BERRIES, a)
+        var item = ItemStack(Material.SWEET_BERRIES, a)
 
         NBT.modify(item) { nbt ->
             nbt.setInteger("item-id", 440)
         }
+
+        item = Utils().makeEdibleWithComponents(item, canAlwaysEat = true, saturation = 0f, nutrition = 0, consumeTime = 5.0, animation = "toot_horn", sound = "minecraft:entity.sniffer.sniffing")
 
         val meta = item.itemMeta as ItemMeta
         val cm = meta.customModelDataComponent
@@ -279,11 +279,13 @@ class DrugItems {
 
     // Shroom Stuff
     fun Shrooms (a : Int): ItemStack {
-        val item = ItemStack(Material.RED_MUSHROOM, a)
+        var item = ItemStack(Material.RED_MUSHROOM, a)
 
         NBT.modify(item) { nbt ->
             nbt.setInteger("item-id", 450)
         }
+
+        item = Utils().makeEdibleWithComponents(item, canAlwaysEat = true, saturation = 0f, nutrition = 0, consumeTime = 5.0, sound = "minecraft:entity.sniffer.eat")
 
         val meta = item.itemMeta as ItemMeta
         val cm = meta.customModelDataComponent
@@ -299,11 +301,13 @@ class DrugItems {
     }
 
     fun Truffles (a : Int): ItemStack {
-        val item = ItemStack(Material.BROWN_MUSHROOM, a)
+        var item = ItemStack(Material.BROWN_MUSHROOM, a)
 
         NBT.modify(item) { nbt ->
             nbt.setInteger("item-id", 451)
         }
+
+        item = Utils().makeEdibleWithComponents(item, canAlwaysEat = true, saturation = 0f, nutrition = 0, consumeTime = 5.0, sound = "minecraft:entity.goat.screaming.eat")
 
         val meta = item.itemMeta as ItemMeta
         val cm = meta.customModelDataComponent

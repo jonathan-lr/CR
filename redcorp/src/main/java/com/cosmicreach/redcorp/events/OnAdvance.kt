@@ -13,7 +13,7 @@ class OnAdvance(private val event : PlayerAdvancementDoneEvent) {
             val wb = world.worldBorder
             val ad = event.advancement.display!!
             var worldBorder = RedCorp.getPlugin().getWorldBorder()
-            val forbidden = mutableListOf("Vanilla Tweaks", "Cauldron Concrete", "Custom Nether Portals", "Dragon Drops", "Double Shulker Shells", "More Mob Heads", "Anti Enderman Grief", "Player Head Drops", "Silence Mobs", "Mini Blocks", "Silk Touch Budding Amethyst")
+            val forbidden = mutableListOf("Vanilla Tweaks", "Cauldron Concrete", "Custom Nether Portals", "Dragon Drops", "Double Shulker Shells", "More Mob Heads", "Anti Enderman Grief", "Player Head Drops", "Silence Mobs", "Mini Blocks", "Silk Touch Budding Amethyst", "Cauldron Mud", "Ender Chest Always Drops", "Painting Picker", "Fast Leaf Decay")
 
             if (forbidden.any { ad.title.contains(it, ignoreCase = true) }) { return }
 

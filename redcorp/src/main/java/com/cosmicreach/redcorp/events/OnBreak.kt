@@ -8,6 +8,7 @@ import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.block.data.Ageable
+import org.bukkit.entity.ArmorStand
 import org.bukkit.event.block.BlockBreakEvent
 import kotlin.random.Random
 
@@ -43,6 +44,20 @@ class OnBreak (private val event : BlockBreakEvent) {
 
         if (entrance) {
             b.world.dropItemNaturally(b.location, GreenhouseItems().GreenhouseEntrance(greenhouseOwner!!))
+
+            val nearby = b.world.getNearbyEntities(
+                b.location.add(0.5, -0.7, 0.5),
+                0.5,
+                1.0,
+                0.5
+            )
+
+            nearby.forEach { entity ->
+                if (entity is ArmorStand && entity.isMarker) {
+                    entity.remove()
+                }
+            }
+
         } else {
             b.world.dropItemNaturally(b.location, GreenhouseItems().GreenhouseExit(greenhouseOwner!!))
         }
@@ -125,6 +140,18 @@ class OnBreak (private val event : BlockBreakEvent) {
 
             nbt.clearNBT()
         }
+
+        val isShipment = nbt.getBoolean("shipment")
+
+        if (isShipment) {
+            if (event.player.hasPermission("redcorp.break-shipment")) {
+                event.isDropItems = false
+                b.drops.clear()
+                nbt.clearNBT()
+            } else {
+                event.isCancelled = true
+            }
+        }
     }
 
     private fun coffeeMachine () {
@@ -143,17 +170,22 @@ class OnBreak (private val event : BlockBreakEvent) {
     private fun breakMush () {
         val shroom = nbt.getBoolean("shroom")
         val truffle = nbt.getBoolean("truffle")
+        val drop = Random.nextInt(4)
         if (shroom) {
             event.isDropItems = false
             b.drops.clear()
 
-            b.world.dropItemNaturally(b.location, DrugItems().Shrooms(Random.nextInt(0, 1)))
+            if (drop == 1) {
+                b.world.dropItemNaturally(b.location, DrugItems().Shrooms(1))
+            }
         }
         if (truffle) {
             event.isDropItems = false
             b.drops.clear()
 
-            b.world.dropItemNaturally(b.location, DrugItems().Truffles(Random.nextInt(0, 1)))
+            if (drop == 1) {
+                b.world.dropItemNaturally(b.location, DrugItems().Truffles(1))
+            }
         }
 
         nbt.clearNBT()

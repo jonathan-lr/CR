@@ -6,6 +6,7 @@ import com.cosmicreach.redcorp.items.DrugItems
 import com.cosmicreach.redcorp.menus.items.BalanceItem
 import com.cosmicreach.redcorp.menus.items.DecreaseItemAmount
 import com.cosmicreach.redcorp.menus.items.IncreaseItemAmount
+import com.cosmicreach.redcorp.menus.items.ShipmentOpen
 import com.cosmicreach.redcorp.menus.items.ShopItem
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.Material
@@ -27,14 +28,17 @@ class OpiumStore(private var econ: Economy) {
         val amount = SimpleItem(ItemBuilder(ItemStack(Material.EMERALD, values[pruchaseAmount.getOrDefault(player, 0)])).setDisplayName("§rYou will purchase #${values[pruchaseAmount.getOrDefault(player, 0)]} items"))
         val balItem = BalanceItem(econ, player)
 
+        val openShipment = ShipmentOpen(441)
+
         val opiumItem = ShopItem(player, econ, balItem, DrugItems().Opium(1), opium.sellPrice, opium.buyPrice, "§fWong", "%vendor% §8|§r The CCP thanks you for your support!", "%vendor% §8|§r The CCP thanks you for your support!", "%vendor% §8|§r The CCP has no place for poor capitalist scum!", "%vendor% §8|§r The CCP has no place for capitalist scum with no product!")
         val gui = Gui.normal()
             .setStructure(
                 "# . . . $ . . . #",
-                "# . . x . x . . #",
+                "# . . x . y . . #",
                 "# . . < @ > . . #")
             .addIngredient('#', border)
             .addIngredient('x', opiumItem)
+            .addIngredient('y', openShipment)
             .addIngredient('$', balItem)
             .addIngredient('@', amount)
             .addIngredient('>', IncreaseItemAmount(listOf(opiumItem)))

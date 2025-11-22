@@ -56,6 +56,49 @@ class Utils {
         return id
     }
 
+    fun getShipmentId(item: ItemStack): Int? {
+        var id : Int? = null
+
+        if (!item.hasItemMeta()) { return id }
+
+        NBT.get(item) { nbt ->
+            id = nbt.getInteger("drop-id")!!
+        }
+
+        return id
+    }
+
+    fun makeEdibleWithComponents(
+        item: ItemStack,
+        canAlwaysEat: Boolean? = null,
+        nutrition: Int? = null,
+        saturation: Float? = null,
+        consumeTime: Double? = null,
+        animation: String? = null,
+        sound: String? = null,
+        consumeParticles: Boolean? = null,
+    ): ItemStack {
+        NBT.modifyComponents(item) { comp ->
+
+            // --- FOOD COMPONENT ---
+            val food = comp.getOrCreateCompound("minecraft:food")
+
+            canAlwaysEat?.let { food.setBoolean("can_always_eat", it) }
+            nutrition?.let { food.setInteger("nutrition", it) }
+            saturation?.let { food.setFloat("saturation", it) }
+
+            // --- CONSUMABLE COMPONENT ---
+            val consumable = comp.getOrCreateCompound("minecraft:consumable")
+
+            consumeTime?.let { consumable.setDouble("consume_seconds", it) }
+            animation?.let { consumable.setString("animation", it) }
+            sound?.let { consumable.setString("sound", it) }
+            consumeParticles?.let { consumable.setBoolean("has_consume_particles", it) }
+        }
+
+        return item
+    }
+
     fun serializeMagicUnlocked(magicUnlocked: HashMap<Player, Boolean>): String {
         return magicUnlocked.entries.joinToString(";") {
             "${it.key.playerListName}=${it.value}"

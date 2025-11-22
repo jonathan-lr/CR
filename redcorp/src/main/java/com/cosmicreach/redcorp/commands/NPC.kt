@@ -346,28 +346,6 @@ class NPC(economy: Economy?): CommandExecutor {
                     window.open()
                     return false
                 }
-                "shipment" -> {
-                    player.sendMessage("§2Shipment §8|§r Testing")
-                    val window = Window.single()
-                        .setViewer(player)
-                        .setTitle("§2Start Shipments")
-                        .setGui(Shipment(econ).makeGUI(player))
-                        .build()
-
-                    window.open()
-                    return false
-                }
-                "shipmentSubmit" -> {
-                    player.sendMessage("§2Shipment §8|§r Testing")
-                    val window = Window.single()
-                        .setViewer(player)
-                        .setTitle("§2Start Shipments")
-                        .setGui(ShipmentSubmit(econ).makeGUI(player))
-                        .build()
-
-                    window.open()
-                    return false
-                }
             }
         }
         return false

@@ -172,11 +172,10 @@ class EventsListener(
         }
     }
 
-    /*
     @EventHandler(priority = EventPriority.MONITOR)
     fun onEat(event: PlayerItemConsumeEvent) {
         OnEat(event).run()
-    }*/
+    }
 
     @EventHandler(priority = EventPriority.MONITOR)
     fun onDispense(event: BlockDispenseEvent) {

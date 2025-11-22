@@ -1,10 +1,15 @@
 package com.cosmicreach.redcorp.items
 
+import com.cosmicreach.redcorp.utils.Utils
 import de.tr7zw.nbtapi.NBT
+import de.tr7zw.nbtapi.NBTItem
 import org.bukkit.Material
+import org.bukkit.Sound
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
+import org.bukkit.inventory.meta.components.FoodComponent
+import org.bukkit.inventory.meta.components.consumable.ConsumableComponent
 
 class PlayerItems {
     fun MRE (a : Int): ItemStack {
@@ -43,6 +48,26 @@ class PlayerItems {
 
     fun Hammer (a : Int): ItemStack {
         val item = ItemStack(Material.WOODEN_AXE, a)
+        val meta = item.itemMeta as ItemMeta
+        val cm = meta.customModelDataComponent
+
+        cm.strings = mutableListOf("hammer")
+
+        meta.setCustomModelDataComponent(cm)
+        meta.setDisplayName("§6§lʏᴏʀɪᴄᴋ's ʜᴀᴍᴍᴇʀ")
+
+        val lore = listOf("§fWhen found, return to Yorick")
+        meta.lore = lore
+        item.setItemMeta(meta)
+
+        return item
+    }
+
+    fun Hammer2 (a : Int): ItemStack {
+        var item = ItemStack(Material.NETHERITE_AXE, a)
+
+        item = Utils().makeEdibleWithComponents(item, canAlwaysEat = true, saturation = 20.0f, nutrition = 20)
+
         val meta = item.itemMeta as ItemMeta
         val cm = meta.customModelDataComponent
 

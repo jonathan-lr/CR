@@ -1,5 +1,6 @@
 package com.cosmicreach.redcorp.menus
 
+import com.cosmicreach.redcorp.RedCorp
 import com.cosmicreach.redcorp.menus.items.BalanceItem
 import com.cosmicreach.redcorp.menus.items.ShipmentItem
 import net.milkbowl.vault.economy.Economy
@@ -9,20 +10,24 @@ import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.SimpleItem
 
-class Shipment(private var econ: Economy) {
+class Shipment(private var drugType: Int) {
+    private val econ = RedCorp.getPlugin().getEcon()
     fun makeGUI(player: Player): Gui {
         val border = SimpleItem(ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).setDisplayName("§r"))
-        val balItem = BalanceItem(econ, player)
-        val shipmentItem = ShipmentItem()
+        val balItem = BalanceItem(econ!!, player)
+        val shipmentItemSmall = ShipmentItem(econ, 1, drugType)
+        val shipmentItemMedium = ShipmentItem(econ, 2, drugType)
+        val shipmentItemLarge = ShipmentItem(econ, 3, drugType)
 
         val gui = Gui.normal()
             .setStructure(
                 "# . . . $ . . . #",
-                "# . x . . . y . #",
+                "# . x . y . z . #",
                 "# . . . . . . . #")
             .addIngredient('#', border)
-            .addIngredient('x', shipmentItem)
-            .addIngredient('y', shipmentItem)
+            .addIngredient('x', shipmentItemSmall)
+            .addIngredient('y', shipmentItemMedium)
+            .addIngredient('z', shipmentItemLarge)
             .addIngredient('$', balItem)
             .build()
         return gui

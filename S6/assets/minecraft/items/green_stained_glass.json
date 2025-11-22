@@ -1,0 +1,19 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "custom_model_data",
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "minecraft:block/green_stained_glass"
+    },
+    "cases": [
+      {
+        "when": "greenhouse",
+        "model": {
+          "type": "minecraft:model",
+          "model": "item/greenhouse"
+        }
+      }
+    ]
+  }   
+}

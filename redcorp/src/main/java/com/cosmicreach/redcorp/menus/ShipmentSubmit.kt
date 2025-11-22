@@ -2,7 +2,7 @@ package com.cosmicreach.redcorp.menus
 
 import com.cosmicreach.redcorp.RedCorp
 import com.cosmicreach.redcorp.menus.items.BalanceItem
-import com.cosmicreach.redcorp.menus.items.ShipmentItem
+import com.cosmicreach.redcorp.menus.items.ShipmentSubmitItem
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -16,22 +16,23 @@ class ShipmentSubmit(private var econ: Economy) {
     fun makeGUI(player: Player): Gui {
         val border = SimpleItem(ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).setDisplayName("§r"))
         val balItem = BalanceItem(econ, player)
-        val shipmentItem = ShipmentItem()
         val shipmentPlayers = RedCorp.getPlugin().getShipmentPlayers()
         val inv: VirtualInventory
 
         if (shipmentPlayers.containsKey(player)) {
             inv = shipmentPlayers[player]!!
         } else {
-            shipmentPlayers[player] = VirtualInventory(1)
+            shipmentPlayers[player] = VirtualInventory(5)
             inv = shipmentPlayers[player]!!
         }
 
+        val shipmentItem = ShipmentSubmitItem(inv, econ)
+
         val gui = Gui.normal()
             .setStructure(
-                "# . . . $ . . . #",
-                "# . x x x x x . #",
-                "# . . . . . . . #")
+                "# # # # $ # # # #",
+                "# # x x x x x # #",
+                "# # # # y # # # #")
             .addIngredient('#', border)
             .addIngredient('x', inv)
             .addIngredient('y', shipmentItem)

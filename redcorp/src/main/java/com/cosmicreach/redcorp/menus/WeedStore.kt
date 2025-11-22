@@ -6,6 +6,7 @@ import com.cosmicreach.redcorp.items.DrugItems
 import com.cosmicreach.redcorp.menus.items.BalanceItem
 import com.cosmicreach.redcorp.menus.items.DecreaseItemAmount
 import com.cosmicreach.redcorp.menus.items.IncreaseItemAmount
+import com.cosmicreach.redcorp.menus.items.ShipmentOpen
 import com.cosmicreach.redcorp.menus.items.ShopItem
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.Material
@@ -29,14 +30,17 @@ class WeedStore(private var econ: Economy) {
 
         val weedItem = ShopItem(player, econ, balItem, DrugItems().GroundWeed(1), weed.sellPrice, weed.buyPrice, "§2Shaggy")
         val spliffItem = ShopItem(player, econ, balItem, DrugItems().Spliff(1), spliff.sellPrice, spliff.buyPrice, "§2Shaggy")
+        val openShipment = ShipmentOpen(422)
+
         val gui = Gui.normal()
             .setStructure(
                 "# . . . $ . . . #",
-                "# . . x . y . . #",
+                "# . x . y . z . #",
                 "# . . < @ > . . #")
             .addIngredient('#', border)
             .addIngredient('x', weedItem)
             .addIngredient('y', spliffItem)
+            .addIngredient('z', openShipment)
             .addIngredient('$', balItem)
             .addIngredient('@', amount)
             .addIngredient('>', IncreaseItemAmount(listOf(weedItem, spliffItem)))

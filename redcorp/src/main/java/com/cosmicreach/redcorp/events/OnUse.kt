@@ -1,7 +1,9 @@
 package com.cosmicreach.redcorp.events
 
 import com.cosmicreach.redcorp.RedCorp
+import com.cosmicreach.redcorp.commands.Materia
 import com.cosmicreach.redcorp.db.Greenhouse
+import com.cosmicreach.redcorp.items.GreenhouseItems
 import com.cosmicreach.redcorp.menus.Grinder
 import com.cosmicreach.redcorp.menus.Teleport
 import com.cosmicreach.redcorp.utils.TeleportActions
@@ -13,6 +15,7 @@ import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
+import org.bukkit.entity.ArmorStand
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
@@ -38,9 +41,8 @@ class OnUse (
 
             when (id) {
                 2 -> gavel()
-                423, 432, 441 -> useDrugs()
                 400 -> grinder()
-                401, 403 -> setData()
+                401, 403, 210 -> setData()
                 2886 -> debug()
                 3 -> playerTeleport()
                 5 -> deathTeleport()
@@ -185,32 +187,6 @@ class OnUse (
         p.world.playSound(p.location, Sound.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR, 0.75f, 1.0f)
     }
 
-    private fun useDrugs() {
-        if (event.hand == EquipmentSlot.HAND) {
-            when (id) {
-                //Spliff
-                423 -> {
-                    p.world.playSound(p.location, Sound.ENTITY_BREEZE_INHALE, 0.2f, 1.0f)
-                    p.world.playSound(p.location, Sound.ENTITY_BLAZE_BURN, 0.2f, 1.0f)
-                    p.addPotionEffect(PotionEffect(PotionEffectType.HUNGER, 1200, 1, true, false, false))
-                    p.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 1200, 2, true, false, false))
-                }
-                //Coke
-                432 -> {
-                    p.world.playSound(p.location, Sound.ENTITY_SNIFFER_SNIFFING, 0.75f, 1.0f)
-                    p.addPotionEffect(PotionEffect(PotionEffectType.SPEED, 1200, 2, true, false, false))
-                }
-                //Opium
-                441 -> {
-                    p.world.playSound(p.location, Sound.ENTITY_SNIFFER_SNIFFING, 0.75f, 1.0f)
-                    p.addPotionEffect(PotionEffect(PotionEffectType.UNLUCK, 6000, 2, true, false, false))
-                }
-            }
-
-            p.inventory.itemInMainHand.amount -= 1
-        }
-    }
-
     private fun grinder() {
         val window = Window.single()
             .setViewer(p)
@@ -232,6 +208,8 @@ class OnUse (
         p.sendMessage("§cCR §8|§r debug shroom ${nbt.getBoolean("shroom")}")
         p.sendMessage("§cCR §8|§r debug truffle ${nbt.getBoolean("truffle")}")
         p.sendMessage("§cCR §8|§r debug fairy ${nbt.getBoolean("fairy")}")
+        p.sendMessage("§cCR §8|§r debug shipment ${nbt.getBoolean("shipment")}")
+        p.sendMessage("§cCR §8|§r debug shipmentId ${nbt.getBoolean("shipmentId")}")
         p.sendMessage("§cCR §8|§r debug greenhouse ${nbt.getBoolean("greenhouse")}")
         p.sendMessage("§cCR §8|§r debug greenhouseOwner ${nbt.getUUID("greenhouse-owner")}")
     }
@@ -264,6 +242,7 @@ class OnUse (
 
 
     private fun greenhouse() {
+        if (event.action != Action.RIGHT_CLICK_BLOCK) return
         val block = event.clickedBlock
         if (block != null) {
             if (id == 201) {
@@ -272,11 +251,35 @@ class OnUse (
                     val owner = Utils().getGreenhouseUUID(i)
                     val greenhouse = Greenhouse(connection).getGreenhouse(owner!!)
 
+                    val worldPlace = block.location.world!!
+
+                    val standLocation = Location(
+                        worldPlace,
+                        block.x + 0.5,
+                        block.y - 0.3,
+                        block.z + 0.5
+                    )
+
+                    val stand = worldPlace.spawn(standLocation, ArmorStand::class.java) { asd: ArmorStand ->
+                        asd.isInvisible = true
+                        asd.isMarker = true
+                        asd.setGravity(false)
+                        asd.isInvulnerable = true
+                        asd.isCustomNameVisible = false
+                        asd.setBasePlate(false)
+                        asd.setArms(false)
+                        asd.isSmall = false
+                    }
+
+                    val item = GreenhouseItems().GreenhouseEntrance(p.uniqueId)
+                    stand.equipment?.helmet = item
+                    stand.addEquipmentLock(EquipmentSlot.HEAD, ArmorStand.LockType.ADDING_OR_CHANGING)
+
                     if (greenhouse != null) {
                         val loc = p.location
                         val locString = "${loc.world?.name},${loc.x},${loc.y},${loc.z},${loc.yaw},${loc.pitch}"
                         Greenhouse(connection).updateExit(owner, locString)
-                        p.sendMessage("§cCR §8|§r Set greenhouse exit location to ${p.location}")
+                        p.sendMessage("§cCR §8|§r Set greenhouse exit location")
                     }
                 } else {
                     event.isCancelled = true
@@ -292,7 +295,7 @@ class OnUse (
                         val loc = p.location
                         val locString = "${loc.world?.name},${loc.x},${loc.y},${loc.z},${loc.yaw},${loc.pitch}"
                         Greenhouse(connection).updateHome(owner, locString)
-                        p.sendMessage("§cCR §8|§r Set greenhouse home location to ${p.location}")
+                        p.sendMessage("§cCR §8|§r Set greenhouse home location")
                     }
                 } else {
                     event.isCancelled = true
@@ -326,11 +329,7 @@ class OnUse (
     }
 
     private fun myceliumDrug() {
-        if (event.clickedBlock == null) {
-            p.world.playSound(p.location, Sound.ENTITY_STRIDER_EAT, 0.75f, 1.0f)
-            p.addPotionEffect(PotionEffect(PotionEffectType.DARKNESS, 1200, 2, true, false, false))
-            p.inventory.itemInMainHand.amount -= 1
-        } else if (event.clickedBlock!!.type == Material.MYCELIUM && event.blockFace == BlockFace.UP) {
+        if (event.clickedBlock!!.type == Material.MYCELIUM && event.blockFace == BlockFace.UP) {
             setData()
         } else {
             event.isCancelled = true
@@ -374,6 +373,11 @@ class OnUse (
                 val owner = Utils().getGreenhouseUUID(i)
                 nbt.setBoolean("greenhouse", true)
                 nbt.setUUID("greenhouse-owner", owner)
+            }
+            210 -> {
+                val id = Utils().getShipmentId(i)
+                nbt.setBoolean("shipment", true)
+                nbt.setInteger("shipmentId", id)
             }
             401 -> {
                 nbt.setBoolean("barrel", true)
