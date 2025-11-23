@@ -131,7 +131,7 @@ class RedCorp : JavaPlugin() {
                 val currentTime = System.currentTimeMillis()
 
                 // Check if one hour (3600000 milliseconds) has passed
-                if (currentTime - lastExecutionTime >= 120000) {
+                if (currentTime - lastExecutionTime >= 3600000) {
                     lastExecutionTime = currentTime // Reset the last execution time
 
                     // Run your hourly task
