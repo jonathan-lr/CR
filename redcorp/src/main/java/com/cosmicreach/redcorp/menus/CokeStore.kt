@@ -17,16 +17,14 @@ import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.SimpleItem
 
 class CokeStore(private var econ: Economy) {
-    private val connection = RedCorp.getPlugin().getConnection()!!
     private val pruchaseAmount = RedCorp.getPlugin().getPurchaseAmount()
     private val values = listOf(1, 4, 8, 16, 32, 64)
 
     fun makeGUI(player: Player): Gui {
-        val coke = StockEx(connection).getInfo("coke")
         val border = SimpleItem(ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).setDisplayName("§r"))
         val amount = SimpleItem(ItemBuilder(ItemStack(Material.EMERALD, values[pruchaseAmount.getOrDefault(player, 0)])).setDisplayName("§rYou will purchase #${values[pruchaseAmount.getOrDefault(player, 0)]} items"))
         val balItem = BalanceItem(econ, player)
-        val cokeItem = ShopItem(player, econ, balItem, DrugItems().Coke(1), coke.sellPrice, coke.buyPrice, "§cPatrick Byattyman", "", "%vendor% §8|§r OHHHHH YEAH that hit the spot thanks %player%§r!", "", "%vendor% §8|§r Whattttt %player%§r! You ran out of Bolivian Marching Powder!", "%vendor% §8|§r Sorry %player%§r I don't sell any of my fun stuff.")
+        val cokeItem = ShopItem(player, econ, balItem, DrugItems().Coke(1), "§cPatrick Byattyman", "", "%vendor% §8|§r OHHHHH YEAH that hit the spot thanks %player%§r!", "", "%vendor% §8|§r Whattttt %player%§r! You ran out of Bolivian Marching Powder!", "%vendor% §8|§r Sorry %player%§r I don't sell any of my fun stuff.", name = "coke")
         val openShipment = ShipmentOpen(432)
 
         val gui = Gui.normal()

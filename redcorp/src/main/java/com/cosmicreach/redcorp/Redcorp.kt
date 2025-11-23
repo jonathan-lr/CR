@@ -2,6 +2,7 @@ package com.cosmicreach.redcorp
 
 import com.cosmicreach.redcorp.commands.TestCommand
 import com.cosmicreach.redcorp.commands.*
+import com.cosmicreach.redcorp.db.StockEx
 import com.cosmicreach.redcorp.recipes.Drugs
 import com.cosmicreach.redcorp.utils.TeleportActions
 import com.sk89q.worldguard.WorldGuard
@@ -130,12 +131,14 @@ class RedCorp : JavaPlugin() {
                 val currentTime = System.currentTimeMillis()
 
                 // Check if one hour (3600000 milliseconds) has passed
-                if (currentTime - lastExecutionTime >= 3600000) {
+                if (currentTime - lastExecutionTime >= 120000) {
                     lastExecutionTime = currentTime // Reset the last execution time
 
                     // Run your hourly task
-                    logger.info("CR Running Hourly Expansion")
+                    logger.info("CR Running Hourly Expansion & Inflation")
                     performExpanse()
+                    val db = getConnection()!!
+                    StockEx(db).decayAllStocksTowardsZero(8)
                 }
             }
         }.runTaskTimer(this,0L,1200L )

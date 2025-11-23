@@ -16,21 +16,17 @@ import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.SimpleItem
 
 class FurnitureStore (private var econ: Economy) {
-    private val connection = RedCorp.getPlugin().getConnection()!!
     private val pruchaseAmount = RedCorp.getPlugin().getPurchaseAmount()
     private val values = listOf(1, 4, 8, 16, 32, 64)
 
     fun makeGUI(player: Player): Gui {
-        val agingBarrel = StockEx(connection).getInfo("aging_barrel")
-        val coffeeMachine = StockEx(connection).getInfo("coffee_machine")
-        val grinder = StockEx(connection).getInfo("grinder")
         val border = SimpleItem(ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).setDisplayName("§r"))
         val amount = SimpleItem(ItemBuilder(ItemStack(Material.EMERALD, values[pruchaseAmount.getOrDefault(player, 0)])).setDisplayName("§rYou will purchase #${values[pruchaseAmount.getOrDefault(player, 0)]} items"))
         val balItem = BalanceItem(econ, player)
 
-        val agingBarrelItem = ShopItem(player, econ, balItem, DrugItems().AgingBarrel(1), agingBarrel.sellPrice, agingBarrel.buyPrice, "§2Oakley")
-        val coffeeMachineItem = ShopItem(player, econ, balItem, DrugItems().CoffieMachine(1), coffeeMachine.sellPrice, coffeeMachine.buyPrice, "§2Oakley")
-        val grinderItem = ShopItem(player, econ, balItem, DrugItems().Grinder(1), grinder.sellPrice, grinder.buyPrice, "§2Oakley")
+        val agingBarrelItem = ShopItem(player, econ, balItem, DrugItems().AgingBarrel(1),"§2Oakley", name = "aging_barrel")
+        val coffeeMachineItem = ShopItem(player, econ, balItem, DrugItems().CoffieMachine(1),"§2Oakley", name = "coffee_machine")
+        val grinderItem = ShopItem(player, econ, balItem, DrugItems().Grinder(1),"§2Oakley", name = "grinder")
         val gui = Gui.normal()
             .setStructure(
                 "# . . . $ . . . #",

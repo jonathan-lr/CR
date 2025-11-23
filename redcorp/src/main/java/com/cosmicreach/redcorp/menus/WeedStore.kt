@@ -17,19 +17,16 @@ import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.SimpleItem
 
 class WeedStore(private var econ: Economy) {
-    private val connection = RedCorp.getPlugin().getConnection()!!
     private val pruchaseAmount = RedCorp.getPlugin().getPurchaseAmount()
     private val values = listOf(1, 4, 8, 16, 32, 64)
 
     fun makeGUI(player: Player): Gui {
-        val weed = StockEx(connection).getInfo("weed_g")
-        val spliff = StockEx(connection).getInfo("weed_z")
         val border = SimpleItem(ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).setDisplayName("§r"))
         val amount = SimpleItem(ItemBuilder(ItemStack(Material.EMERALD, values[pruchaseAmount.getOrDefault(player, 0)])).setDisplayName("§rYou will purchase #${values[pruchaseAmount.getOrDefault(player, 0)]} items"))
         val balItem = BalanceItem(econ, player)
 
-        val weedItem = ShopItem(player, econ, balItem, DrugItems().GroundWeed(1), weed.sellPrice, weed.buyPrice, "§2Shaggy")
-        val spliffItem = ShopItem(player, econ, balItem, DrugItems().Spliff(1), spliff.sellPrice, spliff.buyPrice, "§2Shaggy")
+        val weedItem = ShopItem(player, econ, balItem, DrugItems().GroundWeed(1),"§2Shaggy", name = "weed_g")
+        val spliffItem = ShopItem(player, econ, balItem, DrugItems().Spliff(1),"§2Shaggy", name = "weed_z")
         val openShipment = ShipmentOpen(422)
 
         val gui = Gui.normal()

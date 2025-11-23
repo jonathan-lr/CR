@@ -1,0 +1,19 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "custom_model_data",
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "minecraft:item/brewing_stand"
+    },
+    "cases": [
+      {
+        "when": "coffeemachine",
+        "model": {
+          "type": "minecraft:model",
+          "model": "item/coffeemachine"
+        }
+      }
+    ]
+  }   
+}

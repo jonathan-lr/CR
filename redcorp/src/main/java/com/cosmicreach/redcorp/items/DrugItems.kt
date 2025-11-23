@@ -42,6 +42,10 @@ class DrugItems {
         }
 
         val meta = item.itemMeta as ItemMeta
+        val cm = meta.customModelDataComponent
+
+        cm.strings = mutableListOf("agingbarrel")
+        meta.setCustomModelDataComponent(cm)
 
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setDisplayName("§2§lᴀɢɪɴɢ ʙᴀʀʀᴇʟ")
@@ -79,6 +83,10 @@ class DrugItems {
         }
 
         val meta = item.itemMeta as ItemMeta
+        val cm = meta.customModelDataComponent
+
+        cm.strings = mutableListOf("coffeemachine")
+        meta.setCustomModelDataComponent(cm)
 
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setDisplayName("§2§lᴄᴏғғɪᴇ ᴍᴀᴄʜɪɴᴇ")

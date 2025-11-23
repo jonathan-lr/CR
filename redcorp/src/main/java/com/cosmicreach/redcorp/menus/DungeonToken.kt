@@ -22,8 +22,8 @@ class DungeonToken(private var econ: Economy) {
         val border = SimpleItem(ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).setDisplayName("§r"))
         val amount = SimpleItem(ItemBuilder(ItemStack(Material.EMERALD, values[pruchaseAmount.getOrDefault(player, 0)])).setDisplayName("§rYou will purchase #${values[pruchaseAmount.getOrDefault(player, 0)]} items"))
         val balItem = BalanceItem(econ, player)
-        val dungeonItem = ShopItem(player, econ, balItem, ItemStack(DungeonItems().dungeonToken()), 100.0, 0.0, "§9Milton")
-        val dungeonHardItem = ShopItem(player, econ, balItem, ItemStack(DungeonItems().dungeonTokenHard()), 0.0, 0.0, "§9Milton")
+        val dungeonItem = ShopItem(player, econ, balItem, ItemStack(DungeonItems().dungeonToken()), "§9Milton", name = "dungeon_t")
+        val dungeonHardItem = ShopItem(player, econ, balItem, ItemStack(DungeonItems().dungeonTokenHard()), "§9Milton", name = "dungeon_t_h")
         val gui = Gui.normal()
                 .setStructure(
                         "# . . . $ . . . #",

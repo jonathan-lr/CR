@@ -21,10 +21,10 @@ class RewardExchange(private var econ: Economy) {
                         "# x . y . v . u #",
                         "# . . . . . . . #")
                 .addIngredient('#', border)
-                .addIngredient('x', ShopItem(player, econ, balItem, ItemStack(DungeonItems().airReward()), 0.0, 300.0, "§aEloise"))
-                .addIngredient('y', ShopItem(player, econ, balItem, ItemStack(DungeonItems().fireReward()), 0.0, 300.0, "§aEloise"))
-                .addIngredient('v', ShopItem(player, econ, balItem, ItemStack(DungeonItems().waterReward()), 0.0, 300.0, "§aEloise"))
-                .addIngredient('u', ShopItem(player, econ, balItem, ItemStack(DungeonItems().earthReward()), 0.0, 300.0, "§aEloise"))
+                .addIngredient('x', ShopItem(player, econ, balItem, ItemStack(DungeonItems().airReward()),"§aEloise", name = "dungeon_r"))
+                .addIngredient('y', ShopItem(player, econ, balItem, ItemStack(DungeonItems().fireReward()),"§aEloise", name = "dungeon_r"))
+                .addIngredient('v', ShopItem(player, econ, balItem, ItemStack(DungeonItems().waterReward()),"§aEloise", name = "dungeon_r"))
+                .addIngredient('u', ShopItem(player, econ, balItem, ItemStack(DungeonItems().earthReward()),"§aEloise", name = "dungeon_r"))
                 .addIngredient('z', balItem)
                 .build()
         return gui

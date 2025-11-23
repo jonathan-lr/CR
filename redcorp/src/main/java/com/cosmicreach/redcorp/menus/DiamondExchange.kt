@@ -15,7 +15,6 @@ import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.SimpleItem
 
 class DiamondExchange(private var econ: Economy, private var type: Int) {
-    private val connection = RedCorp.getPlugin().getConnection()!!
     private val pruchaseAmount = RedCorp.getPlugin().getPurchaseAmount()
     private val values = listOf(1, 4, 8, 16, 32, 64)
 
@@ -24,9 +23,8 @@ class DiamondExchange(private var econ: Economy, private var type: Int) {
         val amount = SimpleItem(ItemBuilder(ItemStack(Material.EMERALD, values[pruchaseAmount.getOrDefault(player, 0)])).setDisplayName("§rYou will purchase #${values[pruchaseAmount.getOrDefault(player, 0)]} items"))
         val balItem = BalanceItem(econ, player)
         if (type == 1) {
-            val diamond = StockEx(connection).getInfo("diamond_p")
-            val diamondItem = ShopItem(player, econ, balItem, ItemStack(Material.DIAMOND, values[pruchaseAmount.getOrDefault(player, 0)]), diamond.sellPrice, diamond.buyPrice, "§cPatrick Byattyman")
-            val diamondBlockItem = ShopItem(player, econ, balItem, ItemStack(Material.DIAMOND_BLOCK, values[pruchaseAmount.getOrDefault(player, 0)]), (diamond.sellPrice*9), (diamond.buyPrice*9), "§cPatrick Byattyman")
+            val diamondItem = ShopItem(player, econ, balItem, ItemStack(Material.DIAMOND, values[pruchaseAmount.getOrDefault(player, 0)]), "§cPatrick Byattyman", name="diamond_p")
+            val diamondBlockItem = ShopItem(player, econ, balItem, ItemStack(Material.DIAMOND_BLOCK, values[pruchaseAmount.getOrDefault(player, 0)]), "§cPatrick Byattyman", name="diamond_p")
             val gui = Gui.normal()
                 .setStructure(
                     "# . . . $ . . . #",
@@ -42,9 +40,8 @@ class DiamondExchange(private var econ: Economy, private var type: Int) {
                 .build()
             return gui
         } else {
-            val diamond = StockEx(connection).getInfo("diamond_s")
-            val diamondItem = ShopItem(player, econ, balItem, ItemStack(Material.DIAMOND, values[pruchaseAmount.getOrDefault(player, 0)]), diamond.sellPrice, diamond.buyPrice, "§6Sterling")
-            val diamondBlockItem = ShopItem(player, econ, balItem, ItemStack(Material.DIAMOND_BLOCK, values[pruchaseAmount.getOrDefault(player, 0)]), (diamond.sellPrice*9), (diamond.buyPrice*9), "§6Sterling")
+            val diamondItem = ShopItem(player, econ, balItem, ItemStack(Material.DIAMOND, values[pruchaseAmount.getOrDefault(player, 0)]), "§6Sterling", useStock = true, name="diamond_s")
+            val diamondBlockItem = ShopItem(player, econ, balItem, ItemStack(Material.DIAMOND_BLOCK, values[pruchaseAmount.getOrDefault(player, 0)]), "§6Sterling", useStock = true, name="diamond_s")
             val gui = Gui.normal()
                 .setStructure(
                     "# . . . $ . . . #",

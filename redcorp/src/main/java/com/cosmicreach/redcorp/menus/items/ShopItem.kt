@@ -12,23 +12,42 @@ import org.bukkit.inventory.meta.ItemMeta
 import xyz.xenondevs.invui.item.ItemProvider
 import xyz.xenondevs.invui.item.ItemWrapper
 import xyz.xenondevs.invui.item.impl.AbstractItem
+import kotlin.math.floor
 
 class ShopItem(
     private var player: Player,
     private var econ: Economy,
     private var balItem: BalanceItem,
     private var shopItem: ItemStack,
-    private var sellPrice: Double,
-    private var buyPrice: Double,
     private var vendorName: String,
     private var vendorCompleteSell: String = "%vendor% §8|§r Thanks %player%§r for the purchase.",
     private var vendorCompleteBuy: String = "%vendor% §8|§r %player%§r sold an item successfully!",
     private var vendorFailSell: String = "%vendor% §8|§r Sorry %player%§r, you do not have enough Units for that purchase",
     private var vendorFailBuy: String = "%vendor% §8|§r Sorry %player%§r, you do not have any %item%§r to sell.",
-    private var vendorStock: String = "%vendor% §8|§r Sorry %player%§r, %item%§r is currently out of stock."
+    private var vendorStock: String = "%vendor% §8|§r Sorry %player%§r, %item%§r is currently out of stock.",
+    private var useStock: Boolean = false,
+    private var name: String = "null",
 ) : AbstractItem() {
     private val values = listOf(1, 4, 8, 16, 32, 64)
     private val connection = RedCorp.getPlugin().getConnection()!!
+    private var item = StockEx(connection).getInfo(name)
+    private var buyPrice = item.buyPrice
+    private var sellPrice = item.sellPrice
+    private var stock = item.stock
+    private val newBuyPrice: Double
+        get() = if (useStock) {
+            buyPrice * (1 - 0.01 * floor(stock / 8.0))
+        } else {
+            buyPrice
+        }
+
+    private val newSellPrice: Double
+        get() = if (useStock) {
+            val cappedStock = stock.coerceAtMost(256) // caps stock at 256
+            sellPrice * (1 - 0.01 * floor(cappedStock / 8.0))
+        } else {
+            sellPrice
+        }
 
     override fun getItemProvider(): ItemProvider {
         val amount = RedCorp.getPlugin().getPurchaseAmount()
@@ -37,10 +56,10 @@ class ShopItem(
         var sell = ""
         var buy = ""
         if (sellPrice > 0.0) {
-            sell = "§f§lLeft Click to §c§lBUY §f§l@ §c§l${econ.format(sellPrice*values[amount.getOrDefault(player, 0)])}"
+            sell = "§f§lLeft Click to §c§lBUY §f§l@ §c§l${econ.format(newSellPrice*values[amount.getOrDefault(player, 0)])}"
         }
         if (buyPrice > 0.0) {
-            buy = "§f§lRight Click to §c§lSELL §f§l@ §c§l${econ.format(buyPrice*values[amount.getOrDefault(player, 0)])}"
+            buy = "§f§lRight Click to §c§lSELL §f§l@ §c§l${econ.format(newBuyPrice*values[amount.getOrDefault(player, 0)])}"
         }
         if (sellPrice == 0.0 && buyPrice == 0.0) {
             sell = "§c§lOut of Stock"
@@ -104,12 +123,17 @@ class ShopItem(
                 StockEx(connection).logSale(
                     shopItem,
                     player,
-                    buyPrice * requiredAmount,
+                    newBuyPrice * requiredAmount,
                     requiredAmount,
                     "playerSell"
                 )
+                if (useStock && name != "null") {
+                    StockEx(connection).setStock(stock+requiredAmount,name)
+                    stock = stock+values[amount.getOrDefault(player, 0)]
+                    notifyWindows()
+                }
                 player.sendMessage(replacePlaceholders(vendorCompleteBuy, player))
-                econ.depositPlayer(player, buyPrice * requiredAmount)
+                econ.depositPlayer(player, newBuyPrice * requiredAmount)
                 balItem.refreshBal()
                 gotItem = true
             } else {
@@ -127,13 +151,18 @@ class ShopItem(
     private fun handleSell(player: Player) {
         val amount = RedCorp.getPlugin().getPurchaseAmount()
         if (sellPrice > 0.0) {
-            if (econ.getBalance(player) >= (sellPrice*values[amount.getOrDefault(player, 0)])) {
+            if (econ.getBalance(player) >= (newSellPrice*values[amount.getOrDefault(player, 0)])) {
                 player.sendMessage(replacePlaceholders(vendorCompleteSell, player))
                 shopItem.amount = values[amount.getOrDefault(player, 0)]
                 player.inventory.addItem(shopItem)
-                econ.withdrawPlayer(player, sellPrice*values[amount.getOrDefault(player, 0)])
+                econ.withdrawPlayer(player, newSellPrice*values[amount.getOrDefault(player, 0)])
                 balItem.refreshBal()
-                StockEx(connection).logSale(shopItem, player, sellPrice*values[amount.getOrDefault(player, 0)], values[amount.getOrDefault(player, 0)], "playerBuy")
+                StockEx(connection).logSale(shopItem, player, newSellPrice*values[amount.getOrDefault(player, 0)], values[amount.getOrDefault(player, 0)], "playerBuy")
+                if (useStock && name != "null") {
+                    StockEx(connection).setStock(stock-values[amount.getOrDefault(player, 0)],name)
+                    stock = stock-values[amount.getOrDefault(player, 0)]
+                    notifyWindows()
+                }
             } else {
                 player.sendMessage(replacePlaceholders(vendorFailSell, player))
             }

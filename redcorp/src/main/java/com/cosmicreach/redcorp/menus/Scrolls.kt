@@ -13,21 +13,17 @@ import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.SimpleItem
 
 class Scrolls(private var econ: Economy) {
-    private val connection = RedCorp.getPlugin().getConnection()!!
     private val pruchaseAmount = RedCorp.getPlugin().getPurchaseAmount()
     private val values = listOf(1, 4, 8, 16, 32, 64)
 
     fun makeGUI(player: Player): Gui {
-        val scrollT = StockEx(connection).getInfo("scroll_t")
-        val scrollD = StockEx(connection).getInfo("scroll_d")
-        val scrollH = StockEx(connection).getInfo("scroll_h")
         val border = SimpleItem(ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).setDisplayName("§r"))
         val amount = SimpleItem(ItemBuilder(ItemStack(Material.EMERALD, values[pruchaseAmount.getOrDefault(player, 0)])).setDisplayName("§rYou will purchase #${values[pruchaseAmount.getOrDefault(player, 0)]} items"))
         var balItem = BalanceItem(econ, player)
 
-        val tScrollItem = ShopItem(player, econ, balItem, ItemStack(CustomItems().Scroll(1, "teleport")), scrollT.sellPrice, scrollT.buyPrice, "§dMerlin")
-        val dScrollItem = ShopItem(player, econ, balItem, ItemStack(CustomItems().Scroll(1, "death")), scrollD.sellPrice, scrollD.buyPrice, "§dMerlin")
-        val hScrollItem = ShopItem(player, econ, balItem, ItemStack(CustomItems().Scroll(1, "home")), scrollH.sellPrice, scrollH.buyPrice, "§dMerlin")
+        val tScrollItem = ShopItem(player, econ, balItem, ItemStack(CustomItems().Scroll(1, "teleport")), "§dMerlin", name = "scroll_t")
+        val dScrollItem = ShopItem(player, econ, balItem, ItemStack(CustomItems().Scroll(1, "death")), "§dMerlin", name = "scroll_d")
+        val hScrollItem = ShopItem(player, econ, balItem, ItemStack(CustomItems().Scroll(1, "home")), "§dMerlin", name = "scroll_h")
 
         val gui = Gui.normal()
                 .setStructure(
