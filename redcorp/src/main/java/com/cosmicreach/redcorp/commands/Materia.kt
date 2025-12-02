@@ -62,8 +62,8 @@ class Materia : CommandExecutor {
             CustomItems().Unit(args.getOrNull(0)?.toIntOrNull() ?: 1, color)
         },
         "weed" to { args: List<String> -> DrugItems().WeedSeed(args.getOrNull(0)?.toIntOrNull() ?: 1) },
-        "greenhouseEntrance" to { args: List<String> -> GreenhouseItems().GreenhouseEntrance(p.uniqueId) },
-        "greenhouseExit" to { args: List<String> -> GreenhouseItems().GreenhouseExit(p.uniqueId) },
+        "greenhouseEntrance" to { args: List<String> -> GreenhouseItems().GreenhouseEntrance(args.getOrNull(1)?.toIntOrNull() ?: -1) },
+        "greenhouseExit" to { args: List<String> -> GreenhouseItems().GreenhouseExit(args.getOrNull(1)?.toIntOrNull() ?: -1) },
     )
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {

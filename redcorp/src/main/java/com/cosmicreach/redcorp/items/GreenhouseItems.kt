@@ -8,12 +8,12 @@ import org.bukkit.inventory.meta.ItemMeta
 import java.util.UUID
 
 class GreenhouseItems {
-    fun GreenhouseEntrance (playerId: UUID): ItemStack {
+    fun GreenhouseEntrance (greenhouseId: Int): ItemStack {
         val item = ItemStack(Material.GREEN_STAINED_GLASS, 1)
 
         NBT.modify(item) { nbt ->
             nbt.setInteger("item-id", 201)
-            nbt.setUUID("player-id", playerId)
+            nbt.setInteger("greenhouse-id", greenhouseId)
         }
 
         val meta = item.itemMeta as ItemMeta
@@ -33,12 +33,12 @@ class GreenhouseItems {
         return item
     }
 
-    fun GreenhouseExit (playerId: UUID): ItemStack {
+    fun GreenhouseExit (greenhouseId: Int): ItemStack {
         val item = ItemStack(Material.BLACK_STAINED_GLASS, 1)
 
         NBT.modify(item) { nbt ->
             nbt.setInteger("item-id", 202)
-            nbt.setUUID("player-id", playerId)
+            nbt.setInteger("greenhouse-id", greenhouseId)
         }
 
         val meta = item.itemMeta as ItemMeta

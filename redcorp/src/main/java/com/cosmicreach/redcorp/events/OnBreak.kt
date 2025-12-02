@@ -4,11 +4,10 @@ import com.cosmicreach.redcorp.items.DrugItems
 import com.cosmicreach.redcorp.items.GreenhouseItems
 import de.tr7zw.nbtapi.NBTBlock
 import de.tr7zw.nbtapi.NBTCompound
-import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.block.data.Ageable
-import org.bukkit.entity.ArmorStand
+import org.bukkit.entity.ItemDisplay
 import org.bukkit.event.block.BlockBreakEvent
 import kotlin.random.Random
 
@@ -38,28 +37,29 @@ class OnBreak (private val event : BlockBreakEvent) {
     private fun greenhouseBreak(entrance: Boolean) {
         val isGreenhouse = nbt.getBoolean("greenhouse")
         if (!isGreenhouse) return
-        val greenhouseOwner = nbt.getUUID("greenhouse-owner")
+        val greenhouseId = nbt.getInteger("greenhouse-id")
         event.isDropItems = false
         b.drops.clear()
 
         if (entrance) {
-            b.world.dropItemNaturally(b.location, GreenhouseItems().GreenhouseEntrance(greenhouseOwner!!))
+            val center = b.location.clone().add(0.5, 0.5, 0.5)
+            b.world.dropItem(center, GreenhouseItems().GreenhouseEntrance(greenhouseId!!))
 
             val nearby = b.world.getNearbyEntities(
-                b.location.add(0.5, -0.7, 0.5),
-                0.5,
-                1.0,
-                0.5
+                center,
+                0.5, // x radius
+                0.5, // y radius
+                0.5  // z radius
             )
 
             nearby.forEach { entity ->
-                if (entity is ArmorStand && entity.isMarker) {
+                if (entity is ItemDisplay && entity.scoreboardTags.contains("fake_block_display")) {
                     entity.remove()
                 }
             }
 
         } else {
-            b.world.dropItemNaturally(b.location, GreenhouseItems().GreenhouseExit(greenhouseOwner!!))
+            b.world.dropItemNaturally(b.location, GreenhouseItems().GreenhouseExit(greenhouseId!!))
         }
         nbt.clearNBT()
     }

@@ -44,13 +44,13 @@ class Utils {
         return id
     }
 
-    fun getGreenhouseUUID(item: ItemStack): UUID? {
-        var id : UUID? = null
+    fun getGreenhouseId(item: ItemStack): Int? {
+        var id : Int? = null
 
         if (!item.hasItemMeta()) { return id }
 
         NBT.get(item) { nbt ->
-            id = nbt.getUUID("player-id")!!
+            id = nbt.getInteger("greenhouse-id")!!
         }
 
         return id

@@ -16,6 +16,10 @@ commands:
   starttag:
     description: used to start tag
     aliases: tag
+  raid:
+    description: used to start raid
+  greenhouse:
+    description: used to control greenhouse
   toggleparticle:
     description: starts particle on player
     aliases: particle

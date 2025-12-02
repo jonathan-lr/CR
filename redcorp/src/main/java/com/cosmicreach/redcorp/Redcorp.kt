@@ -36,7 +36,9 @@ class RedCorp : JavaPlugin() {
     private var lastTagged = HashMap<Int, Player>()
     private var passedTimes = HashMap<Int, Int>()
     private var magicUnlocked = HashMap<Player, Boolean>()
-    private var greenhouseTracker = HashMap<Player, String>()
+    private var canRaid = HashMap<Player, Int>()
+    private var greenhouseInvite = HashMap<Player, Player>()
+    private var greenhouseTracker = HashMap<Player, Int>()
     private var gambleLock = HashMap<Player, Boolean>()
     private var purchaseAmount = HashMap<Player, Int>()
     private var fairiesFound = HashMap<Player, Array<Boolean>>()
@@ -120,6 +122,10 @@ class RedCorp : JavaPlugin() {
         getCommand("starttag")?.tabCompleter = CompleteTag()
         getCommand("addrelic")?.setExecutor(AddRelic(this, config))
         getCommand("addrelic")?.tabCompleter = AddRelicComplete()
+        getCommand("raid")?.setExecutor(Raid())
+        getCommand("raid")?.tabCompleter = RaidComplete()
+        getCommand("greenhouse")?.setExecutor(GreenhouseCommand())
+        getCommand("greenhouse")?.tabCompleter = GreenhouseComplete()
         //getCommand("setnicks")?.setExecutor(SetNicks(this, config))
     }
 
@@ -161,7 +167,7 @@ class RedCorp : JavaPlugin() {
         return shipmentPlayers
     }
 
-    fun getGreenhouseTracker(): HashMap<Player, String> {
+    fun getGreenhouseTracker(): HashMap<Player, Int> {
         return greenhouseTracker
     }
 
@@ -175,6 +181,18 @@ class RedCorp : JavaPlugin() {
 
     fun getMagicUnlocked(): HashMap<Player, Boolean> {
         return magicUnlocked
+    }
+
+    fun getCanRaid(): HashMap<Player, Int> {
+        return canRaid
+    }
+
+    fun getGreenhouseInvite(): HashMap<Player, Player> {
+        return greenhouseInvite
+    }
+
+    fun getAgingBarrels(): HashMap<Block, VirtualInventory> {
+        return agingBarrels
     }
 
     fun getAgingViewers(): HashMap<Block, MutableList<Window>> {

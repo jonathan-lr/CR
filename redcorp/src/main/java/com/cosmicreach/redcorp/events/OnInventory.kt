@@ -47,6 +47,7 @@ class OnInventory (private val event : InventoryOpenEvent, private val agingBarr
         val nbt = NBTBlock(b).data
         val barrel = nbt.getBoolean("barrel")
 
+        // Deprecated
         if (barrel) {
             val fermenting = nbt.getBoolean("ferment")
             val viewers = RedCorp.getPlugin().getAgingViewers()
@@ -97,6 +98,7 @@ class OnInventory (private val event : InventoryOpenEvent, private val agingBarr
         }
     }
 
+    // Deprecated
     private fun brewing() {
         val p = event.player as Player
         val b = event.inventory.location?.block as Block

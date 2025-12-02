@@ -3,6 +3,7 @@ package com.cosmicreach.redcorp
 import com.cosmicreach.redcorp.db.Greenhouse
 import com.cosmicreach.redcorp.db.Magic
 import com.cosmicreach.redcorp.events.*
+import com.cosmicreach.redcorp.items.GreenhouseItems
 import com.cosmicreach.redcorp.utils.DrugTest
 import com.cosmicreach.redcorp.utils.TeleportActions
 import com.cosmicreach.redcorp.utils.Utils
@@ -61,6 +62,7 @@ class EventsListener(
         val p = event.whoClicked
         if (p is Player) {
             HandleInvChange(p).run()
+            OnBundle(p, event).run()
         }
     }
 
@@ -158,7 +160,7 @@ class EventsListener(
     fun onInvClose(event: InventoryCloseEvent) {
         val p = event.player
         if (p is Player) {
-            HandleInvChange(p).run()
+            HandleInvChangeBudget(p).run()
         }
     }
 
@@ -217,12 +219,14 @@ class EventsListener(
 
         if (!greenhouseTracking.containsKey(player)) return
 
-        val playerHome = greenhouseTracking.get(player)
+        val greenhouseId = greenhouseTracking.get(player)
 
         val loc = player.location
         val locString = "${loc.world?.name},${loc.x},${loc.y},${loc.z},${loc.yaw},${loc.pitch}"
 
-        val data = Greenhouse(connection).addGreenhouse(player.uniqueId, locString, locString, playerHome!!)
+        val data = Greenhouse(connection).updateHome(greenhouseId!!, locString)
+
+        player.location.world?.dropItem(player.location, GreenhouseItems().GreenhouseExit(greenhouseId))
 
         greenhouseTracking.remove(player)
 

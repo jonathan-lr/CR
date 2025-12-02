@@ -23,7 +23,7 @@ class TestCommand() : CommandExecutor {
         val connection = RedCorp.getPlugin().getConnection()!!
         if (sender !is Player) { return false }
         if (sender.hasPermission("redcorp.dev")) {
-            val test = Greenhouse(connection).getGreenhouse(sender.uniqueId)
+            val test = Greenhouse(connection).getGreenhousesForPlayer(sender.uniqueId)
 
             if (test != null) {
                 val parts: List<String>
@@ -48,14 +48,14 @@ class TestCommand() : CommandExecutor {
 
                 sender.teleport(location)
             } else {
-                val loc = sender.location
-                val locString = "${loc.world?.name},${loc.x},${loc.y},${loc.z},${loc.yaw},${loc.pitch}"
+                //val loc = sender.location
+                //val locString = "${loc.world?.name},${loc.x},${loc.y},${loc.z},${loc.yaw},${loc.pitch}"
 
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "sudo ${sender.playerListName} island create greenhouse")
+                //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "sudo ${sender.playerListName} island create greenhouse")
 
-                val greenhouseTracking = RedCorp.getPlugin().getGreenhouseTracker()
+                //val greenhouseTracking = RedCorp.getPlugin().getGreenhouseTracker()
 
-                greenhouseTracking.put(sender, locString)
+                //greenhouseTracking.put(sender, locString)
             }
 
 
