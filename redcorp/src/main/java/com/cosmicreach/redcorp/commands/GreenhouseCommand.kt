@@ -94,6 +94,9 @@ class GreenhouseCommand : CommandExecutor {
                 greenhouseInvites.remove(target, sender)
                 ChatUtil.send(sender, ChatUtil.json { text("Canceled invite to ${target.displayName}") })
                 ChatUtil.send(target, ChatUtil.json { text("${sender.displayName} canceled their invite sorry :(") })
+
+                ChatUtil.send(sender, ChatUtil.json { text("Test $greenhouseInvites") })
+
                 return true
             }
 

@@ -1,11 +1,9 @@
 {
-  "pack": {
-    "pack_format": 64,
-    "description": "§5CR§cS6 §61.21.8 \n§8by §4Red §8& §2Yorick"
-  },
-  "features": {
-    "enabled": [
-      "vanilla"
-    ]
-  }
+    "pack": {
+        "pack_format": 34,
+    "min_format": 34,
+    "max_format": 69,
+		"supported_formats": {"min_inclusive": 34, "max_inclusive": 69},
+        "description": "§5CR§cS7 §61.21.10 \n§8by §4Red §8& §2Yorick"
+    }
 }

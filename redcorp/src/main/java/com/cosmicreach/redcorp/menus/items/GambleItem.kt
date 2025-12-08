@@ -67,29 +67,29 @@ class GambleItem(
                     if (spin.distinct().size == 1) { // All numbers are the same
                         when (spin.first()) {
                             0 -> {
-                                player.sendMessage("§cCR §8|§r You won §c§l${econ.format(100.0)}")
-                                econ.depositPlayer(player, 150.0)
+                                player.sendMessage("§cCR §8|§r You won §c§l${econ.format(300.0)}")
+                                econ.depositPlayer(player, 300.0)
                                 player.world.playSound(player.location, Sound.ENTITY_VILLAGER_AMBIENT, 0.75f, 1.0f)
                             }
                             1 -> {
-                                player.sendMessage("§cCR §8|§r You won §c§l${econ.format(250.0)}")
-                                econ.depositPlayer(player, 250.0)
-                                player.world.playSound(player.location, Sound.ENTITY_VILLAGER_TRADE, 0.75f, 1.0f)
-                            }
-                            2 -> {
                                 player.sendMessage("§cCR §8|§r You won §c§l${econ.format(500.0)}")
                                 econ.depositPlayer(player, 500.0)
                                 player.world.playSound(player.location, Sound.ENTITY_VILLAGER_TRADE, 0.75f, 1.0f)
                             }
+                            2 -> {
+                                player.sendMessage("§cCR §8|§r You won §c§l${econ.format(1000.0)}")
+                                econ.depositPlayer(player, 1000.0)
+                                player.world.playSound(player.location, Sound.ENTITY_VILLAGER_TRADE, 0.75f, 1.0f)
+                            }
                             3 -> {
-                                player.sendMessage("§cCR §8|§r You won §c§l${econ.format(750.0)}")
-                                econ.depositPlayer(player, 750.0)
+                                player.sendMessage("§cCR §8|§r You won §c§l${econ.format(1500.0)}")
+                                econ.depositPlayer(player, 1500.0)
                                 player.world.playSound(player.location, Sound.ENTITY_WITHER_SPAWN, 0.75f, 1.0f)
                             }
                             4 -> {
-                                player.sendMessage("§cCR §8|§r You won §c§l${econ.format(1000.0)}")
+                                player.sendMessage("§cCR §8|§r You won §c§l${econ.format(3000.0)}")
                                 Bukkit.broadcastMessage("§cCR §8|§r ${player.displayName}§r won the Jackpot")
-                                econ.depositPlayer(player, 1000.0)
+                                econ.depositPlayer(player, 3000.0)
                                 player.world.playSound(player.location, Sound.ENTITY_WITHER_SPAWN, 0.75f, 1.0f)
                             }
                         }

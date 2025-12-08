@@ -219,20 +219,18 @@ class CustomItems {
     }
 
     fun Fairy (a: Int, id: String): ItemStack {
-        val item = ItemStack(Material.PLAYER_HEAD, a)
-        val profile = Bukkit.createPlayerProfile(UUID.randomUUID())
-        val textures = profile.textures
-        val url = URL("https://textures.minecraft.net/texture/8241989eac173a87489233b11239e54643609de929189b9e10e598b5cc896021")
-        textures.skin = url
-        profile.setTextures(textures)
+        val item = ItemStack(Material.PAPER, a)
 
         NBT.modify(item) { nbt ->
             nbt.setInteger("item-id", 700+id.toInt())
         }
 
-        val meta = item.itemMeta as SkullMeta
-        meta.ownerProfile = profile
+        val meta = item.itemMeta as ItemMeta
+        val cm = meta.customModelDataComponent
 
+        cm.strings = mutableListOf("fairy")
+
+        meta.setCustomModelDataComponent(cm)
         item.setItemMeta(meta)
         return item
     }

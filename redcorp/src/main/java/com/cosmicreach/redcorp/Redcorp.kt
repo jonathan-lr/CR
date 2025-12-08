@@ -15,6 +15,7 @@ import org.bukkit.block.Block
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
+import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.inventory.VirtualInventory
 import xyz.xenondevs.invui.window.Window
 import java.sql.Connection
@@ -29,6 +30,7 @@ class RedCorp : JavaPlugin() {
     private var grinderPlayers = HashMap<Player, VirtualInventory>()
     private var shipmentPlayers = HashMap<Player, VirtualInventory>()
     private var agingBarrels = HashMap<Block, VirtualInventory>()
+    private var storedGuis = HashMap<Block, Gui>()
     private val agingViewers = HashMap<Block, MutableList<Window>>()
     private var particleTeleport = HashMap<Player, ParticleManager>()
     private var economy: Economy? = null
@@ -126,6 +128,8 @@ class RedCorp : JavaPlugin() {
         getCommand("raid")?.tabCompleter = RaidComplete()
         getCommand("greenhouse")?.setExecutor(GreenhouseCommand())
         getCommand("greenhouse")?.tabCompleter = GreenhouseComplete()
+        getCommand("createnpc")?.setExecutor(CreateNPC())
+        getCommand("createnpc")?.tabCompleter = CreateNPCComplete()
         //getCommand("setnicks")?.setExecutor(SetNicks(this, config))
     }
 
@@ -193,6 +197,10 @@ class RedCorp : JavaPlugin() {
 
     fun getAgingBarrels(): HashMap<Block, VirtualInventory> {
         return agingBarrels
+    }
+
+    fun getStoredGuis(): HashMap<Block, Gui> {
+        return storedGuis
     }
 
     fun getAgingViewers(): HashMap<Block, MutableList<Window>> {

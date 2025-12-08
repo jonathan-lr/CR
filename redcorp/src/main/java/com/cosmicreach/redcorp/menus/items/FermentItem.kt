@@ -2,7 +2,7 @@ package com.cosmicreach.redcorp.menus.items
 
 import com.cosmicreach.redcorp.RedCorp
 import com.cosmicreach.redcorp.items.DrugItems
-import de.tr7zw.nbtapi.NBTBlock
+import com.cosmicreach.redcorp.items.ServerItems
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.block.Block
@@ -10,72 +10,64 @@ import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.Damageable
 import org.bukkit.scheduler.BukkitRunnable
 import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.inventory.VirtualInventory
 import xyz.xenondevs.invui.item.ItemProvider
 import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.controlitem.ControlItem
+import kotlin.math.roundToInt
 
-class FermentItem(private val inv : VirtualInventory, private val block: Block) : ControlItem<Gui>() {
+class FermentItem(private val inv : VirtualInventory, private val progressInv: VirtualInventory, private val block: Block, private val setFermenting: (Boolean) -> Boolean, private val fermenting: Boolean) : ControlItem<Gui>() {
     override fun getItemProvider(gui: Gui): ItemProvider {
-        return ItemBuilder(Material.GRINDSTONE).setDisplayName("§2§lFerment Booze").setLegacyLore((mutableListOf("§f§lClick to ferment", "§f§l4 Produce = 1 Drink")))
+        return ItemBuilder(Material.GRINDSTONE).setDisplayName("§2§lFerment Booze").setLegacyLore((mutableListOf("§f§lClick to ferment", "§f4 Produce = 1 Drink")))
     }
 
     override fun handleClick(clickType: ClickType, player: Player, event: InventoryClickEvent) {
         val item = inv.getItem(0) ?: return
-        val nbt = NBTBlock(block).data
-        val fermenting = nbt.getBoolean("ferment")
 
         if (item.type == Material.AIR || fermenting) return
 
         val fermentables = mutableListOf(Material.WHEAT, Material.APPLE, Material.POTATO, Material.SWEET_BERRIES)
 
         if (fermentables.contains(item.type) && item.amount >= 4) {
-            nbt.setBoolean("ferment", true)
-            val viewers = RedCorp.getPlugin().getAgingViewers()
-            if (viewers[block] != null) {
-                viewers[block]?.forEach {
-                    it.viewer.closeInventory()
-                }
-                viewers[block]?.clear()
-            }
-            //gui.closeForAllViewers()
+            setFermenting(true)
 
-            var count = 60
             object : BukkitRunnable() {
+                var elapsed = 0L
+                var fermentTime = 20L*60
+
                 override fun run() {
-                    when (count) {
-                        60 -> {
-                            player.world.playSound(player.location, Sound.BLOCK_BREWING_STAND_BREW, 0.75f, 1.0f)
-                            player.sendMessage("§cCR §8|§r Starting Ferment")
-                        }
-                        1 -> {
-                            player.sendMessage("§cCR §8|§r Finished Ferment")
-
-                            nbt.setBoolean("ferment", false)
-                            player.world.playSound(player.location, Sound.BLOCK_BREWING_STAND_BREW, 0.75f, 1.0f)
-
-                            when (item.type) {
-                                Material.WHEAT -> {
-                                    inv.setItemSilently(0, ItemStack(DrugItems().Larger(item.amount/4)))
-                                }
-                                Material.APPLE -> {
-                                    inv.setItemSilently(0, ItemStack(DrugItems().Cider(item.amount/4)))
-                                }
-                                Material.POTATO -> {
-                                    inv.setItemSilently(0, ItemStack(DrugItems().Vodka(item.amount/4)))
-                                }
-                                Material.SWEET_BERRIES -> {
-                                    inv.setItemSilently(0, ItemStack(DrugItems().Wine(item.amount/4)))
-                                }
-                                else -> {return}
-                            }
-
-                            cancel()
-                        }
+                    if (elapsed == 0L) {
+                        player.world.playSound(player.location, Sound.BLOCK_BREWING_STAND_BREW, 0.75f, 1.0f)
                     }
-                    count -= 1
+                    if (elapsed >= fermentTime) {
+                        player.world.playSound(player.location, Sound.BLOCK_BREWING_STAND_BREW, 0.75f, 1.0f)
+
+                        when (item.type) {
+                            Material.WHEAT -> {
+                                inv.setItemSilently(0, ItemStack(DrugItems().Larger(item.amount/4)))
+                            }
+                            Material.APPLE -> {
+                                inv.setItemSilently(0, ItemStack(DrugItems().Cider(item.amount/4)))
+                            }
+                            Material.POTATO -> {
+                                inv.setItemSilently(0, ItemStack(DrugItems().Vodka(item.amount/4)))
+                            }
+                            Material.SWEET_BERRIES -> {
+                                inv.setItemSilently(0, ItemStack(DrugItems().Wine(item.amount/4)))
+                            }
+                            else -> {return}
+                        }
+
+                        setFermenting(false)
+                        cancel()
+                    }
+
+                    val progress = elapsed.toDouble() / fermentTime.toDouble()
+                    updateProgressTool(progressInv, 0, progress.toDouble())
+                    elapsed += 20L
                 }
             }.runTaskTimer(RedCorp.getPlugin(), 0L, 20L).taskId
         } else {
@@ -83,5 +75,23 @@ class FermentItem(private val inv : VirtualInventory, private val block: Block) 
             block.world.dropItemNaturally(block.location, item)
             inv.setItemSilently(0, ItemStack(Material.AIR))
         }
+    }
+
+    private fun updateProgressTool(progressInv: VirtualInventory, invIndex: Int, progressAmount: Double) {
+        val item = ServerItems().emptyProgressTool()
+        val meta = item.itemMeta
+
+        if (meta is Damageable && item.type.maxDurability > 0) {
+            val maxDura = item.type.maxDurability.toInt()
+            val clamped = progressAmount.coerceIn(0.0, 1.0)
+
+            val damage = ((1.0 - clamped) * maxDura).roundToInt()
+
+            meta.damage = damage
+            item.itemMeta = meta
+        }
+
+        progressInv.setItemSilently(invIndex, item)
+        progressInv.notifyWindows()
     }
 }

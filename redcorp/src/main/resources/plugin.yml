@@ -20,6 +20,8 @@ commands:
     description: used to start raid
   greenhouse:
     description: used to control greenhouse
+  createnpc:
+    description: used to createnpcs
   toggleparticle:
     description: starts particle on player
     aliases: particle

@@ -4,6 +4,7 @@ import com.cosmicreach.redcorp.items.CustomItems
 import com.cosmicreach.redcorp.items.DrugItems
 import com.cosmicreach.redcorp.items.GreenhouseItems
 import com.cosmicreach.redcorp.items.PlayerItems
+import com.cosmicreach.redcorp.items.ServerItems
 import com.cosmicreach.redcorp.items.ShipmentItems
 import de.tr7zw.nbtapi.NBTCompound
 import org.bukkit.block.Block
@@ -20,6 +21,8 @@ class Materia : CommandExecutor {
         "arlbaro" to { args: List<String> -> PlayerItems().Arlbaro(args.getOrNull(0)?.toIntOrNull() ?: 1) },
         "awp" to { args: List<String> -> PlayerItems().Awp(args.getOrNull(0)?.toIntOrNull() ?: 1) },
         "barrel" to { args: List<String> -> DrugItems().AgingBarrel(args.getOrNull(0)?.toIntOrNull() ?: 1) },
+        "dryingrack" to { args: List<String> -> DrugItems().DryingRack(args.getOrNull(0)?.toIntOrNull() ?: 1) },
+        "slots" to { args: List<String> -> ServerItems().SlotMachine(args.getOrNull(0)?.toIntOrNull() ?: 1) },
         "card" to { args: List<String> ->
             val suit = args.getOrElse(1) { "joker" }
             val number = args.getOrElse(2) { "ace" }
@@ -120,6 +123,8 @@ class MateriaComplete : TabCompleter {
         "arlbaro" to "redcorp.materia.arlbaro",
         "awp" to "redcorp.materia.awp",
         "barrel" to "redcorp.materia.barrel",
+        "dryingrack" to "redcorp.materia.dryingrack",
+        "slots" to "redcorp.materia.slots",
         "card" to "redcorp.materia.card",
         "coffee" to "redcorp.materia.coffee",
         "coke" to "redcorp.materia.coke",

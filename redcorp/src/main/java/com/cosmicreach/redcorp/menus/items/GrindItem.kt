@@ -24,7 +24,7 @@ class GrindItem(private val inv : VirtualInventory) : ControlItem<Gui>() {
             inv.setItem(UpdateReason.SUPPRESSED, 0, DrugItems().Coke(item.amount))
         }
 
-        if (Utils().checkID(item, arrayOf(421))) {
+        if (Utils().checkID(item, arrayOf(424))) {
             inv.setItem(UpdateReason.SUPPRESSED, 0, DrugItems().GroundWeed(item.amount))
         }
     }

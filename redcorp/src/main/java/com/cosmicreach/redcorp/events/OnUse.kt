@@ -2,10 +2,14 @@ package com.cosmicreach.redcorp.events
 
 import com.cosmicreach.redcorp.RedCorp
 import com.cosmicreach.redcorp.db.Greenhouse
+import com.cosmicreach.redcorp.items.CustomItems
 import com.cosmicreach.redcorp.items.DrugItems
 import com.cosmicreach.redcorp.items.GreenhouseItems
+import com.cosmicreach.redcorp.items.ServerItems
 import com.cosmicreach.redcorp.menus.AgingBarrel
 import com.cosmicreach.redcorp.menus.CoffeeMachine
+import com.cosmicreach.redcorp.menus.DryingRack
+import com.cosmicreach.redcorp.menus.FruitGamble
 import com.cosmicreach.redcorp.menus.Grinder
 import com.cosmicreach.redcorp.menus.Teleport
 import com.cosmicreach.redcorp.utils.ChatUtil
@@ -15,6 +19,7 @@ import de.tr7zw.nbtapi.NBTBlock
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.Server
 import org.bukkit.Sound
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
@@ -47,7 +52,7 @@ class OnUse (
             when (id) {
                 2 -> gavel()
                 400 -> grinder()
-                401, 403 -> customBlock()
+                401, 403, 404, 399 -> customBlock()
                 210 -> setData()
                 2886 -> debug()
                 3 -> playerTeleport()
@@ -58,7 +63,7 @@ class OnUse (
                 440 -> podzolDrug()
                 450, 451 -> myceliumDrug()
                 473 -> woodDrug()
-                in 700..720 -> setData()
+                in 700..730 -> customBlock()
             }
 
             if(event.item!!.type == Material.BONE_MEAL && event.clickedBlock != null) {
@@ -191,53 +196,51 @@ class OnUse (
             if(block.type == Material.BARRIER) {
                 val nbt = NBTBlock(block).data
                 val barrel = nbt.getBoolean("barrel")
+                val drying = nbt.getBoolean("drying")
                 val coffee = nbt.getBoolean("coffee")
-                val fermenting = nbt.getBoolean("ferment")
+                val slot = nbt.getBoolean("slot")
                 if (event.action == Action.RIGHT_CLICK_BLOCK) {
                     val viewers = RedCorp.getPlugin().getAgingViewers()
                     val agingBarrels = RedCorp.getPlugin().getAgingBarrels()
 
                     if (barrel) {
-                        if (fermenting) {
-                            p.sendMessage("§cCR §8|§r Sorry ${p.displayName} §rthat barrel is still fermenting!")
-                            return
-                        }
-
                         val window = Window.single()
                             .setViewer(p)
-                            .setTitle("§6§lAging Barrel")
-                            .setGui(AgingBarrel(agingBarrels).makeGUI(block))
+                            .setTitle("§r\uE100\uE002")
+                            .setGui(AgingBarrel(agingBarrels).getOrCreateGui(block))
                             .build()
 
                         window.open()
+                    }
 
-                        if (viewers[block] != null) {
-                            viewers[block]?.add(window)
-                        } else {
-                            viewers[block] = mutableListOf(window)
-                        }
+                    if (drying) {
+                        val window = Window.single()
+                            .setViewer(p)
+                            .setTitle("§r\uE100\uE003")
+                            .setGui(DryingRack(agingBarrels).getOrCreateGui(block))
+                            .build()
+
+                        window.open()
+                    }
+
+                    if (slot) {
+                        val window = Window.single()
+                            .setViewer(p)
+                            .setTitle("§r\uE100\uE004")
+                            .setGui(FruitGamble().makeGUI(p))
+                            .build()
+
+                        window.open()
                     }
 
                     if (coffee) {
-                        if (fermenting) {
-                            event.isCancelled = true
-                            p.sendMessage("§cCR §8|§r Sorry ${p.displayName} §rthat coffee is still brewing!")
-                            return
-                        }
-
                         val window = Window.single()
                             .setViewer(p)
-                            .setTitle("§6§lCoffee Machine")
-                            .setGui(CoffeeMachine(agingBarrels).makeGUI(block))
+                            .setTitle("§r\uE100\uE001")
+                            .setGui(CoffeeMachine(agingBarrels).getOrCreateGui(block))
                             .build()
 
                         window.open()
-
-                        if (viewers[block] != null) {
-                            viewers[block]?.add(window)
-                        } else {
-                            viewers[block] = mutableListOf(window)
-                        }
                     }
                 } else {
                     val center = block.location.clone().add(0.5, 0.5, 0.5)
@@ -247,7 +250,7 @@ class OnUse (
 
                         nbt.clearNBT()
 
-                        breakFakeBlock(block)
+                        Utils().breakFakeBlock(block)
                     }
                     if (barrel) {
                         block.type = Material.AIR
@@ -255,7 +258,25 @@ class OnUse (
 
                         nbt.clearNBT()
 
-                        breakFakeBlock(block)
+                        Utils().breakFakeBlock(block)
+                    }
+                    if (drying) {
+                        block.type = Material.AIR
+                        block.world.dropItem(center, DrugItems().DryingRack(1))
+
+                        nbt.clearNBT()
+
+                        Utils().breakFakeBlock(block)
+                    }
+                    if (slot) {
+                        if (event.player.hasPermission("redcorp.break-slot")) {
+                            block.type = Material.AIR
+                            block.world.dropItem(center, ServerItems().SlotMachine(1))
+
+                            nbt.clearNBT()
+
+                            Utils().breakFakeBlock(block)
+                        }
                     }
                 }
             }
@@ -313,10 +334,10 @@ class OnUse (
         p.sendMessage("§cCR §8|§r debug coke ${nbt.getBoolean("coke")}")
         p.sendMessage("§cCR §8|§r debug popy ${nbt.getBoolean("poppy")}")
         p.sendMessage("§cCR §8|§r debug barrel ${nbt.getBoolean("barrel")}")
-        p.sendMessage("§cCR §8|§r debug ferment ${nbt.getBoolean("ferment")}")
         p.sendMessage("§cCR §8|§r debug shroom ${nbt.getBoolean("shroom")}")
         p.sendMessage("§cCR §8|§r debug truffle ${nbt.getBoolean("truffle")}")
         p.sendMessage("§cCR §8|§r debug fairy ${nbt.getBoolean("fairy")}")
+        p.sendMessage("§cCR §8|§r debug fairyId ${nbt.getBoolean("fairyId")}")
         p.sendMessage("§cCR §8|§r debug shipment ${nbt.getBoolean("shipment")}")
         p.sendMessage("§cCR §8|§r debug shipmentId ${nbt.getBoolean("shipmentId")}")
         p.sendMessage("§cCR §8|§r debug greenhouse ${nbt.getBoolean("greenhouse")}")
@@ -356,16 +377,25 @@ class OnUse (
             setData()
 
             var item = ItemStack(Material.STICK)
-            var sale = 0F
+            var scale = 0F
             if (id == 401) {
                 item = DrugItems().AgingBarrel(1)
-                sale = 1.2F
-            } else if (id == 403) {
+                scale = 1.2F
+            } else if (id == 399) {
+                item = ServerItems().SlotMachine(1)
+                scale = 1F
+            }  else if (id == 403) {
                 item = DrugItems().CoffieMachine(1)
-                sale = 0.8F
+                scale = 0.8F
+            } else if (id == 404) {
+                item = DrugItems().DryingRack(1)
+                scale = 0.8F
+            } else if (id in 700..730) {
+                item = CustomItems().Fairy(1, (id-700).toString())
+                scale = 1F
             }
 
-            placeFakeBlock(item, block, sale)
+            Utils().placeFakeBlock(item, block, scale, event)
 
             event.isCancelled = true
 
@@ -416,7 +446,7 @@ class OnUse (
                     val greenhouse = Greenhouse(connection).getGreenhouseById(greenhouseId!!)
                     val item = GreenhouseItems().GreenhouseEntrance(greenhouseId)
 
-                    placeFakeBlock(item, block, 0.7F)
+                    Utils().placeFakeBlock(item, block, 0.7F, event)
 
                     if (greenhouse != null) {
                         val loc = p.location
@@ -489,76 +519,6 @@ class OnUse (
         }
     }
 
-    private fun snapYawTo90(rawYaw: Float): Float {
-        // Normalize to 0–360
-        var yaw = rawYaw
-        while (yaw < 0f) yaw += 360f
-        yaw %= 360f
-
-        // Round to nearest 90
-        val snapped = (yaw / 90f).roundToInt() * 90
-        return (snapped % 360).toFloat()
-    }
-
-    private fun placeFakeBlock(item: ItemStack, block: Block, scale: Float = 0F) {
-        val location = block.location
-
-        when (event.blockFace) {
-            BlockFace.UP -> location.y += 1
-            BlockFace.DOWN -> location.y -= 1
-            BlockFace.NORTH -> location.z -= 1
-            BlockFace.SOUTH -> location.z += 1
-            BlockFace.WEST -> location.x -= 1
-            BlockFace.EAST -> location.x += 1
-            else -> return // Handle cases where blockFace is invalid or unexpected
-        }
-
-        val worldPlace = block.location.world!!
-        val displayLocation = Location(
-            worldPlace,
-            location.x + 0.5,
-            location.y + 0.5,
-            location.z + 0.5
-        )
-
-        val playerYaw = p.location.yaw
-        val snappedYaw = snapYawTo90(playerYaw)
-        val finalYaw = ((snappedYaw + 180f) % 360f)
-
-        displayLocation.yaw = finalYaw
-
-        worldPlace.spawn(displayLocation, ItemDisplay::class.java) { d: ItemDisplay ->
-            d.itemStack = item              // your custom-model-data item
-            d.billboard = Display.Billboard.FIXED  // don't face the player
-            d.isPersistent = true
-            d.isInvulnerable = true
-            d.setGravity(false)
-            d.scoreboardTags.add("fake_block_display")
-
-            val t = d.transformation
-            t.scale.set(scale, scale, scale)
-            t.translation.y = (scale -1F) / 2f
-            d.transformation = t
-        }
-    }
-
-    private fun breakFakeBlock(block: Block) {
-        val center = block.location.clone().add(0.5, 0.5, 0.5)
-
-        val nearby = block.world.getNearbyEntities(
-            center,
-            0.5, // x radius
-            0.5, // y radius
-            0.5  // z radius
-        )
-
-        nearby.forEach { entity ->
-            if (entity is ItemDisplay && entity.scoreboardTags.contains("fake_block_display")) {
-                entity.remove()
-            }
-        }
-    }
-
     private fun setData() {
         val location = event.clickedBlock!!.location
 
@@ -591,14 +551,10 @@ class OnUse (
                 nbt.setBoolean("shipment", true)
                 nbt.setInteger("shipmentId", id)
             }
-            401 -> {
-                nbt.setBoolean("barrel", true)
-                nbt.setBoolean("ferment", false)
-            }
-            403 -> {
-                nbt.setBoolean("coffee", true)
-                nbt.setBoolean("ferment", false)
-            }
+            399 -> nbt.setBoolean("slot", true)
+            401 -> nbt.setBoolean("barrel", true)
+            403 -> nbt.setBoolean("coffee", true)
+            404 -> nbt.setBoolean("drying", true)
             420 -> nbt.setBoolean("weed", true)
             430 -> nbt.setBoolean("coke", true)
             440 -> nbt.setBoolean("poppy", true)

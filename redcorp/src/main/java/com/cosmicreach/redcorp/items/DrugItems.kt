@@ -95,6 +95,26 @@ class DrugItems {
         return item
     }
 
+    fun DryingRack (a : Int): ItemStack {
+        val item = ItemStack(Material.BARREL, a)
+
+        NBT.modify(item) { nbt ->
+            nbt.setInteger("item-id", 404)
+        }
+
+        val meta = item.itemMeta as ItemMeta
+        val cm = meta.customModelDataComponent
+
+        cm.strings = mutableListOf("agingbarrel")
+        meta.setCustomModelDataComponent(cm)
+
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+        meta.setDisplayName("§2§lᴅʀʏɪɴɢ ʀᴀᴄᴋ")
+        item.setItemMeta(meta)
+
+        return item
+    }
+
     // WEED STUFF
     fun WeedSeed (a : Int): ItemStack {
         val item = ItemStack(Material.WHEAT_SEEDS, a)
@@ -131,6 +151,26 @@ class DrugItems {
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
         meta.setDisplayName("§2§lᴄᴀɴɴᴀʙɪꜱ")
+        item.setItemMeta(meta)
+
+        return item
+    }
+
+    fun DriedWeed (a : Int): ItemStack {
+        val item = ItemStack(Material.WHEAT, a)
+
+        NBT.modify(item) { nbt ->
+            nbt.setInteger("item-id", 424)
+        }
+
+        val meta = item.itemMeta as ItemMeta
+        val cm = meta.customModelDataComponent
+
+        cm.strings = mutableListOf("driedweed")
+
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+        meta.setCustomModelDataComponent(cm)
+        meta.setDisplayName("§2§lᴅʀɪᴇᴅ ᴄᴀɴɴᴀʙɪꜱ")
         item.setItemMeta(meta)
 
         return item

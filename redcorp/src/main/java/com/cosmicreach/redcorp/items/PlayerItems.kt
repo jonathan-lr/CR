@@ -2,14 +2,10 @@ package com.cosmicreach.redcorp.items
 
 import com.cosmicreach.redcorp.utils.Utils
 import de.tr7zw.nbtapi.NBT
-import de.tr7zw.nbtapi.NBTItem
 import org.bukkit.Material
-import org.bukkit.Sound
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
-import org.bukkit.inventory.meta.components.FoodComponent
-import org.bukkit.inventory.meta.components.consumable.ConsumableComponent
 
 class PlayerItems {
     fun MRE (a : Int): ItemStack {

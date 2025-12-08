@@ -11,6 +11,8 @@ import de.tr7zw.nbtapi.NBTBlock
 import org.bukkit.*
 import org.bukkit.block.Block
 import org.bukkit.block.data.Directional
+import org.bukkit.entity.EntityCategory
+import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -28,6 +30,7 @@ import org.bukkit.event.inventory.PrepareItemCraftEvent
 import org.bukkit.event.player.*
 import org.bukkit.event.player.PlayerAdvancementDoneEvent
 import org.bukkit.event.world.StructureGrowEvent
+import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitRunnable
 import xyz.xenondevs.invui.inventory.VirtualInventory
 
@@ -231,5 +234,22 @@ class EventsListener(
         greenhouseTracking.remove(player)
 
         player.sendMessage("Saved greenhouse location: $data")
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    fun onRightClick(e: PlayerInteractAtEntityEvent) {
+        val entity = e.rightClicked
+        if (entity.type != EntityType.MANNEQUIN) return
+
+        val key = NamespacedKey(RedCorp.getPlugin(), "npc_name")
+        val pdc = entity.persistentDataContainer
+
+        val id = pdc.get(key, PersistentDataType.STRING)
+
+        if (id != null) {
+            Bukkit.broadcastMessage("§cCR §8|§r You clicked NPC ID: §e$id")
+        } else {
+            Bukkit.broadcastMessage("§cCR §8|§r This mannequin has no ID stored.")
+        }
     }
 }

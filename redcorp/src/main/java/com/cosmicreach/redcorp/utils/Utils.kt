@@ -1,11 +1,15 @@
 package com.cosmicreach.redcorp.utils
 
-import com.cosmicreach.redcorp.RedCorp
 import de.tr7zw.nbtapi.NBT
-import org.bukkit.Bukkit
+import org.bukkit.Location
+import org.bukkit.block.Block
+import org.bukkit.block.BlockFace
+import org.bukkit.entity.Display
+import org.bukkit.entity.ItemDisplay
 import org.bukkit.entity.Player
+import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
-import java.util.UUID
+import kotlin.math.roundToInt
 
 class Utils {
     fun checkID(item: ItemStack, ids: Array<Int>): Boolean {
@@ -99,31 +103,74 @@ class Utils {
         return item
     }
 
-    fun serializeMagicUnlocked(magicUnlocked: HashMap<Player, Boolean>): String {
-        return magicUnlocked.entries.joinToString(";") {
-            "${it.key.playerListName}=${it.value}"
+    private fun snapYawTo90(rawYaw: Float): Float {
+        // Normalize to 0–360
+        var yaw = rawYaw
+        while (yaw < 0f) yaw += 360f
+        yaw %= 360f
+
+        // Round to nearest 90
+        val snapped = (yaw / 90f).roundToInt() * 90
+        return (snapped % 360).toFloat()
+    }
+
+    fun placeFakeBlock(item: ItemStack, block: Block, scale: Float = 0F, event: PlayerInteractEvent) {
+        val location = block.location
+
+        when (event.blockFace) {
+            BlockFace.UP -> location.y += 1
+            BlockFace.DOWN -> location.y -= 1
+            BlockFace.NORTH -> location.z -= 1
+            BlockFace.SOUTH -> location.z += 1
+            BlockFace.WEST -> location.x -= 1
+            BlockFace.EAST -> location.x += 1
+            else -> return // Handle cases where blockFace is invalid or unexpected
+        }
+
+        val worldPlace = block.location.world!!
+        val displayLocation = Location(
+            worldPlace,
+            location.x + 0.5,
+            location.y + 0.5,
+            location.z + 0.5
+        )
+
+        val playerYaw = event.player.location.yaw
+        val snappedYaw = snapYawTo90(playerYaw)
+        val finalYaw = ((snappedYaw + 180f) % 360f)
+
+        displayLocation.yaw = finalYaw
+
+        worldPlace.spawn(displayLocation, ItemDisplay::class.java) { d: ItemDisplay ->
+            d.setItemStack(item)              // your custom-model-data item
+            d.billboard = Display.Billboard.FIXED  // don't face the player
+            d.isPersistent = true
+            d.isInvulnerable = true
+            d.setGravity(false)
+            d.scoreboardTags.add("fake_block_display")
+
+            val t = d.transformation
+            t.scale.set(scale, scale, scale)
+            t.translation.y = (scale -1F) / 2f
+            d.transformation = t
         }
     }
 
-    fun deserializeMagicUnlocked(serializedData: String) {
-        val magicUnlocked = RedCorp.getPlugin().getMagicUnlocked()
-        val entries = serializedData.split(";")
+    fun breakFakeBlock(block: Block) {
+        val center = block.location.clone().add(0.5, 0.5, 0.5)
 
-        for (entry in entries) {
-            if (entry.isNotBlank()) {
-                val parts = entry.split("=")
-                if (parts.size == 2) {
-                    val playerName = parts[0]
-                    val unlocked = parts[1].toBoolean()
-                    val player = Bukkit.getPlayer(playerName)
-                    if (player != null) {
-                        magicUnlocked[player] = unlocked
-                    }
-                }
+        val nearby = block.world.getNearbyEntities(
+            center,
+            0.5, // x radius
+            0.5, // y radius
+            0.5  // z radius
+        )
+
+        nearby.forEach { entity ->
+            if (entity is ItemDisplay && entity.scoreboardTags.contains("fake_block_display")) {
+                entity.remove()
             }
         }
-
-        return
     }
 
     fun setScore(player: Player, objectiveName: String, value: Int) {

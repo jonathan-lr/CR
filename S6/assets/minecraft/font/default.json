@@ -1,0 +1,53 @@
+{
+    "providers": [
+        {
+            "type": "reference",
+            "id": "minecraft:include/space"
+        },
+        {
+            "type": "reference",
+            "id": "minecraft:include/default",
+            "filter": {
+                "uniform": false
+            }
+        },
+        {
+            "type": "reference",
+            "id": "minecraft:include/unifont"
+        },
+		{
+			"type": "bitmap",
+			"file": "minecraft:gui/coffee.png",
+			"ascent": 24,
+			"height": 256,
+			"chars": ["\uE001"]
+		},
+		{
+			"type": "bitmap",
+			"file": "minecraft:gui/barrel.png",
+			"ascent": 24,
+			"height": 256,
+			"chars": ["\uE002"]
+		},
+		{
+			"type": "bitmap",
+			"file": "minecraft:gui/rack.png",
+			"ascent": 24,
+			"height": 256,
+			"chars": ["\uE003"]
+		},
+		{
+			"type": "bitmap",
+			"file": "minecraft:gui/pokies.png",
+			"ascent": 24,
+			"height": 256,
+			"chars": ["\uE004"]
+		},
+		{
+		  "type": "space",
+		  "advances": {
+			"\uE100": -8  
+		  }
+		}
+    ]
+}

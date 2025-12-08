@@ -2,6 +2,7 @@ package com.cosmicreach.redcorp.events
 
 import com.cosmicreach.redcorp.items.DrugItems
 import com.cosmicreach.redcorp.items.GreenhouseItems
+import com.cosmicreach.redcorp.utils.Utils
 import de.tr7zw.nbtapi.NBTBlock
 import de.tr7zw.nbtapi.NBTCompound
 import org.bukkit.Material
@@ -28,6 +29,7 @@ class OnBreak (private val event : BlockBreakEvent) {
             Material.PLAYER_HEAD -> fairyBreak()
             Material.GREEN_STAINED_GLASS -> greenhouseBreak(true)
             Material.BLACK_STAINED_GLASS -> greenhouseBreak(false)
+            Material.BARRIER -> breakCustom()
             else -> {}
         }
 
@@ -45,23 +47,16 @@ class OnBreak (private val event : BlockBreakEvent) {
             val center = b.location.clone().add(0.5, 0.5, 0.5)
             b.world.dropItem(center, GreenhouseItems().GreenhouseEntrance(greenhouseId!!))
 
-            val nearby = b.world.getNearbyEntities(
-                center,
-                0.5, // x radius
-                0.5, // y radius
-                0.5  // z radius
-            )
-
-            nearby.forEach { entity ->
-                if (entity is ItemDisplay && entity.scoreboardTags.contains("fake_block_display")) {
-                    entity.remove()
-                }
-            }
-
+            Utils().breakFakeBlock(b)
         } else {
             b.world.dropItemNaturally(b.location, GreenhouseItems().GreenhouseExit(greenhouseId!!))
         }
         nbt.clearNBT()
+    }
+
+    private fun breakCustom() {
+        nbt.clearNBT()
+        Utils().breakFakeBlock(b)
     }
 
     private fun weedBreak () {

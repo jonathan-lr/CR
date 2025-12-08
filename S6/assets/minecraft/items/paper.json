@@ -412,6 +412,20 @@
           "type": "model",
           "model": "item/cards/back"
         }
+      },
+      {
+        "when": "fairy",
+        "model": {
+          "type": "model",
+          "model": "item/fairy"
+        }
+      },
+      {
+        "when": "slots",
+        "model": {
+          "type": "model",
+          "model": "item/slots"
+        }
       }
     ]
   }   

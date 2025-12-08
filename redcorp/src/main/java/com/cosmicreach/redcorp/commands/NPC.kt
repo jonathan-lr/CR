@@ -340,7 +340,7 @@ class NPC(economy: Economy?): CommandExecutor {
                     val window = Window.single()
                             .setViewer(player)
                             .setTitle("§2Fruit Gamble")
-                            .setGui(FruitGamble(econ).makeGUI(player))
+                            .setGui(FruitGamble().makeGUI(player))
                             .build()
 
                     window.open()
