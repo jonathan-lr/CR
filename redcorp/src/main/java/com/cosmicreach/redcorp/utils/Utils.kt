@@ -114,7 +114,7 @@ class Utils {
         return (snapped % 360).toFloat()
     }
 
-    fun placeFakeBlock(item: ItemStack, block: Block, scale: Float = 0F, event: PlayerInteractEvent) {
+    fun placeFakeBlock(item: ItemStack, block: Block, scale: Float = 0F, event: PlayerInteractEvent, freeRotation: Boolean = false) {
         val location = block.location
 
         when (event.blockFace) {
@@ -136,7 +136,8 @@ class Utils {
         )
 
         val playerYaw = event.player.location.yaw
-        val snappedYaw = snapYawTo90(playerYaw)
+        var snappedYaw = snapYawTo90(playerYaw)
+        if (freeRotation) { snappedYaw = playerYaw }
         val finalYaw = ((snappedYaw + 180f) % 360f)
 
         displayLocation.yaw = finalYaw

@@ -3,6 +3,7 @@ package com.cosmicreach.redcorp.menus.items
 import com.cosmicreach.redcorp.RedCorp
 import com.cosmicreach.redcorp.items.DrugItems
 import com.cosmicreach.redcorp.items.ServerItems
+import com.cosmicreach.redcorp.utils.Utils
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.block.Block
@@ -19,7 +20,7 @@ import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.controlitem.ControlItem
 import kotlin.math.roundToInt
 
-class FermentItem(private val inv : VirtualInventory, private val progressInv: VirtualInventory, private val block: Block, private val setFermenting: (Boolean) -> Boolean, private val fermenting: Boolean) : ControlItem<Gui>() {
+class FermentItem(private val inv : VirtualInventory, private val progressInv: VirtualInventory, private val block: Block, private val setFermenting: (Boolean) -> Boolean, private val getFermenting: () -> Boolean) : ControlItem<Gui>() {
     override fun getItemProvider(gui: Gui): ItemProvider {
         return ItemBuilder(Material.GRINDSTONE).setDisplayName("§2§lFerment Booze").setLegacyLore((mutableListOf("§f§lClick to ferment", "§f4 Produce = 1 Drink")))
     }
@@ -27,11 +28,12 @@ class FermentItem(private val inv : VirtualInventory, private val progressInv: V
     override fun handleClick(clickType: ClickType, player: Player, event: InventoryClickEvent) {
         val item = inv.getItem(0) ?: return
 
-        if (item.type == Material.AIR || fermenting) return
+        if (item.type == Material.AIR || getFermenting()) return
 
-        val fermentables = mutableListOf(Material.WHEAT, Material.APPLE, Material.POTATO, Material.SWEET_BERRIES)
+        val fermentables = mutableListOf(Material.WHEAT, Material.APPLE, Material.POTATO, Material.SWEET_BERRIES, Material.GLOWSTONE_DUST)
 
         if (fermentables.contains(item.type) && item.amount >= 4) {
+            if (item.type === Material.GLOWSTONE_DUST && !Utils().checkID(item,arrayOf(443))) return
             setFermenting(true)
 
             object : BukkitRunnable() {
@@ -57,6 +59,9 @@ class FermentItem(private val inv : VirtualInventory, private val progressInv: V
                             }
                             Material.SWEET_BERRIES -> {
                                 inv.setItemSilently(0, ItemStack(DrugItems().Wine(item.amount/4)))
+                            }
+                            Material.GLOWSTONE_DUST -> {
+                                inv.setItemSilently(0, ItemStack(DrugItems().Opium(item.amount)))
                             }
                             else -> {return}
                         }

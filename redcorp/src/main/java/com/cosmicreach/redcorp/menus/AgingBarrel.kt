@@ -1,15 +1,10 @@
 package com.cosmicreach.redcorp.menus
 
 import com.cosmicreach.redcorp.RedCorp
-import com.cosmicreach.redcorp.menus.items.DescItem
 import com.cosmicreach.redcorp.menus.items.FermentItem
-import org.bukkit.Material
 import org.bukkit.block.Block
-import org.bukkit.inventory.ItemStack
 import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.inventory.VirtualInventory
-import xyz.xenondevs.invui.item.builder.ItemBuilder
-import xyz.xenondevs.invui.item.impl.SimpleItem
 
 class AgingBarrel(private val agingBarrels: HashMap<Block, VirtualInventory>) {
     private val progressInventories = HashMap<VirtualInventory, VirtualInventory>()
@@ -33,7 +28,7 @@ class AgingBarrel(private val agingBarrels: HashMap<Block, VirtualInventory>) {
                 ". . . . z . . . .",)
             .addIngredient('x', inv)
             .addIngredient('p', progressInv)
-            .addIngredient('z', FermentItem(inv, progressInv, block, ::setFermenting, fermenting))
+            .addIngredient('z', FermentItem(inv, progressInv, block, ::setFermenting, ::getFermenting))
             .build()
 
         setupHandlers(inv, progressInv)
@@ -43,6 +38,10 @@ class AgingBarrel(private val agingBarrels: HashMap<Block, VirtualInventory>) {
 
     private fun setFermenting(ferment: Boolean): Boolean {
         fermenting = ferment
+        return fermenting
+    }
+
+    private fun getFermenting(): Boolean {
         return fermenting
     }
 

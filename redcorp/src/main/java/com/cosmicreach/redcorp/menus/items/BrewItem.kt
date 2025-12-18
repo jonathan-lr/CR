@@ -23,7 +23,7 @@ import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.controlitem.ControlItem
 import kotlin.math.roundToInt
 
-class BrewItem(private val inv : VirtualInventory, private val progressInv: VirtualInventory, private val block: Block, private val setBrewing: (Boolean) -> Boolean, private val brewing: Boolean) : ControlItem<Gui>() {
+class BrewItem(private val inv : VirtualInventory, private val progressInv: VirtualInventory, private val block: Block, private val setBrewing: (Boolean) -> Boolean, private val getBrewing: () -> Boolean) : ControlItem<Gui>() {
     override fun getItemProvider(gui: Gui): ItemProvider {
         return ItemBuilder(Material.BREWING_STAND).setDisplayName("§2§lBrew Coffee").setLegacyLore((mutableListOf("§f§lClick to brew")))
     }
@@ -34,7 +34,7 @@ class BrewItem(private val inv : VirtualInventory, private val progressInv: Virt
         val milk = inv.getItem(2)
         val sugar = inv.getItem(3)
 
-        if (beans!!.type == Material.AIR || brewing) return
+        if (beans!!.type == Material.AIR || getBrewing()) return
         if (water!!.type == Material.AIR ) return
 
         var hasMilk = false

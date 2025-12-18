@@ -6,7 +6,6 @@ import com.cosmicreach.redcorp.menus.items.BalanceItem
 import com.cosmicreach.redcorp.menus.items.DecreaseItemAmount
 import com.cosmicreach.redcorp.menus.items.IncreaseItemAmount
 import com.cosmicreach.redcorp.menus.items.ShopItem
-import net.milkbowl.vault.economy.Economy
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -14,7 +13,8 @@ import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.SimpleItem
 
-class DungeonToken(private var econ: Economy) {
+class DungeonToken() {
+    private val econ = RedCorp.getPlugin().getEcon()
     private val pruchaseAmount = RedCorp.getPlugin().getPurchaseAmount()
     private val values = listOf(1, 4, 8, 16, 32, 64)
 

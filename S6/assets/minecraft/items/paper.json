@@ -426,6 +426,13 @@
           "type": "model",
           "model": "item/slots"
         }
+      },
+      {
+        "when": "greenhouse",
+        "model": {
+          "type": "model",
+          "model": "item/greenhouse_upgrade"
+        }
       }
     ]
   }   

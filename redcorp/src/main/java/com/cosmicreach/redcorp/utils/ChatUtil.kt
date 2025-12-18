@@ -1,187 +1,98 @@
 package com.cosmicreach.redcorp.utils
 
-import net.md_5.bungee.api.ChatColor
-import net.md_5.bungee.api.chat.ClickEvent
-import net.md_5.bungee.api.chat.HoverEvent
-import net.md_5.bungee.api.chat.TextComponent
-import net.md_5.bungee.api.chat.hover.content.Item
-import net.md_5.bungee.api.chat.hover.content.Text
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.event.ClickEvent
+import net.kyori.adventure.text.event.HoverEvent
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
+import net.kyori.adventure.text.ComponentLike
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
 object ChatUtil {
+    private const val PREFIX_LEGACY = "§cCR §8|§r "
 
-    private const val PREFIX = "§cCR §8|§r "
-
-    // ---------- COLOR TAGS ----------
-
-    private val COLOR_TAGS: Map<String, String> = mapOf(
-        // Colors
-        "<black>" to ChatColor.BLACK.toString(),
-        "<dark_blue>" to ChatColor.DARK_BLUE.toString(),
-        "<dark_green>" to ChatColor.DARK_GREEN.toString(),
-        "<dark_aqua>" to ChatColor.DARK_AQUA.toString(),
-        "<dark_red>" to ChatColor.DARK_RED.toString(),
-        "<dark_purple>" to ChatColor.DARK_PURPLE.toString(),
-        "<gold>" to ChatColor.GOLD.toString(),
-        "<gray>" to ChatColor.GRAY.toString(),
-        "<dark_gray>" to ChatColor.DARK_GRAY.toString(),
-        "<blue>" to ChatColor.BLUE.toString(),
-        "<green>" to ChatColor.GREEN.toString(),
-        "<aqua>" to ChatColor.AQUA.toString(),
-        "<red>" to ChatColor.RED.toString(),
-        "<light_purple>" to ChatColor.LIGHT_PURPLE.toString(),
-        "<yellow>" to ChatColor.YELLOW.toString(),
-        "<white>" to ChatColor.WHITE.toString(),
-
-        // Formats
-        "<bold>" to ChatColor.BOLD.toString(),
-        "<italic>" to ChatColor.ITALIC.toString(),
-        "<underlined>" to ChatColor.UNDERLINE.toString(),
-        "<strikethrough>" to ChatColor.STRIKETHROUGH.toString(),
-        "<obfuscated>" to ChatColor.MAGIC.toString(),
-
-        // Reset / closers
-        "</bold>" to ChatColor.RESET.toString(),
-        "</italic>" to ChatColor.RESET.toString(),
-        "</underlined>" to ChatColor.RESET.toString(),
-        "</strikethrough>" to ChatColor.RESET.toString(),
-        "</obfuscated>" to ChatColor.RESET.toString(),
-        "</red>" to ChatColor.RESET.toString(),
-        "</green>" to ChatColor.RESET.toString(),
-        "</yellow>" to ChatColor.RESET.toString(),
-        "</gold>" to ChatColor.RESET.toString(),
-        "</gray>" to ChatColor.RESET.toString(),
-        "</blue>" to ChatColor.RESET.toString(),
-        "</light_purple>" to ChatColor.RESET.toString(),
-        "</dark_red>" to ChatColor.RESET.toString(),
-        "<reset>" to ChatColor.RESET.toString()
-    )
-
-    private fun applyColorTags(input: String): String {
-        var result = input
-        COLOR_TAGS.forEach { (tag, code) ->
-            result = result.replace(tag, code, ignoreCase = true)
-        }
-        return result
+    private fun parse(input: String): Component {
+        return LegacyComponentSerializer.legacySection().deserialize(input)
     }
 
-    // ---------- PREFIX HELPERS ----------
-
-    private fun applyPrefix(component: TextComponent): TextComponent {
-        val pref = TextComponent(PREFIX)
-        val root = TextComponent()
-        root.addExtra(pref)
-        root.addExtra(component)
-        return root
+    private fun applyPrefix(component: Component): Component {
+        val prefix = LegacyComponentSerializer.legacySection().deserialize(PREFIX_LEGACY)
+        return prefix.append(component)
     }
 
-    // ---------- PUBLIC SEND METHODS ----------
-
-    fun sendComponents(player: Player, vararg components: TextComponent) {
-        val base = TextComponent()
-        base.addExtra(TextComponent(PREFIX))
-        components.forEach { base.addExtra(it) }
-        player.spigot().sendMessage(base)
+    fun sendComponents(player: Player, vararg components: ComponentLike) {
+        val base = Component.text()
+        base.append(LegacyComponentSerializer.legacySection().deserialize(PREFIX_LEGACY))
+        components.forEach { base.append(it.asComponent()) }
+        player.sendMessage(base.build())
     }
 
-    fun send(player: Player, component: TextComponent) {
-        player.spigot().sendMessage(applyPrefix(component))
+    fun send(player: Player, component: ComponentLike) {
+        player.sendMessage(applyPrefix(component.asComponent()))
     }
 
-    // ---------- COMPONENT BUILDERS ----------
+    fun send(player: Player, message: String) {
+        player.sendMessage(applyPrefix(parse(message)))
+    }
 
     fun button(
         label: String,
-        color: ChatColor = ChatColor.WHITE,
         command: String,
         hoverText: String? = null,
         hoverItem: ItemStack? = null
-    ): TextComponent {
+    ): Component {
+        var c: Component = parse(label)
+            .clickEvent(ClickEvent.runCommand(command))
 
-        val parsedLabel = applyColorTags(label)
-
-        val component = TextComponent(parsedLabel).apply {
-            this.color = color
-            clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, command)
+        if (hoverItem != null) {
+            c = c.hoverEvent(hoverItem.asHoverEvent())
+        } else if (hoverText != null) {
+            c = c.hoverEvent(HoverEvent.showText(parse(hoverText)))
         }
 
-        when {
-            hoverItem != null -> {
-                component.hoverEvent = HoverEvent(
-                    HoverEvent.Action.SHOW_ITEM,
-                    Item(
-                        hoverItem.type.key.toString(),
-                        hoverItem.amount,
-                        null
-                    )
-                )
-            }
-
-            hoverText != null -> {
-                component.hoverEvent = HoverEvent(
-                    HoverEvent.Action.SHOW_TEXT,
-                    Text(applyColorTags(hoverText))
-                )
-            }
-        }
-
-        return component
+        return c
     }
 
     fun text(
         content: String,
-        color: ChatColor = ChatColor.WHITE,
         hoverText: String? = null
-    ): TextComponent {
-
-        val parsed = applyColorTags(content)
-
-        return TextComponent(parsed).apply {
-            this.color = color
-
-            if (hoverText != null) {
-                hoverEvent = HoverEvent(
-                    HoverEvent.Action.SHOW_TEXT,
-                    Text(applyColorTags(hoverText))
-                )
-            }
+    ): Component {
+        var c: Component = parse(content)
+        if (hoverText != null) {
+            c = c.hoverEvent(HoverEvent.showText(parse(hoverText)))
         }
+        return c
     }
 
-    // ---------- JSON / DSL BUILDER ----------
-
     class JsonBuilder {
-        private val base = TextComponent()
+        private val base = Component.text()
 
         fun text(
             content: String,
-            color: ChatColor = ChatColor.WHITE,
             hoverText: String? = null
         ) {
-            base.addExtra(ChatUtil.text(content, color, hoverText))
+            base.append(ChatUtil.text(content, hoverText))
         }
 
         fun button(
             label: String,
-            color: ChatColor = ChatColor.WHITE,
             command: String,
             hoverText: String? = null,
             hoverItem: ItemStack? = null
         ) {
-            base.addExtra(ChatUtil.button(label, color, command, hoverText, hoverItem))
+            base.append(ChatUtil.button(label, command, hoverText, hoverItem))
         }
 
         fun space() {
-            base.addExtra(TextComponent(" "))
+            base.append(Component.space())
         }
 
-        internal fun build(): TextComponent = base
+        internal fun build(): Component = base.build()
     }
 
-    fun json(init: JsonBuilder.() -> Unit): TextComponent {
-        val builder = JsonBuilder()
-        builder.init()
-        return builder.build()
+    fun json(init: JsonBuilder.() -> Unit): Component {
+        val b = JsonBuilder()
+        b.init()
+        return b.build()
     }
 }

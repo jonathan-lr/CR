@@ -73,7 +73,7 @@ class StockEx(private var connection: Connection) {
         val sql = "INSERT INTO purchases (user, username, itemType, itemId, price, amount, purchaseType) VALUES (?, ?, ?, ?, ?, ?, ?)"
         connection.prepareStatement(sql).use { statement ->
             statement.setString(1, player.uniqueId.toString())
-            statement.setString(2, player.playerListName)
+            statement.setString(2, player.name)
             statement.setString(3, item.type.toString())
             statement.setInt(4, id)
             statement.setDouble(5, price)

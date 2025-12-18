@@ -13,6 +13,13 @@
           "type": "model",
           "model": "item/drugs/coca_leaf"
         }
+      },
+      {
+        "when": "cokedried",
+        "model": {
+          "type": "model",
+          "model": "item/drugs/coca_leaf_dried"
+        }
       }
     ]
   }   

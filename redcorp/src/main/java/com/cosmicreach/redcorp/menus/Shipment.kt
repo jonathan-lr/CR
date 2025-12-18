@@ -10,14 +10,14 @@ import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.SimpleItem
 
-class Shipment(private var drugType: Int) {
+class Shipment(private var drugType: Int, private var drugName: String) {
     private val econ = RedCorp.getPlugin().getEcon()
     fun makeGUI(player: Player): Gui {
         val border = SimpleItem(ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).setDisplayName("§r"))
         val balItem = BalanceItem(econ!!, player)
-        val shipmentItemSmall = ShipmentItem(econ, 1, drugType)
-        val shipmentItemMedium = ShipmentItem(econ, 2, drugType)
-        val shipmentItemLarge = ShipmentItem(econ, 3, drugType)
+        val shipmentItemSmall = ShipmentItem(econ, 1, drugType, drugName)
+        val shipmentItemMedium = ShipmentItem(econ, 2, drugType, drugName)
+        val shipmentItemLarge = ShipmentItem(econ, 3, drugType, drugName)
 
         val gui = Gui.normal()
             .setStructure(

@@ -51,7 +51,7 @@ class CompleteTag : TabCompleter {
             val players = Bukkit.getServer().onlinePlayers
             val list = mutableListOf<String>()
             players.forEach { p ->
-                list.add(p.playerListName)
+                list.add(p.name)
             }
             return list
         }

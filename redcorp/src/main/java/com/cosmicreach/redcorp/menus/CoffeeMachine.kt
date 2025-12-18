@@ -8,8 +8,6 @@ import org.bukkit.block.Block
 import org.bukkit.inventory.ItemStack
 import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.inventory.VirtualInventory
-import xyz.xenondevs.invui.item.builder.ItemBuilder
-import xyz.xenondevs.invui.item.impl.SimpleItem
 
 class CoffeeMachine(private val agingBarrels: HashMap<Block, VirtualInventory>) {
     private val progressInventories = HashMap<VirtualInventory, VirtualInventory>()
@@ -37,7 +35,7 @@ class CoffeeMachine(private val agingBarrels: HashMap<Block, VirtualInventory>) 
             .addIngredient('u', DescItem(ItemStack(Material.BLUE_STAINED_GLASS_PANE),"§cWater Bottle", "§cAdd water bottle above"))
             .addIngredient('v', DescItem(ItemStack(Material.WHITE_STAINED_GLASS_PANE),"§cMilk Slot", "§cAdd optional milk above"))
             .addIngredient('w', DescItem(ItemStack(Material.WHITE_STAINED_GLASS_PANE),"§cSugar Slot", "§cAdd optional sugar above"))
-            .addIngredient('z', BrewItem(inv, progressInv, block, ::setBrewing, brewing))
+            .addIngredient('z', BrewItem(inv, progressInv, block, ::setBrewing, ::setBrewing))
             .build()
 
         setupHandlers(inv, progressInv)
@@ -49,6 +47,11 @@ class CoffeeMachine(private val agingBarrels: HashMap<Block, VirtualInventory>) 
         brewing = brew
         return brewing
     }
+
+    private fun setBrewing(): Boolean {
+        return brewing
+    }
+
 
     private fun setupHandlers(inv: VirtualInventory, progressInv: VirtualInventory) {
         inv.setPreUpdateHandler { event ->

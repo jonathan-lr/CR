@@ -11,6 +11,8 @@ import com.cosmicreach.redcorp.menus.CoffeeMachine
 import com.cosmicreach.redcorp.menus.DryingRack
 import com.cosmicreach.redcorp.menus.FruitGamble
 import com.cosmicreach.redcorp.menus.Grinder
+import com.cosmicreach.redcorp.menus.MixingMachine
+import com.cosmicreach.redcorp.menus.PressMachine
 import com.cosmicreach.redcorp.menus.Teleport
 import com.cosmicreach.redcorp.utils.ChatUtil
 import com.cosmicreach.redcorp.utils.TeleportActions
@@ -19,13 +21,9 @@ import de.tr7zw.nbtapi.NBTBlock
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
-import org.bukkit.Server
 import org.bukkit.Sound
-import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
-import org.bukkit.entity.Display
-import org.bukkit.entity.ItemDisplay
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
@@ -34,7 +32,6 @@ import org.bukkit.scheduler.BukkitRunnable
 import xyz.xenondevs.invui.inventory.VirtualInventory
 import xyz.xenondevs.invui.window.Window
 import java.sql.Connection
-import kotlin.math.roundToInt
 
 class OnUse (
     private val event : PlayerInteractEvent,
@@ -52,7 +49,7 @@ class OnUse (
             when (id) {
                 2 -> gavel()
                 400 -> grinder()
-                401, 403, 404, 399 -> customBlock()
+                401, 403, 404, 405, 406, 407, 399 -> customBlock()
                 210 -> setData()
                 2886 -> debug()
                 3 -> playerTeleport()
@@ -63,7 +60,7 @@ class OnUse (
                 440 -> podzolDrug()
                 450, 451 -> myceliumDrug()
                 473 -> woodDrug()
-                in 700..730 -> customBlock()
+                in 700..732 -> customBlock()
             }
 
             if(event.item!!.type == Material.BONE_MEAL && event.clickedBlock != null) {
@@ -82,10 +79,6 @@ class OnUse (
 
             if (event.hand == EquipmentSlot.OFF_HAND) return
 
-            if(block.type == Material.PLAYER_HEAD) {
-                fairy()
-            }
-
             if(block.type == Material.GREEN_STAINED_GLASS) {
                 if (event.action != Action.RIGHT_CLICK_BLOCK) return
                 val nbt = NBTBlock(event.clickedBlock).data
@@ -102,7 +95,7 @@ class OnUse (
                     //val loc = p.location
                     //val locString = "${loc.world?.name},${loc.x},${loc.y},${loc.z},${loc.yaw},${loc.pitch}"
 
-                    //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "sudo ${p.playerListName} island create greenhouse")
+                    //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "sudo ${p.name} island create greenhouse")
 
                     //val greenhouseTracking = RedCorp.getPlugin().getGreenhouseTracker()
 
@@ -131,17 +124,17 @@ class OnUse (
                         text("Are you sure you want to raid this? ")
 
                         button(
-                            label = "<dark_gray>[<green><bold>ʏᴇs</bold><dark_gray>]",
+                            label = "§8[§2§lʏᴇs</bold>§r§8]",
                             command = "/raid confirm",
-                            hoverText = "<gray>Start the raid!</gray>"
+                            hoverText = "§7Start the raid!"
                         )
 
                         space()
 
                         button(
-                            label = "<dark_gray>[<red><bold>ɴᴏ</bold><dark_gray>]",
+                            label = "§8[§4§lɴᴏ§r§8]",
                             command = "/raid cancel",
-                            hoverText = "<gray>Nah I changed my mind</gray>"
+                            hoverText = "§7Nah I changed my mind"
                         )
                     }
                     ChatUtil.send(p, msg)
@@ -195,8 +188,16 @@ class OnUse (
 
             if(block.type == Material.BARRIER) {
                 val nbt = NBTBlock(block).data
+                val fairy = nbt.getBoolean("fairy")
+                if (fairy) {
+                    fairy()
+                    return
+                }
                 val barrel = nbt.getBoolean("barrel")
                 val drying = nbt.getBoolean("drying")
+                val grind = nbt.getBoolean("grind")
+                val mixer = nbt.getBoolean("mixer")
+                val press = nbt.getBoolean("press")
                 val coffee = nbt.getBoolean("coffee")
                 val slot = nbt.getBoolean("slot")
                 if (event.action == Action.RIGHT_CLICK_BLOCK) {
@@ -218,6 +219,36 @@ class OnUse (
                             .setViewer(p)
                             .setTitle("§r\uE100\uE003")
                             .setGui(DryingRack(agingBarrels).getOrCreateGui(block))
+                            .build()
+
+                        window.open()
+                    }
+
+                    if (grind) {
+                        val window = Window.single()
+                            .setViewer(p)
+                            .setTitle("§r\uE100\uE003")
+                            .setGui(DryingRack(agingBarrels).getOrCreateGui(block))
+                            .build()
+
+                        window.open()
+                    }
+
+                    if (mixer) {
+                        val window = Window.single()
+                            .setViewer(p)
+                            .setTitle("§rMixing Machine")
+                            .setGui(MixingMachine(agingBarrels).getOrCreateGui(block))
+                            .build()
+
+                        window.open()
+                    }
+
+                    if (press) {
+                        val window = Window.single()
+                            .setViewer(p)
+                            .setTitle("§rPress Machine")
+                            .setGui(PressMachine(agingBarrels).getOrCreateGui(block))
                             .build()
 
                         window.open()
@@ -268,6 +299,30 @@ class OnUse (
 
                         Utils().breakFakeBlock(block)
                     }
+                    if (grind) {
+                        block.type = Material.AIR
+                        block.world.dropItem(center, DrugItems().IdustrialGrinder(1))
+
+                        nbt.clearNBT()
+
+                        Utils().breakFakeBlock(block)
+                    }
+                    if (mixer) {
+                        block.type = Material.AIR
+                        block.world.dropItem(center, DrugItems().Mixer(1))
+
+                        nbt.clearNBT()
+
+                        Utils().breakFakeBlock(block)
+                    }
+                    if (press) {
+                        block.type = Material.AIR
+                        block.world.dropItem(center, DrugItems().Press(1))
+
+                        nbt.clearNBT()
+
+                        Utils().breakFakeBlock(block)
+                    }
                     if (slot) {
                         if (event.player.hasPermission("redcorp.break-slot")) {
                             block.type = Material.AIR
@@ -297,7 +352,7 @@ class OnUse (
                 p.sendMessage("§cCR §8|§r Your power is beyond this creature!")
             } else {
                 if (!fairiesFound.containsKey(p)) {
-                    fairiesFound[p] = Array(20) { false }
+                    fairiesFound[p] = Array(32) { false }
                 }
                 val playerFairies = fairiesFound[p]
                 if (playerFairies!![fairyId]) {
@@ -306,7 +361,7 @@ class OnUse (
                     p.world.playSound(p.location, Sound.ENTITY_ALLAY_DEATH, 0.75f, 1.0f)
                     playerFairies[fairyId] = true
                     fairiesFound[p] = playerFairies
-                    p.sendMessage("§cCR §8|§r You found Fairy #${fairyId+1} you have found ${playerFairies.count { it }}/20")
+                    p.sendMessage("§cCR §8|§r You found Fairy #${fairyId+1} you have found ${playerFairies.count { it }}/32")
                 }
                 //p.sendMessage("debug ${playerFairies.joinToString(", ")}")
             }
@@ -334,6 +389,9 @@ class OnUse (
         p.sendMessage("§cCR §8|§r debug coke ${nbt.getBoolean("coke")}")
         p.sendMessage("§cCR §8|§r debug popy ${nbt.getBoolean("poppy")}")
         p.sendMessage("§cCR §8|§r debug barrel ${nbt.getBoolean("barrel")}")
+        p.sendMessage("§cCR §8|§r debug press ${nbt.getBoolean("press")}")
+        p.sendMessage("§cCR §8|§r debug grinder ${nbt.getBoolean("grinder")}")
+        p.sendMessage("§cCR §8|§r debug mixer ${nbt.getBoolean("mixer")}")
         p.sendMessage("§cCR §8|§r debug shroom ${nbt.getBoolean("shroom")}")
         p.sendMessage("§cCR §8|§r debug truffle ${nbt.getBoolean("truffle")}")
         p.sendMessage("§cCR §8|§r debug fairy ${nbt.getBoolean("fairy")}")
@@ -378,6 +436,7 @@ class OnUse (
 
             var item = ItemStack(Material.STICK)
             var scale = 0F
+            var freeRotaion = false
             if (id == 401) {
                 item = DrugItems().AgingBarrel(1)
                 scale = 1.2F
@@ -389,13 +448,23 @@ class OnUse (
                 scale = 0.8F
             } else if (id == 404) {
                 item = DrugItems().DryingRack(1)
-                scale = 0.8F
-            } else if (id in 700..730) {
+                scale = 0.4F
+            } else if (id == 405) {
+                item = DrugItems().IdustrialGrinder(1)
+                scale = 1.2F
+            } else if (id == 406) {
+                item = DrugItems().Mixer(1)
+                scale = 1.2F
+            } else if (id == 407) {
+                item = DrugItems().Press(1)
+                scale = 1.2F
+            } else if (id in 700..732) {
                 item = CustomItems().Fairy(1, (id-700).toString())
-                scale = 1F
+                scale = 0.6F
+                freeRotaion = true
             }
 
-            Utils().placeFakeBlock(item, block, scale, event)
+            Utils().placeFakeBlock(item, block, scale, event, freeRotaion)
 
             event.isCancelled = true
 
@@ -425,14 +494,14 @@ class OnUse (
                 if (block.location.world?.name == "world") {
                     var greenhouseId = Utils().getGreenhouseId(i)
                     if (greenhouseId == -1) {
-                        p.sendMessage("Creating Greenhouse")
+                        p.sendMessage("§cCR §8|§r Creating Greenhouse")
                         val loc = p.location
                         val locString = "${loc.world?.name},${loc.x},${loc.y},${loc.z},${loc.yaw},${loc.pitch}"
 
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "sudo ${p.playerListName} island create greenhouse")
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "sudo ${p.name} island create greenhouse")
 
-                        val newGreenhouse = Greenhouse(connection).createGreenhouse("", "", locString)
-                        Greenhouse(connection).linkPlayerToGreenhouse(newGreenhouse, p.uniqueId)
+                        val newGreenhouse = Greenhouse(connection).createGreenhouse("", locString)
+                        Greenhouse(connection).linkPlayerToGreenhouse(newGreenhouse, p.uniqueId, true)
                         i = GreenhouseItems().GreenhouseEntrance(newGreenhouse)
                         val greenhouseTracking = RedCorp.getPlugin().getGreenhouseTracker()
 
@@ -440,7 +509,6 @@ class OnUse (
                     }
 
                     greenhouseId = Utils().getGreenhouseId(i)
-                    p.sendMessage("New assigned id = ${greenhouseId}")
                     setData()
 
                     val greenhouse = Greenhouse(connection).getGreenhouseById(greenhouseId!!)
@@ -481,6 +549,11 @@ class OnUse (
     private fun farmlandDrug() {
         val block = event.clickedBlock
         if (block != null) {
+            if (block.location.world?.name != "greenhouse") {
+                p.sendMessage("§cCR §8|§r Sorry this can only grow in a greenhouse")
+                event.isCancelled = true
+                return
+            }
             if (block.type == Material.FARMLAND) {
                 setData()
             } else {
@@ -492,6 +565,11 @@ class OnUse (
     private fun podzolDrug() {
         val block = event.clickedBlock
         if (block != null) {
+            if (block.location.world?.name != "greenhouse") {
+                p.sendMessage("§cCR §8|§r Sorry this can only grow in a greenhouse")
+                event.isCancelled = true
+                return
+            }
             if (block.type == Material.PODZOL && event.blockFace == BlockFace.UP) {
                 setData()
             } else {
@@ -502,11 +580,20 @@ class OnUse (
     }
 
     private fun myceliumDrug() {
-        if (event.clickedBlock!!.type == Material.MYCELIUM && event.blockFace == BlockFace.UP) {
-            setData()
-        } else {
-            event.isCancelled = true
-            p.sendMessage("§cCR §8|§r This must be placed on mycelium :)")
+        val block = event.clickedBlock
+        if (block != null) {
+            if (block.location.world?.name != "greenhouse") {
+                p.sendMessage("§cCR §8|§r Sorry this can only grow in a greenhouse")
+                event.isCancelled = true
+                return
+            }
+            if (block.type == Material.MYCELIUM && event.blockFace == BlockFace.UP) {
+
+                setData()
+            } else {
+                event.isCancelled = true
+                p.sendMessage("§cCR §8|§r This must be placed on mycelium :)")
+            }
         }
     }
 
@@ -555,13 +642,16 @@ class OnUse (
             401 -> nbt.setBoolean("barrel", true)
             403 -> nbt.setBoolean("coffee", true)
             404 -> nbt.setBoolean("drying", true)
+            405 -> nbt.setBoolean("grind", true)
+            406 -> nbt.setBoolean("mixer", true)
+            407 -> nbt.setBoolean("press", true)
             420 -> nbt.setBoolean("weed", true)
             430 -> nbt.setBoolean("coke", true)
             440 -> nbt.setBoolean("poppy", true)
             450 -> nbt.setBoolean("shroom", true)
             451 -> nbt.setBoolean("truffle", true)
             473 -> nbt.setBoolean("coffeeBean", true)
-            in 700..720 -> {
+            in 700..732 -> {
                 nbt.setBoolean("fairy", true)
                 nbt.setInteger("fairyId", id)
             }

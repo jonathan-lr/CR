@@ -10,8 +10,8 @@ import xyz.xenondevs.invui.inventory.get
 import java.util.concurrent.ThreadLocalRandom
 
 class DrugTest {
-    private var illegalDrugs = mutableListOf(421, 422, 423, 431, 432, 441, 450, 451)
-    private var illegalDrugsPlus = mutableListOf(240, 421, 422, 423, 430, 431, 432, 440, 441, 450, 451)
+    private var illegalDrugs = mutableListOf(421, 422, 423, 424, 431, 432, 433, 434, 435, 441, 442, 443, 444, 450, 451)
+    private var illegalDrugsPlus = mutableListOf(420, 421, 422, 423, 424, 430, 431, 432, 433, 434, 435, 440, 441, 442, 443, 444, 450, 451)
     val allBundles = listOf(
         Material.BUNDLE, // Add here any specific colored bundle materials if applicable
         Material.RED_BUNDLE,
@@ -118,9 +118,9 @@ class DrugTest {
         if (econ != null) {
             econ.withdrawPlayer(p, 2000.0)
             when (ThreadLocalRandom.current().nextInt(0, 3)) {
-                0 -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "jail ${p.playerListName} 1 2m")
-                1 -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "jail ${p.playerListName} 2 2m")
-                2 -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "jail ${p.playerListName} 3 2m")
+                0 -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "jail ${p.name} 1 2m")
+                1 -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "jail ${p.name} 2 2m")
+                2 -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "jail ${p.name} 3 2m")
             }
 
             p.inventory.forEach {

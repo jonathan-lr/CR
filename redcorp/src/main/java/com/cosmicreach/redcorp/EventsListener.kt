@@ -17,9 +17,11 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
+import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockDispenseEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.entity.EntityShootBowEvent
 import org.bukkit.event.entity.PlayerDeathEvent
@@ -214,6 +216,16 @@ class EventsListener(
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
+    fun onEntityDmg(e: EntityDamageEvent) {
+        if (e.entity.type != EntityType.MANNEQUIN) return
+        val key = NamespacedKey(RedCorp.getPlugin(), "npc_name")
+        if (!e.entity.persistentDataContainer.has(key, PersistentDataType.STRING)) return
+        val p = e.damageSource.causingEntity
+        if (p is Player && p.hasPermission("redcorp.killnpc")) return
+        e.isCancelled = true
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
     fun onWorldChange(event: PlayerChangedWorldEvent) {
         val connection = RedCorp.getPlugin().getConnection()!!
         val player = event.player
@@ -238,18 +250,6 @@ class EventsListener(
 
     @EventHandler(priority = EventPriority.MONITOR)
     fun onRightClick(e: PlayerInteractAtEntityEvent) {
-        val entity = e.rightClicked
-        if (entity.type != EntityType.MANNEQUIN) return
-
-        val key = NamespacedKey(RedCorp.getPlugin(), "npc_name")
-        val pdc = entity.persistentDataContainer
-
-        val id = pdc.get(key, PersistentDataType.STRING)
-
-        if (id != null) {
-            Bukkit.broadcastMessage("§cCR §8|§r You clicked NPC ID: §e$id")
-        } else {
-            Bukkit.broadcastMessage("§cCR §8|§r This mannequin has no ID stored.")
-        }
+        OnNpc(e).run()
     }
 }

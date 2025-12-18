@@ -3,16 +3,17 @@ package com.cosmicreach.redcorp.utils
 import com.cosmicreach.redcorp.RedCorp
 import com.cosmicreach.redcorp.items.*
 import org.bukkit.*
+import org.bukkit.block.Block
+import org.bukkit.block.Lidded
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
 import java.lang.Integer.parseInt
-import java.lang.reflect.InvocationTargetException
+import java.util.ArrayList
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.PI
 import kotlin.math.cos
-import kotlin.math.pow
 import kotlin.math.sin
 
 class DecideLoot() {
@@ -20,55 +21,51 @@ class DecideLoot() {
     private var typesConf = arrayOf("air", "fire", "water", "earth")
     private var items = arrayOf("Pick", "Shovel", "Hoe", "Axe", "Sword", "Helmet", "Chestplate", "Leggings", "Boots", "Wings")
 
-    data class Point(val x: Double, val y: Double)
-    private val startPoint = Point(232.5,43.5)
-    private val endPoint = Point(221.5,50.5)
-    private val peakPoint = Point(230.5,48.5)
+    data class Point3D(val x: Double, val y: Double, val z: Double)
+    private val startPoint = Point3D(49.5, 82.0, -9.5)
+    private val endPoint = Point3D(49.5, 75.0, -6.5)
+    private val peakPoint = Point3D(49.5, 78.0, -8.5)
+
     private val numPoints = 32
     private val dust = Particle.DustOptions(Color.fromRGB(255, 0, 255), 1.5F)
 
-    private fun interpolateOutwardInwardCurve(startPoint: Point, endPoint: Point, peakPoint: Point, numPoints: Int): List<Point> {
-        val points = mutableListOf<Point>()
+    private fun interpolateOutwardInwardCurve3D(
+        start: Point3D,
+        end: Point3D,
+        peak: Point3D,
+        numPoints: Int
+    ): List<Point3D> {
+        val steps = numPoints.coerceAtLeast(2)
+        val out = ArrayList<Point3D>(steps)
 
-        for (t in 0 until numPoints) {
-            val tNormalized = t.toDouble() / (numPoints - 1)
-            val x = (1 - tNormalized).pow(2) * startPoint.x +
-                    2 * (1 - tNormalized) * tNormalized * peakPoint.x +
-                    tNormalized.pow(2) * endPoint.x
-            val y = (1 - tNormalized).pow(2) * startPoint.y +
-                    2 * (1 - tNormalized) * tNormalized * peakPoint.y +
-                    tNormalized.pow(2) * endPoint.y
-            points.add(Point(x, y))
+        for (i in 0 until steps) {
+            val t = i.toDouble() / (steps - 1).toDouble()
+            val u = 1.0 - t
+
+            // Quadratic Bézier: B(t) = u^2*P0 + 2*u*t*P1 + t^2*P2
+            val x = (u * u * start.x) + (2.0 * u * t * peak.x) + (t * t * end.x)
+            val y = (u * u * start.y) + (2.0 * u * t * peak.y) + (t * t * end.y)
+            val z = (u * u * start.z) + (2.0 * u * t * peak.z) + (t * t * end.z)
+
+            out.add(Point3D(x, y, z))
         }
-
-        return points
+        return out
     }
 
+
     fun openChest(p: Player, vault: Int, drop: Int) {
-        val block = Location(p.world, endPoint.x, 91.0, endPoint.y).block
-        //val testPacket = PacketContainer(PacketType.Play.Server.BLOCK_ACTION)
-        //testPacket.blockPositionModifier.write(0, BlockPosition(block.x, block.y, block.z));
-        //testPacket.integers.write(0, 1)
-        //testPacket.integers.write(0, 1)
-        //testPacket.blocks.write(0, block.type)
-        val loc = block.location
-        val interpolatedPoints = interpolateOutwardInwardCurve(startPoint, endPoint, peakPoint, numPoints)
+        val block = Location(p.world, endPoint.x, endPoint.y, endPoint.z).block
+        val interpolatedPoints = interpolateOutwardInwardCurve3D(startPoint, endPoint, peakPoint, numPoints)
+
+        p.world.strikeLightningEffect(Location(p.world, startPoint.x, startPoint.y, startPoint.z))
 
         var count = 0
         object : BukkitRunnable() {
             override fun run() {
                 val point = interpolatedPoints[count]
-                p.world.spawnParticle(Particle.DUST, Location(p.world,point.x,91.5,point.y ), 10, dust)
+                p.world.spawnParticle(Particle.DUST, Location(p.world,point.x, point.y, point.z ), 10, dust)
                 if (count == 24) {
-                    try {
-                        block.world.players.forEach {
-                            if (it.location.distanceSquared(loc) < 4096) {
-                                //protocolManager?.sendServerPacket(it, testPacket)
-                            }
-                        }
-                    } catch (e: InvocationTargetException) {
-                        e.message?.let { Bukkit.broadcastMessage(it) }
-                    }
+                    setChestLid(block, true)
                     spiral(p, vault, drop)
                     cancel()
                 }
@@ -79,33 +76,27 @@ class DecideLoot() {
 
     fun spiral(p: Player, vault: Int, drop: Int) {
         var radius = 2.0
-        var height = 91.0
+        var height = endPoint.y
         var count = 0.0
         var count2 = 0
         val numPoints = 32
-        val block = Location(p.world, endPoint.x, 91.0, endPoint.y).block
-        //val testPacket = PacketContainer(PacketType.Play.Server.BLOCK_ACTION)
-        //testPacket.blockPositionModifier.write(0, BlockPosition(block.x, block.y, block.z));
-        //testPacket.integers.write(0, 0)
-        //testPacket.integers.write(0, 0)
-        //testPacket.blocks.write(0, block.type)
-        val loc = block.location
+        val block = Location(p.world, endPoint.x, endPoint.y, endPoint.z).block
         object : BukkitRunnable() {
             override fun run() {
 
                 val theta = 2 * PI * count / numPoints
                 val theta2 = 2 * PI * (count+16.0) / numPoints
                 val x = endPoint.x + radius * cos(theta)
-                val y = endPoint.y + radius * sin(theta)
+                val y = endPoint.z + radius * sin(theta)
                 val x2 = endPoint.x + radius * cos(theta2)
-                val y2 = endPoint.y + radius * sin(theta2)
+                val y2 = endPoint.z + radius * sin(theta2)
 
                 p.world.spawnParticle(Particle.DUST, Location(p.world,x,height,y), 1, dust)
                 p.world.spawnParticle(Particle.DUST, Location(p.world,x2,height,y2), 1, dust)
 
                 if (radius <= 0.0) {
                     radius = 2.0
-                    height = 91.0
+                    height = endPoint.y
                 }
                 if (count >= 32.0) {
                     p.world.playSound(p.location, Sound.BLOCK_NOTE_BLOCK_BELL, 0.75f, 1.0f)
@@ -113,15 +104,8 @@ class DecideLoot() {
                     count = 0.0
                     count2 += 1
                     if (count2 >= 5) {
-                        try {
-                            block.world.players.forEach {
-                                if (it.location.distanceSquared(loc) < 4096) {
-                                    //protocolManager?.sendServerPacket(it, testPacket)
-                                }
-                            }
-                        } catch (e: InvocationTargetException) {
-                            e.message?.let { Bukkit.broadcastMessage(it) }
-                        }
+                        setChestLid(block, false)
+
                         giveLoot(p, vault, drop)
                         cancel()
                     }
@@ -134,7 +118,6 @@ class DecideLoot() {
     }
 
     fun giveLoot(p: Player, vault: Int, drop: Int) {
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "closedoor 93")
         val w = p.world
         Bukkit.broadcastMessage("§cCR §8|§r ${p.displayName} §rgot a §6${types[vault]} ${items[drop]}")
         w.spawnParticle(Particle.TOTEM_OF_UNDYING, p.location, 100)
@@ -304,6 +287,14 @@ class DecideLoot() {
         return false
     }
 
+    private fun setChestLid(block: Block, open: Boolean) {
+        val state = block.state
+        if (state is Lidded) {
+            if (open) state.open() else state.close()
+        }
+    }
+
+
     private fun runRelic(sender: CommandSender, vault: Int) {
         if (sender !is Player) {return}
         val world = sender.world
@@ -313,7 +304,6 @@ class DecideLoot() {
         val drop = ThreadLocalRandom.current().nextInt(0, 10)
 
         var configItem = parseInt(RedCorp.getPlugin().config.getString("configuration.${typesConf[vault]}.${items[drop].lowercase()}"))
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "opendoor 93")
 
         if (configItem == 0) {
             object : BukkitRunnable() {
@@ -321,7 +311,7 @@ class DecideLoot() {
                     world.playSound(sender.location, Sound.ENTITY_VILLAGER_DEATH, 0.75f, 1.0f)
                     Bukkit.broadcastMessage("§cCR §8|§r ${sender.displayName} §rgot a §6${types[vault]} ${items[drop]} §rbut there were none left :(")
                 }
-            }.runTaskLater(RedCorp.getPlugin(), 60L)
+            }.runTaskLater(RedCorp.getPlugin(), 20L)
             return
         }
 
@@ -329,7 +319,7 @@ class DecideLoot() {
             override fun run() {
                 openChest(sender, vault, drop)
             }
-        }.runTaskLater(RedCorp.getPlugin(), 80L)
+        }.runTaskLater(RedCorp.getPlugin(), 20L)
 
         configItem -= 1
         RedCorp.getPlugin().config.set("configuration.${typesConf[vault]}.${items[drop].lowercase()}", configItem)

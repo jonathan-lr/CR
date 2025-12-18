@@ -12,7 +12,8 @@ import xyz.xenondevs.invui.item.impl.controlitem.ControlItem
 import xyz.xenondevs.invui.window.Window
 
 class ShipmentOpen(
-    private var drugType: Int
+    private var drugType: Int,
+    private var drugName: String,
 ) : ControlItem<Gui>() {
     override fun getItemProvider(gui: Gui): ItemProvider {
         return ItemBuilder(Material.BARREL).setDisplayName("§2§lOpen Shipment Menu").setLegacyLore((mutableListOf("§f§lClick to open")))
@@ -22,7 +23,7 @@ class ShipmentOpen(
         val window = Window.single()
             .setViewer(player)
             .setTitle("§2Shipments")
-            .setGui(Shipment(drugType).makeGUI(player))
+            .setGui(Shipment(drugType, drugName).makeGUI(player))
             .build()
 
         window.open()

@@ -43,7 +43,7 @@ class OnHit (private val event : EntityDamageByEntityEvent) {
 
                         tagger.inventory.itemInMainHand.amount = -1
                         if (passed != null) {
-                            taggie.inventory.addItem(TagItems().tagStick(taggie.playerListName, tagger.playerListName, passed + 1, gameId))
+                            taggie.inventory.addItem(TagItems().tagStick(taggie.name, tagger.name, passed + 1, gameId))
                         }
                     }
                 }

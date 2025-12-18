@@ -14,17 +14,18 @@ import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.SimpleItem
 
-class DiamondExchange(private var econ: Economy, private var type: Int) {
+class DiamondExchange(private var type: Int) {
     private val pruchaseAmount = RedCorp.getPlugin().getPurchaseAmount()
     private val values = listOf(1, 4, 8, 16, 32, 64)
+    private val econ = RedCorp.getPlugin().getEcon()
 
     fun makeGUI(player: Player): Gui {
         val border = SimpleItem(ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).setDisplayName("§r"))
         val amount = SimpleItem(ItemBuilder(ItemStack(Material.EMERALD, values[pruchaseAmount.getOrDefault(player, 0)])).setDisplayName("§rYou will purchase #${values[pruchaseAmount.getOrDefault(player, 0)]} items"))
         val balItem = BalanceItem(econ, player)
         if (type == 1) {
-            val diamondItem = ShopItem(player, econ, balItem, ItemStack(Material.DIAMOND, values[pruchaseAmount.getOrDefault(player, 0)]), "§cPatrick Byattyman", name="diamond_p")
-            val diamondBlockItem = ShopItem(player, econ, balItem, ItemStack(Material.DIAMOND_BLOCK, values[pruchaseAmount.getOrDefault(player, 0)]), "§cPatrick Byattyman", name="diamond_p")
+            val diamondItem = ShopItem(player, econ, balItem, ItemStack(Material.DIAMOND, values[pruchaseAmount.getOrDefault(player, 0)]), "§cPatrick Byattyman", useStock = true, name="diamond_p")
+            val diamondBlockItem = ShopItem(player, econ, balItem, ItemStack(Material.DIAMOND_BLOCK, values[pruchaseAmount.getOrDefault(player, 0)]), "§cPatrick Byattyman", useStock = true, name="diamond_p")
             val gui = Gui.normal()
                 .setStructure(
                     "# . . . $ . . . #",

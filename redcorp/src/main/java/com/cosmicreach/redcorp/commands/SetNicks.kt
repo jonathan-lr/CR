@@ -17,7 +17,7 @@ class SetNicks(private val plugin: JavaPlugin, private val config: FileConfigura
         }
 
         if (sender.hasPermission("redcorp.setnicks")) {
-            if (sender.playerListName == "Redrobbo") {
+            if (sender.name == "Redrobbo") {
                 when(parseInt(args[0])) {
                     1 -> {
                         config.set("configuration.red.survival", args[1])
@@ -36,7 +36,7 @@ class SetNicks(private val plugin: JavaPlugin, private val config: FileConfigura
                     }
                 }
             }
-            if (sender.playerListName == "YorickSK") {
+            if (sender.name == "YorickSK") {
                 when(parseInt(args[0])) {
                     1 -> {
                         config.set("configuration.yorick.survival", args[1])
@@ -55,7 +55,7 @@ class SetNicks(private val plugin: JavaPlugin, private val config: FileConfigura
                     }
                 }
             }
-            if (sender.playerListName == "Wasbie") {
+            if (sender.name == "Wasbie") {
                 when(parseInt(args[0])) {
                     1 -> {
                         config.set("configuration.jay.survival", args[1])

@@ -35,7 +35,7 @@ class Drugs() {
     }
 
     private fun opiumRecipe (): SmokingRecipe {
-        val opium = SmokingRecipe(NamespacedKey(RedCorp.getPlugin(), "poppy"), DrugItems().Opium(1),RecipeChoice.ExactChoice(DrugItems().OpiumFlower(8)), 1.0F, 500)
+        val opium = SmokingRecipe(NamespacedKey(RedCorp.getPlugin(), "poppy"), DrugItems().OpiumResin(1),RecipeChoice.ExactChoice(DrugItems().OpiumSap(1)), 1.0F, 500)
         return opium
     }
 }

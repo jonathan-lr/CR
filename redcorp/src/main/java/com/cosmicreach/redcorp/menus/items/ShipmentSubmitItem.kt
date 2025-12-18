@@ -2,6 +2,7 @@ package com.cosmicreach.redcorp.menus.items
 
 import com.cosmicreach.redcorp.RedCorp
 import com.cosmicreach.redcorp.db.Delivery
+import com.cosmicreach.redcorp.db.StockEx
 import com.cosmicreach.redcorp.utils.Utils
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.Bukkit
@@ -47,6 +48,27 @@ class ShipmentSubmitItem(
             player.sendMessage("§cCR §8|§rSorry ${player.displayName} §rthere are not enough items in this shipment")
             return
         }
+
+        var drugName = "weed_g"
+        when(shipment.drugType) {
+            422 -> {
+                drugName = "weed_g"
+            }
+            435 -> {
+                drugName = "coke"
+            }
+            444 -> {
+                drugName = "opium"
+            }
+            450 -> {
+                drugName = "shroom"
+            }
+            451 -> {
+                drugName = "truffle"
+            }
+        }
+        val item = StockEx(connection).getInfo(drugName)
+        StockEx(connection).setStock(item.stock+totalMatchingAmount,drugName)
 
         Bukkit.broadcastMessage("§cCR §8|§r ${player.displayName} §rhas completed a shipment")
         player.sendMessage("§cCR §8|§r Here is your money ${player.displayName} §r,${econ.format(shipment.price*shipment.amount)} in full")

@@ -1,7 +1,10 @@
 package com.cosmicreach.redcorp.events
 
+import com.cosmicreach.redcorp.RedCorp
+import com.cosmicreach.redcorp.db.Greenhouse
 import com.cosmicreach.redcorp.items.DrugItems
 import com.cosmicreach.redcorp.items.GreenhouseItems
+import com.cosmicreach.redcorp.utils.ChatUtil
 import com.cosmicreach.redcorp.utils.Utils
 import de.tr7zw.nbtapi.NBTBlock
 import de.tr7zw.nbtapi.NBTCompound
@@ -40,8 +43,16 @@ class OnBreak (private val event : BlockBreakEvent) {
         val isGreenhouse = nbt.getBoolean("greenhouse")
         if (!isGreenhouse) return
         val greenhouseId = nbt.getInteger("greenhouse-id")
+        val connection = RedCorp.getPlugin().getConnection()!!
+        val p = event.player
         event.isDropItems = false
         b.drops.clear()
+
+        val greenhouse = Greenhouse(connection).getGreenhousesForPlayer(p.uniqueId)
+
+        if (greenhouse == null || greenhouse.id != greenhouseId) {
+            ChatUtil.send(p, ChatUtil.json { text("${p.displayName} you dont own this") })
+        }
 
         if (entrance) {
             val center = b.location.clone().add(0.5, 0.5, 0.5)

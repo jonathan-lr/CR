@@ -3,7 +3,6 @@ package com.cosmicreach.redcorp.menus
 import com.cosmicreach.redcorp.RedCorp
 import com.cosmicreach.redcorp.items.DrugItems
 import com.cosmicreach.redcorp.items.ServerItems
-import com.cosmicreach.redcorp.menus.items.FermentItem
 import com.cosmicreach.redcorp.utils.Utils
 import org.bukkit.block.Block
 import org.bukkit.inventory.ItemStack
@@ -20,7 +19,8 @@ class DryingRack(
     private val guis = RedCorp.getPlugin().getStoredGuis()
     private val DRY_TIME_TICKS = 20L * 20
     private val dryingRecipes: Map<Int, ItemStack> = mapOf(
-        421 to DrugItems().DriedWeed(1)
+        421 to DrugItems().DriedWeed(1),
+        431 to DrugItems().DriedCocaLeaf(1)
     )
 
     fun getOrCreateGui(block: Block): Gui {

@@ -22,6 +22,9 @@ class Materia : CommandExecutor {
         "awp" to { args: List<String> -> PlayerItems().Awp(args.getOrNull(0)?.toIntOrNull() ?: 1) },
         "barrel" to { args: List<String> -> DrugItems().AgingBarrel(args.getOrNull(0)?.toIntOrNull() ?: 1) },
         "dryingrack" to { args: List<String> -> DrugItems().DryingRack(args.getOrNull(0)?.toIntOrNull() ?: 1) },
+        "press" to { args: List<String> -> DrugItems().Press(args.getOrNull(0)?.toIntOrNull() ?: 1) },
+        "mixer" to { args: List<String> -> DrugItems().Mixer(args.getOrNull(0)?.toIntOrNull() ?: 1) },
+        "industrialGrinder" to { args: List<String> -> DrugItems().IdustrialGrinder(args.getOrNull(0)?.toIntOrNull() ?: 1) },
         "slots" to { args: List<String> -> ServerItems().SlotMachine(args.getOrNull(0)?.toIntOrNull() ?: 1) },
         "card" to { args: List<String> ->
             val suit = args.getOrElse(1) { "joker" }
@@ -124,6 +127,9 @@ class MateriaComplete : TabCompleter {
         "awp" to "redcorp.materia.awp",
         "barrel" to "redcorp.materia.barrel",
         "dryingrack" to "redcorp.materia.dryingrack",
+        "press" to "redcorp.materia.press",
+        "mixer" to "redcorp.materia.mixer",
+        "industrialGrinder" to "redcorp.materia.industrialGrinder",
         "slots" to "redcorp.materia.slots",
         "card" to "redcorp.materia.card",
         "coffee" to "redcorp.materia.coffee",

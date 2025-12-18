@@ -10,8 +10,9 @@ class Greenhouse(private var connection: Connection) {
     data class GreenhouseInfo(
         val id: Int,
         val home: String,
-        val visit: String,
-        val exitl: String
+        val exitl: String,
+        val upgradeS: Int,
+        val upgradeQ: Int,
     )
 
     data class VisitCheck(
@@ -19,12 +20,11 @@ class Greenhouse(private var connection: Connection) {
         val nextAllowedAt: Instant?
     )
 
-    fun createGreenhouse(home: String, visit: String, exitl: String): Int {
-        val sql = "INSERT INTO greenhouse (home, visit, exitl) VALUES (?, ?, ?)"
+    fun createGreenhouse(home: String, exitl: String): Int {
+        val sql = "INSERT INTO greenhouse (home, exitl) VALUES (?, ?)"
         connection.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS).use { stmt ->
             stmt.setString(1, home)
-            stmt.setString(2, visit)
-            stmt.setString(3, exitl)
+            stmt.setString(2, exitl)
             stmt.executeUpdate()
 
             stmt.generatedKeys.use { rs ->
@@ -38,7 +38,7 @@ class Greenhouse(private var connection: Connection) {
     }
 
     fun getGreenhouseById(id: Int): GreenhouseInfo? {
-        val sql = "SELECT id, home, visit, exitl FROM greenhouse WHERE id = ?"
+        val sql = "SELECT id, home, exitl, upgradeS, upgradeQ FROM greenhouse WHERE id = ?"
         connection.prepareStatement(sql).use { stmt ->
             stmt.setInt(1, id)
             stmt.executeQuery().use { rs ->
@@ -46,8 +46,9 @@ class Greenhouse(private var connection: Connection) {
                     GreenhouseInfo(
                         id = rs.getInt("id"),
                         home = rs.getString("home"),
-                        visit = rs.getString("visit"),
-                        exitl = rs.getString("exitl")
+                        exitl = rs.getString("exitl"),
+                        upgradeS = rs.getInt("upgradeS"),
+                        upgradeQ = rs.getInt("upgradeQ")
                     )
                 } else {
                     null
@@ -85,23 +86,33 @@ class Greenhouse(private var connection: Connection) {
         }
     }
 
-    fun updateVisit(id: Int, visit: String): Boolean {
-        val sql = "UPDATE greenhouse SET visit = ? WHERE id = ?"
+    fun updateUpgradeS(id: Int, amount: Int): Boolean {
+        val sql = "UPDATE greenhouse SET upgradeS = ? WHERE id = ?"
         connection.prepareStatement(sql).use { stmt ->
-            stmt.setString(1, visit)
+            stmt.setInt(1, amount)
             stmt.setInt(2, id)
             return stmt.executeUpdate() > 0
         }
     }
 
-    fun linkPlayerToGreenhouse(greenhouseId: Int, playerUUID: UUID): Boolean {
+    fun updateUpgradeQ(id: Int, amount: Int): Boolean {
+        val sql = "UPDATE greenhouse SET upgradeQ = ? WHERE id = ?"
+        connection.prepareStatement(sql).use { stmt ->
+            stmt.setInt(1, amount)
+            stmt.setInt(2, id)
+            return stmt.executeUpdate() > 0
+        }
+    }
+
+    fun linkPlayerToGreenhouse(greenhouseId: Int, playerUUID: UUID, creator: Boolean): Boolean {
         val sql = """
-            INSERT INTO greenhouse_users (greenhouse_id, user)
-            VALUES (?, ?)
+            INSERT INTO greenhouse_users (greenhouse_id, user, creator)
+            VALUES (?, ?, ?)
         """.trimIndent()
         connection.prepareStatement(sql).use { stmt ->
             stmt.setInt(1, greenhouseId)
             stmt.setString(2, playerUUID.toString())
+            stmt.setBoolean(3, creator)
             return stmt.executeUpdate() > 0
         }
     }
@@ -135,7 +146,7 @@ class Greenhouse(private var connection: Connection) {
 
     fun getGreenhousesForPlayer(playerUUID: UUID): GreenhouseInfo? {
         val sql = """
-            SELECT g.id, g.home, g.visit, g.exitl
+            SELECT g.id, g.home, g.exitl, g.upgradeS, g.upgradeQ
             FROM greenhouse g
             JOIN greenhouse_users gu ON gu.greenhouse_id = g.id
             WHERE gu.user = ?
@@ -148,11 +159,35 @@ class Greenhouse(private var connection: Connection) {
                     GreenhouseInfo(
                         id = rs.getInt("id"),
                         home = rs.getString("home"),
-                        visit = rs.getString("visit"),
-                        exitl = rs.getString("exitl")
+                        exitl = rs.getString("exitl"),
+                        upgradeS = rs.getInt("upgradeS"),
+                        upgradeQ = rs.getInt("upgradeQ")
                     )
                 } else {
                     return null
+                }
+            }
+        }
+    }
+
+    fun getGreenhouseCreatorUUID(userUUID: UUID): UUID? {
+        val sql = """
+        SELECT gu_creator.user
+        FROM greenhouse_users gu_input
+        JOIN greenhouse_users gu_creator
+            ON gu_creator.greenhouse_id = gu_input.greenhouse_id
+           AND gu_creator.creator = 1
+        WHERE gu_input.user = ?
+        LIMIT 1
+    """.trimIndent()
+
+        connection.prepareStatement(sql).use { stmt ->
+            stmt.setString(1, userUUID.toString())
+            stmt.executeQuery().use { rs ->
+                return if (rs.next()) {
+                    UUID.fromString(rs.getString("user"))
+                } else {
+                    null
                 }
             }
         }

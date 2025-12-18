@@ -48,6 +48,7 @@ class RedCorp : JavaPlugin() {
     private var lastExecutionTime: Long = 0
     private var worldBorder: Double = 0.0
     private val playerRegions = mutableMapOf<Player, Set<String>>()
+    val merlinConfirm = HashMap<Player, Boolean>()
 
     override fun onLoad() {
         logger.info("Registering Flags")
@@ -113,7 +114,7 @@ class RedCorp : JavaPlugin() {
         getCommand("getrelic")?.tabCompleter = GetRelicComplete()
         getCommand("getToken")?.setExecutor(GetToken())
         getCommand("getToken")?.tabCompleter = GetTokenComplete()
-        getCommand("NPC")?.setExecutor(NPC(economy))
+        getCommand("NPC")?.setExecutor(NPC())
         getCommand("getReward")?.setExecutor(GetReward())
         getCommand("toggleparticle")?.setExecutor(ToggleParticle(particlePlayers))
         //getCommand("nick")?.setExecutor(Nick())
@@ -231,8 +232,8 @@ class RedCorp : JavaPlugin() {
         return RedCorpFlags
     }
 
-    fun getEcon(): Economy?{
-        return economy
+    fun getEcon(): Economy{
+        return economy!!
     }
 
     fun getGrinderPlayers(): HashMap<Player, VirtualInventory> {

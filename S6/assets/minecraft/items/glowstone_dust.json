@@ -13,6 +13,27 @@
           "type": "model",
           "model": "item/drugs/opium"
         }
+      },
+      {
+        "when": "opiumsap",
+        "model": {
+          "type": "model",
+          "model": "item/drugs/opium_sap"
+        }
+      },
+      {
+        "when": "opiumresin",
+        "model": {
+          "type": "model",
+          "model": "item/drugs/opium_resin"
+        }
+      },
+      {
+        "when": "opiumcompact",
+        "model": {
+          "type": "model",
+          "model": "item/drugs/opium_compact"
+        }
       }
     ]
   }

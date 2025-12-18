@@ -2,6 +2,7 @@ package com.cosmicreach.redcorp.menus.items
 
 import com.cosmicreach.redcorp.RedCorp
 import com.cosmicreach.redcorp.db.Delivery
+import com.cosmicreach.redcorp.db.StockEx
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -15,14 +16,18 @@ import xyz.xenondevs.invui.item.ItemProvider
 import xyz.xenondevs.invui.item.ItemWrapper
 import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.controlitem.ControlItem
+import kotlin.math.floor
 import kotlin.random.Random
 
 class ShipmentItem(
     private var econ: Economy,
     private var size: Int,
     private var drugType: Int,
+    private val drugName: String
 ) : ControlItem<Gui>() {
     private val connection = RedCorp.getPlugin().getConnection()!!
+    private var item = StockEx(connection).getInfo(drugName)
+    private val newBuyPrice = item.buyPrice * (1 - 0.01 * floor(item.stock / 8.0)).coerceAtLeast(0.0)
 
     override fun getItemProvider(gui: Gui): ItemProvider {
         var amount = 32
@@ -43,7 +48,7 @@ class ShipmentItem(
 
         meta.setDisplayName("§c§l${shipmentText} sʜɪᴘᴍᴇɴᴛ")
 
-        val lore = listOf("§fClick to start shipment for $amount @ ${econ.format(10.0*multiplier)} each")
+        val lore = listOf("§fClick to start shipment for $amount @ ${econ.format(newBuyPrice*multiplier)} each")
         meta.lore = lore
         displayItem.itemMeta = meta
 
@@ -58,7 +63,7 @@ class ShipmentItem(
             return
         }
 
-        val sellPrice = 10.0
+        val sellPrice = newBuyPrice
         var amount = 32
         var label = "small"
         var multiplier = 1.00

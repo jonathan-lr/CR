@@ -16,9 +16,9 @@ class Nick : CommandExecutor {
             return false
         }
 
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tab player ${sender.playerListName} customtagname ${args.joinToString(" ")}")
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tab player ${sender.playerListName} customtabname ${args.joinToString(" ")}")
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "nickname ${sender.playerListName} ${args.joinToString(" ")}")
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tab player ${sender.name} customtagname ${args.joinToString(" ")}")
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tab player ${sender.name} customtabname ${args.joinToString(" ")}")
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "nickname ${sender.name} ${args.joinToString(" ")}")
         sender.sendMessage("§cCR §8| §4Setting new nickname ${args.joinToString(" ")}")
 
         return false

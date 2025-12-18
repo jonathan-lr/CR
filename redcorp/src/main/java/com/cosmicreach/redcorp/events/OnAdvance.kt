@@ -3,6 +3,7 @@ package com.cosmicreach.redcorp.events
 import com.cosmicreach.redcorp.RedCorp
 import io.papermc.paper.advancement.AdvancementDisplay
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.event.HoverEvent
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Bukkit
@@ -54,10 +55,14 @@ class OnAdvance(private val event : PlayerAdvancementDoneEvent) {
         val prefix = Component.text("CR ", NamedTextColor.RED)
             .append(Component.text("| ", NamedTextColor.DARK_GRAY))
 
+        val titleWithHover = display.title()
+            .color(frameColor)
+            .hoverEvent(HoverEvent.showText(display.description()))
+
         val completedMsg = prefix
             .append(event.player.displayName()) // already a Component in modern Paper
             .append(Component.text(" completed advancement ", NamedTextColor.WHITE))
-            .append(display.title().color(frameColor))
+            .append(titleWithHover)
 
         val borderMsg = prefix.append(
             Component.text(

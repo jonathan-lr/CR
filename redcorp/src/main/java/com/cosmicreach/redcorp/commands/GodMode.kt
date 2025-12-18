@@ -21,12 +21,12 @@ class GodMode(private val config: FileConfiguration) : CommandExecutor {
             var s = config.getString("configuration.red.survival")
             var c = config.getString("configuration.red.creative")
             var a = config.getString("configuration.red.adventure")
-            if (sender.playerListName == "YorickSK") {
+            if (sender.name == "YorickSK") {
                 s = config.getString("configuration.yorick.survival")
                 c = config.getString("configuration.yorick.creative")
                 a = config.getString("configuration.yorick.adventure")
             }
-            if (sender.playerListName == "Wasbie") {
+            if (sender.name == "Wasbie") {
                 s = config.getString("configuration.jay.survival")
                 c = config.getString("configuration.jay.creative")
                 a = config.getString("configuration.jay.adventure")
@@ -35,9 +35,9 @@ class GodMode(private val config: FileConfiguration) : CommandExecutor {
             when(parseInt(args[0])) {
                 1 -> {
                     sender.sendMessage("§cCR §8| Transitioning to Survival Mode")
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tab player ${sender.playerListName} customtagname $s")
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tab player ${sender.playerListName} customtabname $s")
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "nickname ${sender.playerListName} $s")
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tab player ${sender.name} customtagname $s")
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tab player ${sender.name} customtabname $s")
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "nickname ${sender.name} $s")
                     if (sender.gameMode == GameMode.CREATIVE) {
                         Bukkit.broadcastMessage("§cCR §8| §8[§4§l-§8]§r ${c?.replace("&", "§")}")
                         Bukkit.broadcastMessage("§cCR §8| §8[§4§l+§8]§r ${s?.replace("&", "§")}")
@@ -49,9 +49,9 @@ class GodMode(private val config: FileConfiguration) : CommandExecutor {
                 }
                 2 -> {
                     sender.sendMessage("§cCR §8| Transitioning to God Mode")
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tab player ${sender.playerListName} customtagname $c")
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tab player ${sender.playerListName} customtabname $c")
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "nickname ${sender.playerListName} $c")
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tab player ${sender.name} customtagname $c")
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tab player ${sender.name} customtabname $c")
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "nickname ${sender.name} $c")
                     if (sender.gameMode == GameMode.SURVIVAL) {
                         Bukkit.broadcastMessage("§cCR §8| §8[§4§l-§8]§r ${s?.replace("&", "§")}")
                         Bukkit.broadcastMessage("§cCR §8| §8[§4§l+§8]§r ${c?.replace("&", "§")}")
@@ -63,9 +63,9 @@ class GodMode(private val config: FileConfiguration) : CommandExecutor {
                 }
                 3 -> {
                     sender.sendMessage("§cCR §8| Transitioning to Adventure Mode")
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tab player ${sender.playerListName} customtagname $a")
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tab player ${sender.playerListName} customtabname $a")
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "nickname ${sender.playerListName} $a")
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tab player ${sender.name} customtagname $a")
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tab player ${sender.name} customtabname $a")
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "nickname ${sender.name} $a")
                     if (sender.gameMode == GameMode.SURVIVAL) {
                         Bukkit.broadcastMessage("§cCR §8| §8[§4§l-§8]§r ${s?.replace("&", "§")}")
                         Bukkit.broadcastMessage("§cCR §8| §8[§4§l+§8]§r ${a?.replace("&", "§")}")

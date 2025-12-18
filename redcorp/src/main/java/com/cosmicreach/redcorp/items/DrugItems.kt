@@ -96,10 +96,30 @@ class DrugItems {
     }
 
     fun DryingRack (a : Int): ItemStack {
-        val item = ItemStack(Material.BARREL, a)
+        val item = ItemStack(Material.CAMPFIRE, a)
 
         NBT.modify(item) { nbt ->
             nbt.setInteger("item-id", 404)
+        }
+
+        val meta = item.itemMeta as ItemMeta
+        val cm = meta.customModelDataComponent
+
+        cm.strings = mutableListOf("dryingrack")
+        meta.setCustomModelDataComponent(cm)
+
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+        meta.setDisplayName("§2§lᴅʀʏɪɴɢ ʀᴀᴄᴋ")
+        item.setItemMeta(meta)
+
+        return item
+    }
+
+    fun IdustrialGrinder (a : Int): ItemStack {
+        val item = ItemStack(Material.BARREL, a)
+
+        NBT.modify(item) { nbt ->
+            nbt.setInteger("item-id", 405)
         }
 
         val meta = item.itemMeta as ItemMeta
@@ -109,7 +129,47 @@ class DrugItems {
         meta.setCustomModelDataComponent(cm)
 
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
-        meta.setDisplayName("§2§lᴅʀʏɪɴɢ ʀᴀᴄᴋ")
+        meta.setDisplayName("§2§lɪɴᴅᴜsᴛʀɪᴀʟ ɢʀɪɴᴅᴇʀ")
+        item.setItemMeta(meta)
+
+        return item
+    }
+
+    fun Mixer (a : Int): ItemStack {
+        val item = ItemStack(Material.BARREL, a)
+
+        NBT.modify(item) { nbt ->
+            nbt.setInteger("item-id", 406)
+        }
+
+        val meta = item.itemMeta as ItemMeta
+        val cm = meta.customModelDataComponent
+
+        cm.strings = mutableListOf("agingbarrel")
+        meta.setCustomModelDataComponent(cm)
+
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+        meta.setDisplayName("§2§lᴍɪxɪɴɢ ᴛᴀʙʟᴇ")
+        item.setItemMeta(meta)
+
+        return item
+    }
+
+    fun Press (a : Int): ItemStack {
+        val item = ItemStack(Material.BARREL, a)
+
+        NBT.modify(item) { nbt ->
+            nbt.setInteger("item-id", 407)
+        }
+
+        val meta = item.itemMeta as ItemMeta
+        val cm = meta.customModelDataComponent
+
+        cm.strings = mutableListOf("agingbarrel")
+        meta.setCustomModelDataComponent(cm)
+
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+        meta.setDisplayName("§2§lᴘʀᴇssɪɴɢ ᴛᴀʙʟᴇ")
         item.setItemMeta(meta)
 
         return item
@@ -260,11 +320,71 @@ class DrugItems {
         return item
     }
 
+    fun DriedCocaLeaf (a : Int): ItemStack {
+        val item = ItemStack(Material.KELP, a)
+
+        NBT.modify(item) { nbt ->
+            nbt.setInteger("item-id", 432)
+        }
+
+        val meta = item.itemMeta as ItemMeta
+        val cm = meta.customModelDataComponent
+
+        cm.strings = mutableListOf("cokedried")
+
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+        meta.setCustomModelDataComponent(cm)
+        meta.setDisplayName("§f§lᴅʀɪᴇᴅ ᴄᴏᴄᴀ ʟᴇᴀꜰ")
+        item.setItemMeta(meta)
+
+        return item
+    }
+
+    fun GroundCokeLeaf (a : Int): ItemStack {
+        val item = ItemStack(Material.SUGAR, a)
+
+        NBT.modify(item) { nbt ->
+            nbt.setInteger("item-id", 433)
+        }
+
+        val meta = item.itemMeta as ItemMeta
+        val cm = meta.customModelDataComponent
+
+        cm.strings = mutableListOf("cokeground")
+
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+        meta.setCustomModelDataComponent(cm)
+        meta.setDisplayName("§f§lɢʀᴏᴜɴᴅ ᴄᴏᴄᴀ ʟᴇᴀꜰ")
+        item.setItemMeta(meta)
+
+        return item
+    }
+
+    fun MixedCoke (a : Int): ItemStack {
+        val item = ItemStack(Material.SUGAR, a)
+
+        NBT.modify(item) { nbt ->
+            nbt.setInteger("item-id", 434)
+        }
+
+        val meta = item.itemMeta as ItemMeta
+        val cm = meta.customModelDataComponent
+
+        cm.strings = mutableListOf("cokemixed")
+
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+        meta.setCustomModelDataComponent(cm)
+        meta.setDisplayName("§f§lᴍɪxᴇᴅ ᴄᴏᴋᴇ")
+        item.setItemMeta(meta)
+
+        return item
+    }
+
     fun Coke (a : Int): ItemStack {
         var item = ItemStack(Material.SUGAR, a)
 
         NBT.modify(item) { nbt ->
-            nbt.setInteger("item-id", 432)
+            nbt.setInteger("item-id", 435)
         }
 
         item = Utils().makeEdibleWithComponents(item, canAlwaysEat = true, saturation = 0f, nutrition = 0, consumeTime = 5.0, animation = "toot_horn", sound = "minecraft:entity.sniffer.sniffing")
@@ -305,12 +425,74 @@ class DrugItems {
         return item
     }
 
-    fun Opium (a : Int): ItemStack {
+    fun OpiumSap (a : Int): ItemStack {
         val item = ItemStack(Material.GLOWSTONE_DUST, a)
 
         NBT.modify(item) { nbt ->
             nbt.setInteger("item-id", 441)
         }
+
+        val meta = item.itemMeta as ItemMeta
+        val cm = meta.customModelDataComponent
+
+        cm.strings = mutableListOf("opiumsap")
+
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+        meta.setCustomModelDataComponent(cm)
+        meta.setDisplayName("§4§lᴏᴘɪᴜᴍ sᴀᴘ")
+        item.setItemMeta(meta)
+
+        return item
+    }
+
+    fun OpiumResin (a : Int): ItemStack {
+        val item = ItemStack(Material.GLOWSTONE_DUST, a)
+
+        NBT.modify(item) { nbt ->
+            nbt.setInteger("item-id", 442)
+        }
+
+        val meta = item.itemMeta as ItemMeta
+        val cm = meta.customModelDataComponent
+
+        cm.strings = mutableListOf("opiumresin")
+
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+        meta.setCustomModelDataComponent(cm)
+        meta.setDisplayName("§4§lᴏᴘɪᴜᴍ ʀᴇsɪɴ")
+        item.setItemMeta(meta)
+
+        return item
+    }
+
+    fun OpiumCompact (a : Int): ItemStack {
+        val item = ItemStack(Material.GLOWSTONE_DUST, a)
+
+        NBT.modify(item) { nbt ->
+            nbt.setInteger("item-id", 443)
+        }
+
+        val meta = item.itemMeta as ItemMeta
+        val cm = meta.customModelDataComponent
+
+        cm.strings = mutableListOf("opiumcompact")
+
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+        meta.setCustomModelDataComponent(cm)
+        meta.setDisplayName("§4§lᴄᴏᴍᴘᴀᴄᴛᴇᴅ ᴏᴘɪᴜᴍ")
+        item.setItemMeta(meta)
+
+        return item
+    }
+
+    fun Opium (a : Int): ItemStack {
+        var item = ItemStack(Material.GLOWSTONE_DUST, a)
+
+        NBT.modify(item) { nbt ->
+            nbt.setInteger("item-id", 444)
+        }
+
+        item = Utils().makeEdibleWithComponents(item, canAlwaysEat = true, saturation = 0f, nutrition = 0, consumeTime = 5.0, sound = "minecraft:entity.sniffer.eat")
 
         val meta = item.itemMeta as ItemMeta
         val cm = meta.customModelDataComponent
@@ -388,7 +570,7 @@ class DrugItems {
         meta.addCustomEffect(PotionEffect(PotionEffectType.STRENGTH, 200, 0, true, false, false), true)
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         meta.setCustomModelDataComponent(cm)
-        meta.setDisplayName("§e§lʟᴀʀɢᴇʀ")
+        meta.setDisplayName("§e§lʟᴀɢᴇʀ")
         item.setItemMeta(meta)
 
         return item

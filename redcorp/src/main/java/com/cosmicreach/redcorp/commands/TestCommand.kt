@@ -51,7 +51,7 @@ class TestCommand() : CommandExecutor {
                 //val loc = sender.location
                 //val locString = "${loc.world?.name},${loc.x},${loc.y},${loc.z},${loc.yaw},${loc.pitch}"
 
-                //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "sudo ${sender.playerListName} island create greenhouse")
+                //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "sudo ${sender.name} island create greenhouse")
 
                 //val greenhouseTracking = RedCorp.getPlugin().getGreenhouseTracker()
 

@@ -20,8 +20,8 @@ class GrindItem(private val inv : VirtualInventory) : ControlItem<Gui>() {
 
     override fun handleClick(clickType: ClickType, player: Player, event: InventoryClickEvent) {
         val item = inv.getItem(0) ?: return
-        if (Utils().checkID(item, arrayOf(431))) {
-            inv.setItem(UpdateReason.SUPPRESSED, 0, DrugItems().Coke(item.amount))
+        if (Utils().checkID(item, arrayOf(432))) {
+            inv.setItem(UpdateReason.SUPPRESSED, 0, DrugItems().GroundCokeLeaf(item.amount))
         }
 
         if (Utils().checkID(item, arrayOf(424))) {

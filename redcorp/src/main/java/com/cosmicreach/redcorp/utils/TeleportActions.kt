@@ -17,7 +17,7 @@ class TeleportActions(private val teleportingPlayers: HashMap<Player, Int>, priv
         val players = Bukkit.getServer().onlinePlayers
         val list = mutableListOf<Player>()
         players.forEach { p ->
-            if (p.playerListName != player.playerListName) {
+            if (p.name != player.name) {
                 if (!list.contains(p)) {
                     p.inventory.forEach { i ->
                         if (i !== null) {

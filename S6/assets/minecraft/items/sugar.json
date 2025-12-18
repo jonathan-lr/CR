@@ -11,7 +11,21 @@
         "when": "coke",
         "model": {
           "type": "model",
-          "model": "item/drugs/coke"
+          "model": "item/drugs/coca"
+        }
+      },
+      {
+        "when": "cokeground",
+        "model": {
+          "type": "model",
+          "model": "item/drugs/coca_ground"
+        }
+      },
+      {
+        "when": "cokemixed",
+        "model": {
+          "type": "model",
+          "model": "item/drugs/coca_mixed"
         }
       }
     ]

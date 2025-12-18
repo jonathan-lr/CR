@@ -27,6 +27,7 @@ class ShopItem(
     private var vendorStock: String = "%vendor% §8|§r Sorry %player%§r, %item%§r is currently out of stock.",
     private var useStock: Boolean = false,
     private var name: String = "null",
+    private var sellProduct: Boolean = true,
 ) : AbstractItem() {
     private val values = listOf(1, 4, 8, 16, 32, 64)
     private val connection = RedCorp.getPlugin().getConnection()!!
@@ -36,7 +37,7 @@ class ShopItem(
     private var stock = item.stock
     private val newBuyPrice: Double
         get() = if (useStock) {
-            buyPrice * (1 - 0.01 * floor(stock / 8.0))
+            buyPrice * (1 - 0.01 * floor(stock / 8.0)).coerceAtLeast(0.0)
         } else {
             buyPrice
         }
@@ -58,7 +59,7 @@ class ShopItem(
         if (sellPrice > 0.0) {
             sell = "§f§lLeft Click to §c§lBUY §f§l@ §c§l${econ.format(newSellPrice*values[amount.getOrDefault(player, 0)])}"
         }
-        if (buyPrice > 0.0) {
+        if (buyPrice > 0.0 && sellProduct) {
             buy = "§f§lRight Click to §c§lSELL §f§l@ §c§l${econ.format(newBuyPrice*values[amount.getOrDefault(player, 0)])}"
         }
         if (sellPrice == 0.0 && buyPrice == 0.0) {
@@ -83,7 +84,7 @@ class ShopItem(
         val amount = RedCorp.getPlugin().getPurchaseAmount()
         val requiredAmount = values[amount.getOrDefault(player, 0)]
 
-        if (buyPrice > 0.0) {
+        if (buyPrice > 0.0 && sellProduct) {
             var totalAvailable = 0
             val stacksToUpdate = mutableListOf<ItemStack>()
 
@@ -105,6 +106,14 @@ class ShopItem(
             // Check if there are enough items
             if (totalAvailable >= requiredAmount) {
                 var remainingToDeduct = requiredAmount
+
+                val tempItem = StockEx(connection).getInfo(name)
+                if (tempItem.stock != stock) {
+                    player.sendMessage("§cCR §8|§r Stock has changed since you opened the UI. Try again")
+                    stock = tempItem.stock
+                    notifyWindows()
+                    return
+                }
 
                 // Second pass: Deduct items from stacks
                 for (stack in stacksToUpdate) {
@@ -151,6 +160,14 @@ class ShopItem(
     private fun handleSell(player: Player) {
         val amount = RedCorp.getPlugin().getPurchaseAmount()
         if (sellPrice > 0.0) {
+            val tempItem = StockEx(connection).getInfo(name)
+            if (tempItem.stock != stock) {
+                player.sendMessage("§cCR §8|§r Stock has changed since you opened the UI. Try again")
+                stock = tempItem.stock
+                notifyWindows()
+                return
+            }
+
             if (econ.getBalance(player) >= (newSellPrice*values[amount.getOrDefault(player, 0)])) {
                 player.sendMessage(replacePlaceholders(vendorCompleteSell, player))
                 shopItem.amount = values[amount.getOrDefault(player, 0)]
