@@ -438,7 +438,7 @@
         "when": "mixing",
         "model": {
           "type": "model",
-          "model": "item/mixing"
+          "model": "item/mixers"
         }
       }
     ]
