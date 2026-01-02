@@ -7,7 +7,7 @@ class Citizen (private val p: Player, private val npc: Int) {
     private val citizens = arrayOf(
         "§aElowen",
         "§9Tharic",
-        "§dMirella",
+        "§dMei Wen",
         "§6Brom",
         "§3Kaelis",
         "§cVashara",
@@ -21,7 +21,7 @@ class Citizen (private val p: Player, private val npc: Int) {
         if (DrugTest().doTest(p)) {
             p.sendMessage("§r${citizens[npc-1]} §8|§r Hi ${p.displayName}§r, you should hide those from the cops")
         } else {
-            p.sendMessage("§r${citizens[npc-1]} §8|§r Hi ${p.displayName}§r, what a lovel day in Insomnis")
+            p.sendMessage("§r${citizens[npc-1]} §8|§r Hi ${p.displayName}§r, what a lovely day in Insomnis")
         }
     }
 }

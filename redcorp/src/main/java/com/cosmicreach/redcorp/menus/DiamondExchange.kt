@@ -25,36 +25,32 @@ class DiamondExchange(private var type: Int) {
         val balItem = BalanceItem(econ, player)
         if (type == 1) {
             val diamondItem = ShopItem(player, econ, balItem, ItemStack(Material.DIAMOND, values[pruchaseAmount.getOrDefault(player, 0)]), "§cPatrick Byattyman", useStock = true, name="diamond_p")
-            val diamondBlockItem = ShopItem(player, econ, balItem, ItemStack(Material.DIAMOND_BLOCK, values[pruchaseAmount.getOrDefault(player, 0)]), "§cPatrick Byattyman", useStock = true, name="diamond_p")
             val gui = Gui.normal()
                 .setStructure(
                     "# . . . $ . . . #",
-                    "# . x . . . y . #",
+                    "# . . . x . . . #",
                     "# . . < @ > . . #")
                 .addIngredient('#', border)
                 .addIngredient('x', diamondItem)
-                .addIngredient('y', diamondBlockItem)
                 .addIngredient('$', balItem)
                 .addIngredient('@', amount)
-                .addIngredient('>', IncreaseItemAmount(listOf(diamondItem, diamondBlockItem)))
-                .addIngredient('<', DecreaseItemAmount(listOf(diamondItem, diamondBlockItem)))
+                .addIngredient('>', IncreaseItemAmount(listOf(diamondItem)))
+                .addIngredient('<', DecreaseItemAmount(listOf(diamondItem)))
                 .build()
             return gui
         } else {
             val diamondItem = ShopItem(player, econ, balItem, ItemStack(Material.DIAMOND, values[pruchaseAmount.getOrDefault(player, 0)]), "§6Sterling", useStock = true, name="diamond_s")
-            val diamondBlockItem = ShopItem(player, econ, balItem, ItemStack(Material.DIAMOND_BLOCK, values[pruchaseAmount.getOrDefault(player, 0)]), "§6Sterling", useStock = true, name="diamond_s")
-            val gui = Gui.normal()
+           val gui = Gui.normal()
                 .setStructure(
                     "# . . . $ . . . #",
-                    "# . x . . . y . #",
+                    "# . . . x . . . #",
                     "# . . < @ > . . #")
                 .addIngredient('#', border)
                 .addIngredient('x', diamondItem)
-                .addIngredient('y', diamondBlockItem)
                 .addIngredient('$', balItem)
                 .addIngredient('@', amount)
-                .addIngredient('>', IncreaseItemAmount(listOf(diamondItem, diamondBlockItem)))
-                .addIngredient('<', DecreaseItemAmount(listOf(diamondItem, diamondBlockItem)))
+                .addIngredient('>', IncreaseItemAmount(listOf(diamondItem)))
+                .addIngredient('<', DecreaseItemAmount(listOf(diamondItem)))
                 .build()
             return gui
         }

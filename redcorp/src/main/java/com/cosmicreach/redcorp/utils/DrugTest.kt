@@ -39,7 +39,7 @@ class DrugTest {
 
     fun doTest(p: Player): Boolean {
         var hasDrugs = false
-        val grinders = RedCorp.getPlugin().getGrinderPlayers()
+        val grinders = RedCorp.getPlugin().grinderPlayers
 
         p.inventory.forEach {
             if (it != null) {
@@ -76,7 +76,7 @@ class DrugTest {
 
     fun doWiderTest(p: Player): Boolean {
         var hasDrugs = false
-        val grinders = RedCorp.getPlugin().getGrinderPlayers()
+        val grinders = RedCorp.getPlugin().grinderPlayers
 
         p.inventory.forEach {
             if (it != null) {
@@ -113,7 +113,7 @@ class DrugTest {
 
     fun arrestPlayer(p: Player) {
         val econ = RedCorp.getPlugin().getEcon()
-        val grinders = RedCorp.getPlugin().getGrinderPlayers()
+        val grinders = RedCorp.getPlugin().grinderPlayers
 
         if (econ != null) {
             econ.withdrawPlayer(p, 2000.0)

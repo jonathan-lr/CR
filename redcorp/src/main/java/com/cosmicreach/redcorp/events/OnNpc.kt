@@ -18,21 +18,16 @@ import com.cosmicreach.redcorp.npcs.Shaggy
 import com.cosmicreach.redcorp.npcs.Sterling
 import com.cosmicreach.redcorp.npcs.Toad
 import com.cosmicreach.redcorp.npcs.Wong
+import com.cosmicreach.redcorp.npcs.Sum
+import com.cosmicreach.redcorp.npcs.Ting
 import com.cosmicreach.redcorp.npcs.Zarek
 import org.bukkit.Bukkit
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.EntityType
-import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.persistence.PersistentDataType
 
 class OnNpc (private val e : PlayerInteractAtEntityEvent) {
-    private var kyleStage = HashMap<Player, Int>()
-    private val kyleConfirm = HashMap<Player, Boolean>()
-    private val merlinConfirm = HashMap<Player, Boolean>()
-    private val zarekConfirm = HashMap<Player, Boolean>()
-    private var zarekStage = HashMap<Player, Int>()
-
     fun run() {
         if (e.hand != org.bukkit.inventory.EquipmentSlot.HAND) return
         val entity = e.rightClicked
@@ -50,7 +45,7 @@ class OnNpc (private val e : PlayerInteractAtEntityEvent) {
                     Ivan(p).run()
                 }
                 "kyle" -> {
-                    Kyle(p, kyleConfirm, kyleStage).run()
+                    Kyle(p).run()
                 }
                 "jeramey" -> {
                     Jeramey(p).run()
@@ -71,7 +66,7 @@ class OnNpc (private val e : PlayerInteractAtEntityEvent) {
                     Merlin(p).run()
                 }
                 "zarek" -> {
-                    Zarek(p, zarekConfirm, zarekStage).run()
+                    Zarek(p).run()
                 }
                 "shadee" -> {
                     ShadeE(p).run()
@@ -90,6 +85,12 @@ class OnNpc (private val e : PlayerInteractAtEntityEvent) {
                 }
                 "wong" -> {
                     Wong(p).run()
+                }
+                "sum" -> {
+                    Sum(p).run()
+                }
+                "ting" -> {
+                    Ting(p).run()
                 }
                 "cassian" -> {
                     Cassian(p).run()

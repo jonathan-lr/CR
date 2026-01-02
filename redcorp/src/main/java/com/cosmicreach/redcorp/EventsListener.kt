@@ -1,7 +1,7 @@
 package com.cosmicreach.redcorp
 
 import com.cosmicreach.redcorp.db.Greenhouse
-import com.cosmicreach.redcorp.db.Magic
+import com.cosmicreach.redcorp.db.Progress
 import com.cosmicreach.redcorp.events.*
 import com.cosmicreach.redcorp.items.GreenhouseItems
 import com.cosmicreach.redcorp.utils.DrugTest
@@ -43,7 +43,6 @@ class EventsListener(
     private val teleportActions: TeleportActions,
     private val teleportStarter: HashMap<Player, Player>,
     private val teleportSolo: HashMap<Player, Int>,
-    private val grinderPlayers: HashMap<Player, VirtualInventory>,
     private val agingBarrels: HashMap<Block, VirtualInventory>,
 ) : Listener {
     init {
@@ -52,12 +51,11 @@ class EventsListener(
 
     private var ids = arrayOf(101, 102, 103, 104, 105, 106, 107, 108, 109, 110)
     private var extendedIds = arrayOf(101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 50, 51, 52, 53, 54, 55, 69, 3, 4, 5, 6, 400, 401, 402, 403, 420, 421, 423, 430, 431, 432, 440, 441, 450, 451, 460, 461, 462, 463, 470, 471, 472)
-    private var types = arrayOf("air", "fire", "water", "earth")
     private var items = arrayOf("pick", "shovel", "hoe", "axe", "sword", "helmet", "chestplate", "leggings", "boots", "wings")
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onDeath(event : PlayerDeathEvent) {
-        OnDeath(event).run(ids, types, items)
+        OnDeath(event).run(ids, items)
         return
     }
 
@@ -139,7 +137,7 @@ class EventsListener(
 
     @EventHandler(priority = EventPriority.MONITOR)
     fun onUse(event: PlayerInteractEvent) {
-        OnUse(event, grinderPlayers, teleportActions).run()
+        OnUse(event, teleportActions).run()
         return
     }
 
@@ -202,13 +200,13 @@ class EventsListener(
 
     @EventHandler(priority = EventPriority.MONITOR)
     fun onJoin(event: PlayerJoinEvent) {
-        val magicUnlocked = RedCorp.getPlugin().getMagicUnlocked()
+        val magicUnlocked = RedCorp.getPlugin().magicUnlocked
         val connection = RedCorp.getPlugin().getConnection()!!
 
-        val result = Magic(connection).getPlayer(event.player.uniqueId)
+        val result = Progress(connection).getPlayer(event.player.uniqueId, 1)
 
         if (result == null) {
-            Magic(connection).addPlayer(event.player.uniqueId)
+            Progress(connection).addPlayer(event.player.uniqueId, 1)
             magicUnlocked[event.player] = false
         } else {
             magicUnlocked[event.player] = result
@@ -221,7 +219,9 @@ class EventsListener(
         val key = NamespacedKey(RedCorp.getPlugin(), "npc_name")
         if (!e.entity.persistentDataContainer.has(key, PersistentDataType.STRING)) return
         val p = e.damageSource.causingEntity
-        if (p is Player && p.hasPermission("redcorp.killnpc")) return
+        if (p is Player && p.hasPermission("redcorp.killnpc")) {
+            return
+        }
         e.isCancelled = true
     }
 

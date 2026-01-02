@@ -41,6 +41,13 @@
           "type": "model",
           "model": "item/lanyards/pink-lanyard"
         }
+      },
+      {
+        "when": "pink-lanyard2",
+        "model": {
+          "type": "model",
+          "model": "item/lanyards/pink-lanyard"
+        }
       }
     ]
   }   

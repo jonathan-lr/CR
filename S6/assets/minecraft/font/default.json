@@ -44,6 +44,34 @@
 			"chars": ["\uE004"]
 		},
 		{
+			"type": "bitmap",
+			"file": "minecraft:gui/press.png",
+			"ascent": 24,
+			"height": 256,
+			"chars": ["\uE005"]
+		},
+		{
+			"type": "bitmap",
+			"file": "minecraft:gui/mixing.png",
+			"ascent": 24,
+			"height": 256,
+			"chars": ["\uE006"]
+		},
+		{
+			"type": "bitmap",
+			"file": "minecraft:gui/grinder_l.png",
+			"ascent": 24,
+			"height": 256,
+			"chars": ["\uE007"]
+		},
+		{
+			"type": "bitmap",
+			"file": "minecraft:gui/grinder_s.png",
+			"ascent": 24,
+			"height": 256,
+			"chars": ["\uE008"]
+		},
+		{
 		  "type": "space",
 		  "advances": {
 			"\uE100": -8  

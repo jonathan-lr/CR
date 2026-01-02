@@ -51,10 +51,6 @@ configuration:
     survival: 'YorickSK'
     creative: '&#6767ab&lYorick'
     adventure: '&4Redbrine'
-  jay:
-    survival: 'Wasbie'
-    creative: 'WasbieButCreative'
-    adventure: 'WasbieButAdventure'
   red:
     survival: '&4&lRed'
     creative: '&5&lOverlord'

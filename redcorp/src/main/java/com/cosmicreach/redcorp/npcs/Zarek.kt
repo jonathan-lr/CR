@@ -1,6 +1,7 @@
 package com.cosmicreach.redcorp.npcs
 
 import com.cosmicreach.redcorp.RedCorp
+import com.cosmicreach.redcorp.db.Progress
 import com.cosmicreach.redcorp.menus.Confirm
 import com.cosmicreach.redcorp.utils.DrugTest
 import com.cosmicreach.redcorp.utils.Utils
@@ -16,52 +17,50 @@ import kotlin.math.sqrt
 
 class Zarek(
     private val player: Player,
-    private val confirm: HashMap<Player, Boolean>,
-    private val stage: HashMap<Player, Int>
 ) {
+    private val connection = RedCorp.getPlugin().getConnection()!!
+
     fun run() {
+        var stage = Progress(connection).getStage(player.uniqueId, 2)
         val item = player.inventory.itemInMainHand
+
         if (!Utils().checkID(item, arrayOf(50))) {
             player.sendMessage(zarekResponse())
             return
         }
 
-        if (!stage.containsKey(player)) {
-            stage[player] = 1
+        if (stage == null) {
+            Progress(connection).addPlayer(player.uniqueId, 2)
+            stage = 0
         }
 
-        when (stage[player]) {
-            1 -> {
+        when (stage) {
+            0 -> {
                 player.sendMessage("§cZarek §8|§r Do you want me to summon Firebelly for a Dungeon Token?")
-                stage[player] = 2
+                Progress(connection).updateStage(player.uniqueId, 2, 1)
                 val window = Window.single()
                     .setViewer(player)
                     .setTitle("§6§lSummon Firebelly?")
-                    .setGui(Confirm(confirm).makeGUI())
+                    .setGui(Confirm(2).makeGUI())
                     .build()
                 window.open()
             }
-            2 -> {
-                if (confirm.containsKey(player)) {
-                    if (confirm[player] == true) {
-                        confirm.remove(player)
-                        stage[player] = 1
-                        player.sendMessage("§cZarek §8|§r Okay the ritual will start in 30 seconds head over to the alter now!")
-                        Bukkit.broadcastMessage("§cCR §8|§r ${player.displayName} has summoned Firebelly")
-                        player.inventory.itemInMainHand.amount -= 1
-                        object : BukkitRunnable() {
-                            override fun run() {
-                                summonFireBelly()
-                            }
-                        }.runTaskLater(RedCorp.getPlugin(), 600L) // 600 ticks = 30 seconds
-                    } else {
-                        confirm.remove(player)
-                        stage[player] = 1
-                        player.sendMessage("§cZarek §8|§r Fine by me, come back when you are ready to challenge him!")
-                    }
+            1 -> {
+                val confirm = Progress(connection).getConfirm(player.uniqueId, 2)!!
+                if (confirm) {
+                    Progress(connection).updateStage(player.uniqueId, 2, 0)
+                    Progress(connection).updateConfirm(player.uniqueId, 2, false)
+                    player.sendMessage("§cZarek §8|§r Okay the ritual will start in 30 seconds head over to the alter now!")
+                    Bukkit.broadcastMessage("§cCR §8|§r ${player.displayName} has summoned Firebelly")
+                    player.inventory.itemInMainHand.amount -= 1
+                    object : BukkitRunnable() {
+                        override fun run() {
+                            summonFireBelly()
+                        }
+                    }.runTaskLater(RedCorp.getPlugin(), 600L) // 600 ticks = 30 seconds
                 } else {
-                    player.sendMessage("§cServer §8|§r Something went wrong try again")
-                    stage[player] = 1
+                    Progress(connection).updateStage(player.uniqueId, 2, 0)
+                    player.sendMessage("§cZarek §8|§r Fine by me, come back when you are ready to challenge him!")
                 }
             }
         }
@@ -112,16 +111,16 @@ class Zarek(
             getCenterBlockLocation(world.getBlockAt(-3, 62, 0).location),
 
             // Pillar positions
-            getCenterBlockLocation(world.getBlockAt(12, 86, 39).location),
-            getCenterBlockLocation(world.getBlockAt(-13, 77, 39).location),
-            getCenterBlockLocation(world.getBlockAt(-34, 104, 24).location),
-            getCenterBlockLocation(world.getBlockAt(-42, 101, -1).location),
-            getCenterBlockLocation(world.getBlockAt(-34, 89, -25).location),
-            getCenterBlockLocation(world.getBlockAt(-13, 98, -40).location),
-            getCenterBlockLocation(world.getBlockAt(12, 95, -40).location),
-            getCenterBlockLocation(world.getBlockAt(33, 92, -25).location),
-            getCenterBlockLocation(world.getBlockAt(42, 83, 0).location),
-            getCenterBlockLocation(world.getBlockAt(33, 80, 24).location)
+            getCenterBlockLocation(world.getBlockAt(12, 76, 39).location),
+            getCenterBlockLocation(world.getBlockAt(-13, 82, 39).location),
+            getCenterBlockLocation(world.getBlockAt(-34, 100, 24).location),
+            getCenterBlockLocation(world.getBlockAt(-42, 97, -1).location),
+            getCenterBlockLocation(world.getBlockAt(-34, 91, -25).location),
+            getCenterBlockLocation(world.getBlockAt(-13, 79, -40).location),
+            getCenterBlockLocation(world.getBlockAt(12, 88, -40).location),
+            getCenterBlockLocation(world.getBlockAt(33, 94, -25).location),
+            getCenterBlockLocation(world.getBlockAt(42, 85, 0).location),
+            getCenterBlockLocation(world.getBlockAt(33, 103, 24).location)
         )
 
         val beam = world.getBlockAt(0, 120, 0).location

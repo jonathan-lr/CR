@@ -136,7 +136,7 @@ class DrugItems {
     }
 
     fun Mixer (a : Int): ItemStack {
-        val item = ItemStack(Material.BARREL, a)
+        val item = ItemStack(Material.PAPER, a)
 
         NBT.modify(item) { nbt ->
             nbt.setInteger("item-id", 406)
@@ -145,7 +145,7 @@ class DrugItems {
         val meta = item.itemMeta as ItemMeta
         val cm = meta.customModelDataComponent
 
-        cm.strings = mutableListOf("agingbarrel")
+        cm.strings = mutableListOf("mixer")
         meta.setCustomModelDataComponent(cm)
 
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)

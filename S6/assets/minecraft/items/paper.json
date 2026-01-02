@@ -433,6 +433,13 @@
           "type": "model",
           "model": "item/greenhouse_upgrade"
         }
+      },
+      {
+        "when": "mixing",
+        "model": {
+          "type": "model",
+          "model": "item/mixing"
+        }
       }
     ]
   }   

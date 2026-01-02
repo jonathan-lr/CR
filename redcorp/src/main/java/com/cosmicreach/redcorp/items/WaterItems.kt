@@ -22,6 +22,7 @@ class WaterItems {
 
         NBT.modify(item) { nbt ->
             nbt.setInteger("item-id", 101)
+            nbt.setString("item-type", "water")
         }
 
         val meta = item.itemMeta as ItemMeta
@@ -51,6 +52,7 @@ class WaterItems {
 
         NBT.modify(item) { nbt ->
             nbt.setInteger("item-id", 102)
+            nbt.setString("item-type", "water")
         }
 
         val meta = item.itemMeta as ItemMeta
@@ -80,6 +82,7 @@ class WaterItems {
 
         NBT.modify(item) { nbt ->
             nbt.setInteger("item-id", 103)
+            nbt.setString("item-type", "water")
         }
 
         val meta = item.itemMeta as ItemMeta
@@ -109,6 +112,7 @@ class WaterItems {
 
         NBT.modify(item) { nbt ->
             nbt.setInteger("item-id", 104)
+            nbt.setString("item-type", "water")
         }
 
         val meta = item.itemMeta as ItemMeta
@@ -138,6 +142,7 @@ class WaterItems {
 
         NBT.modify(item) { nbt ->
             nbt.setInteger("item-id", 105)
+            nbt.setString("item-type", "water")
         }
 
         val meta = item.itemMeta as ItemMeta
@@ -168,6 +173,7 @@ class WaterItems {
 
         NBT.modify(item) { nbt ->
             nbt.setInteger("item-id", 106)
+            nbt.setString("item-type", "water")
         }
 
         val meta = item.itemMeta as ArmorMeta
@@ -202,6 +208,7 @@ class WaterItems {
 
         NBT.modify(item) { nbt ->
             nbt.setInteger("item-id", 107)
+            nbt.setString("item-type", "water")
         }
 
         val meta = item.itemMeta as ArmorMeta
@@ -233,6 +240,7 @@ class WaterItems {
 
         NBT.modify(item) { nbt ->
             nbt.setInteger("item-id", 108)
+            nbt.setString("item-type", "water")
         }
 
         val meta = item.itemMeta as ArmorMeta
@@ -265,6 +273,7 @@ class WaterItems {
 
         NBT.modify(item) { nbt ->
             nbt.setInteger("item-id", 109)
+            nbt.setString("item-type", "water")
         }
 
         val meta = item.itemMeta as ArmorMeta
@@ -298,6 +307,7 @@ class WaterItems {
 
         NBT.modify(item) { nbt ->
             nbt.setInteger("item-id", 110)
+            nbt.setString("item-type", "water")
         }
 
         val meta = item.itemMeta as ItemMeta

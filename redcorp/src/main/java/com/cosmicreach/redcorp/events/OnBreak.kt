@@ -50,8 +50,10 @@ class OnBreak (private val event : BlockBreakEvent) {
 
         val greenhouse = Greenhouse(connection).getGreenhousesForPlayer(p.uniqueId)
 
-        if (greenhouse == null || greenhouse.id != greenhouseId) {
+        if ((greenhouse == null || greenhouse.id != greenhouseId) && !p.hasPermission("redcorp.breakGreenhouse")) {
             ChatUtil.send(p, ChatUtil.json { text("${p.displayName} you dont own this") })
+            event.isCancelled = true
+            return
         }
 
         if (entrance) {

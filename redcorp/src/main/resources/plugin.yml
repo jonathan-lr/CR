@@ -34,5 +34,7 @@ commands:
     aliases: gt
   NPC:
     description: used for npc dialogue (server only)
+  dragondrops:
+    description: used to give custom dragon rewards (server only)
   testcommand:
     description: for testing

@@ -62,6 +62,7 @@ class Materia : CommandExecutor {
         },
         "shroom" to { args: List<String> -> DrugItems().Shrooms(args.getOrNull(0)?.toIntOrNull() ?: 1) },
         "test" to { args: List<String> -> CustomItems().TestWing(args.getOrNull(0)?.toIntOrNull() ?: 1) },
+        "borderItem" to { args: List<String> -> CustomItems().BorderItem(args.getOrNull(0)?.toIntOrNull() ?: 1) },
         "truffle" to { args: List<String> -> DrugItems().Truffles(args.getOrNull(0)?.toIntOrNull() ?: 1) },
         "unit" to { args: List<String> ->
             val color = args.getOrElse(1) { "red" }
@@ -150,6 +151,7 @@ class MateriaComplete : TabCompleter {
         "scroll" to "redcorp.materia.scroll",
         "shroom" to "redcorp.materia.shroom",
         "test" to "redcorp.materia.test",
+        "borderItem" to "redcorp.materia.borderItem",
         "truffle" to "redcorp.materia.truffle",
         "unit" to "redcorp.materia.unit",
         "weed" to "redcorp.materia.weed",

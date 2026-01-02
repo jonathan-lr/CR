@@ -1,5 +1,6 @@
 package com.cosmicreach.redcorp.items
 
+import com.cosmicreach.redcorp.utils.Utils
 import de.tr7zw.nbtapi.NBT
 import org.bukkit.Bukkit
 import org.bukkit.JukeboxSong
@@ -321,5 +322,31 @@ class CustomItems {
         val itemId = itemBaseId + numberIdOffset
 
         return Triple(itemId, "$displayNamePrefix$cardName", "${suit.first()}$number")
+    }
+
+    fun BorderItem (a: Int): ItemStack {
+        var item = ItemStack(Material.PAPER, a)
+
+        NBT.modify(item) { nbt ->
+            nbt.setInteger("item-id", 199)
+        }
+
+        item = Utils().makeEdibleWithComponents(item, canAlwaysEat = true, saturation = 0f, nutrition = 0, consumeTime = 2.0, sound = "minecraft:entity.sniffer.eat")
+
+        val meta = item.itemMeta as ItemMeta
+        val cm = meta.customModelDataComponent
+
+        cm.strings = mutableListOf("greenhouse")
+
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+        meta.setCustomModelDataComponent(cm)
+
+        meta.setDisplayName("§2§lʙᴏʀᴅᴇʀ ᴇxᴘᴀɴᴅᴇʀ")
+
+        val lore = listOf("§9Right click to use", "§9Increases border")
+        meta.lore = lore
+
+        item.setItemMeta(meta)
+        return item
     }
 }

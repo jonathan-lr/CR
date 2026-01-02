@@ -28,6 +28,8 @@ class ShopItem(
     private var useStock: Boolean = false,
     private var name: String = "null",
     private var sellProduct: Boolean = true,
+    private var stockMultiplier: Double = 0.01,
+    private var stockTrigger: Double = 8.0,
 ) : AbstractItem() {
     private val values = listOf(1, 4, 8, 16, 32, 64)
     private val connection = RedCorp.getPlugin().getConnection()!!
@@ -37,7 +39,7 @@ class ShopItem(
     private var stock = item.stock
     private val newBuyPrice: Double
         get() = if (useStock) {
-            buyPrice * (1 - 0.01 * floor(stock / 8.0)).coerceAtLeast(0.0)
+            buyPrice * (1 - stockMultiplier * floor(stock / stockTrigger)).coerceAtLeast(0.0)
         } else {
             buyPrice
         }
@@ -45,7 +47,7 @@ class ShopItem(
     private val newSellPrice: Double
         get() = if (useStock) {
             val cappedStock = stock.coerceAtMost(256) // caps stock at 256
-            sellPrice * (1 - 0.01 * floor(cappedStock / 8.0))
+            sellPrice * (1 - stockMultiplier * floor(cappedStock / stockTrigger))
         } else {
             sellPrice
         }
@@ -136,13 +138,13 @@ class ShopItem(
                     requiredAmount,
                     "playerSell"
                 )
+                player.sendMessage(replacePlaceholders(vendorCompleteBuy, player))
+                econ.depositPlayer(player, newBuyPrice * requiredAmount)
                 if (useStock && name != "null") {
                     StockEx(connection).setStock(stock+requiredAmount,name)
                     stock = stock+values[amount.getOrDefault(player, 0)]
                     notifyWindows()
                 }
-                player.sendMessage(replacePlaceholders(vendorCompleteBuy, player))
-                econ.depositPlayer(player, newBuyPrice * requiredAmount)
                 balItem.refreshBal()
                 gotItem = true
             } else {

@@ -11,6 +11,7 @@ import com.cosmicreach.redcorp.menus.CoffeeMachine
 import com.cosmicreach.redcorp.menus.DryingRack
 import com.cosmicreach.redcorp.menus.FruitGamble
 import com.cosmicreach.redcorp.menus.Grinder
+import com.cosmicreach.redcorp.menus.IndustrialGrinder
 import com.cosmicreach.redcorp.menus.MixingMachine
 import com.cosmicreach.redcorp.menus.PressMachine
 import com.cosmicreach.redcorp.menus.Teleport
@@ -29,13 +30,11 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
-import xyz.xenondevs.invui.inventory.VirtualInventory
 import xyz.xenondevs.invui.window.Window
 import java.sql.Connection
 
 class OnUse (
     private val event : PlayerInteractEvent,
-    private val grinderPlayers: HashMap<Player, VirtualInventory>,
     private val teleportActions: TeleportActions
 ) {
 
@@ -85,10 +84,7 @@ class OnUse (
                 val isGreenhouse = nbt.getBoolean("greenhouse")
                 val greenhouseId = nbt.getInteger("greenhouse-id")
 
-                if (!isGreenhouse || greenhouseId == null) {
-                    p.sendMessage("§cCR §8|§r Something has gone wrong call Zach he can fix it")
-                    return
-                }
+                if (!isGreenhouse || greenhouseId == null) { return }
 
                 val greenhouse = Greenhouse(connection).getGreenhouseById(greenhouseId)
                 if (greenhouse == null) {
@@ -100,6 +96,11 @@ class OnUse (
                     //val greenhouseTracking = RedCorp.getPlugin().getGreenhouseTracker()
 
                     //greenhouseTracking.put(p, locString)
+                    p.sendMessage("§cCR §8|§r Something has gone wrong call Zach he can fix it")
+                    return
+                }
+
+                if (greenhouse.home == "") {
                     p.sendMessage("§cCR §8|§r Something has gone wrong call Zach he can fix it")
                     return
                 }
@@ -124,7 +125,7 @@ class OnUse (
                         text("Are you sure you want to raid this? ")
 
                         button(
-                            label = "§8[§2§lʏᴇs</bold>§r§8]",
+                            label = "§8[§2§lʏᴇs§r§8]",
                             command = "/raid confirm",
                             hoverText = "§7Start the raid!"
                         )
@@ -155,10 +156,7 @@ class OnUse (
                 val isGreenhouse = nbt.getBoolean("greenhouse")
                 val greenhouseId = nbt.getInteger("greenhouse-id")
 
-                if (!isGreenhouse || greenhouseId == null) {
-                    p.sendMessage("§cCR §8|§r Something has gone wrong call Zach he can fix it")
-                    return
-                }
+                if (!isGreenhouse || greenhouseId == null) { return }
 
                 val greenhouse = Greenhouse(connection).getGreenhouseById(greenhouseId)
                 if (greenhouse == null) {
@@ -201,8 +199,7 @@ class OnUse (
                 val coffee = nbt.getBoolean("coffee")
                 val slot = nbt.getBoolean("slot")
                 if (event.action == Action.RIGHT_CLICK_BLOCK) {
-                    val viewers = RedCorp.getPlugin().getAgingViewers()
-                    val agingBarrels = RedCorp.getPlugin().getAgingBarrels()
+                    val agingBarrels = RedCorp.getPlugin().agingBarrels
 
                     if (barrel) {
                         val window = Window.single()
@@ -227,8 +224,8 @@ class OnUse (
                     if (grind) {
                         val window = Window.single()
                             .setViewer(p)
-                            .setTitle("§r\uE100\uE003")
-                            .setGui(DryingRack(agingBarrels).getOrCreateGui(block))
+                            .setTitle("§r\uE100\uE007")
+                            .setGui(IndustrialGrinder().getOrCreateGui(block))
                             .build()
 
                         window.open()
@@ -237,7 +234,7 @@ class OnUse (
                     if (mixer) {
                         val window = Window.single()
                             .setViewer(p)
-                            .setTitle("§rMixing Machine")
+                            .setTitle("§r\uE100\uE006")
                             .setGui(MixingMachine(agingBarrels).getOrCreateGui(block))
                             .build()
 
@@ -247,7 +244,7 @@ class OnUse (
                     if (press) {
                         val window = Window.single()
                             .setViewer(p)
-                            .setTitle("§rPress Machine")
+                            .setTitle("§r\uE100\uE005")
                             .setGui(PressMachine(agingBarrels).getOrCreateGui(block))
                             .build()
 
@@ -346,8 +343,8 @@ class OnUse (
         val fairyId = nbt.getInteger("fairyId") - 700
 
         if (fairy) {
-            val fairiesFound = RedCorp.getPlugin().getFairies()
-            val hasMagic = RedCorp.getPlugin().getMagicUnlocked()
+            val fairiesFound = RedCorp.getPlugin().fairiesFound
+            val hasMagic = RedCorp.getPlugin().magicUnlocked
             if (hasMagic[p] == true) {
                 p.sendMessage("§cCR §8|§r Your power is beyond this creature!")
             } else {
@@ -375,8 +372,8 @@ class OnUse (
     private fun grinder() {
         val window = Window.single()
             .setViewer(p)
-            .setTitle("§6§lDrug Grinder")
-            .setGui(Grinder(grinderPlayers).makeGUI(p))
+            .setTitle("§r\uE100\uE008")
+            .setGui(Grinder().makeGUI(p))
             .build()
 
         window.open()
@@ -498,29 +495,47 @@ class OnUse (
                         val loc = p.location
                         val locString = "${loc.world?.name},${loc.x},${loc.y},${loc.z},${loc.yaw},${loc.pitch}"
 
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "sudo ${p.name} island create greenhouse")
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user ${p.name} permission settemp bskyblock.island true 3s")
+                        Bukkit.getScheduler().runTaskLater(RedCorp.getPlugin(), Runnable {
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "sudo ${p.name} island create greenhouse")
 
-                        val newGreenhouse = Greenhouse(connection).createGreenhouse("", locString)
-                        Greenhouse(connection).linkPlayerToGreenhouse(newGreenhouse, p.uniqueId, true)
-                        i = GreenhouseItems().GreenhouseEntrance(newGreenhouse)
-                        val greenhouseTracking = RedCorp.getPlugin().getGreenhouseTracker()
+                            val newGreenhouse = Greenhouse(connection).createGreenhouse("", locString)
+                            Greenhouse(connection).linkPlayerToGreenhouse(newGreenhouse, p.uniqueId, true)
+                            i = GreenhouseItems().GreenhouseEntrance(newGreenhouse)
+                            val greenhouseTracking = RedCorp.getPlugin().getGreenhouseTracker()
 
-                        greenhouseTracking.put(p, newGreenhouse)
-                    }
+                            greenhouseTracking.put(p, newGreenhouse)
 
-                    greenhouseId = Utils().getGreenhouseId(i)
-                    setData()
+                            val newGreenhouseId = Utils().getGreenhouseId(i)
+                            setData()
 
-                    val greenhouse = Greenhouse(connection).getGreenhouseById(greenhouseId!!)
-                    val item = GreenhouseItems().GreenhouseEntrance(greenhouseId)
+                            val greenhouse = Greenhouse(connection).getGreenhouseById(newGreenhouseId!!)
+                            val item = GreenhouseItems().GreenhouseEntrance(newGreenhouseId)
 
-                    Utils().placeFakeBlock(item, block, 0.7F, event)
+                            Utils().placeFakeBlock(item, block, 0.7F, event)
 
-                    if (greenhouse != null) {
-                        val loc = p.location
-                        val locString = "${loc.world?.name},${loc.x},${loc.y},${loc.z},${loc.yaw},${loc.pitch}"
-                        Greenhouse(connection).updateExit(greenhouseId, locString)
-                        p.sendMessage("§cCR §8|§r Set greenhouse exit location")
+                            if (greenhouse != null) {
+                                val loc = p.location
+                                val locString = "${loc.world?.name},${loc.x},${loc.y},${loc.z},${loc.yaw},${loc.pitch}"
+                                Greenhouse(connection).updateExit(newGreenhouseId, locString)
+                                p.sendMessage("§cCR §8|§r Set greenhouse exit location")
+                            }
+                        }, 20L)
+                    } else {
+                        greenhouseId = Utils().getGreenhouseId(i)
+                        setData()
+
+                        val greenhouse = Greenhouse(connection).getGreenhouseById(greenhouseId!!)
+                        val item = GreenhouseItems().GreenhouseEntrance(greenhouseId)
+
+                        Utils().placeFakeBlock(item, block, 0.7F, event)
+
+                        if (greenhouse != null) {
+                            val loc = p.location
+                            val locString = "${loc.world?.name},${loc.x},${loc.y},${loc.z},${loc.yaw},${loc.pitch}"
+                            Greenhouse(connection).updateExit(greenhouseId, locString)
+                            p.sendMessage("§cCR §8|§r Set greenhouse exit location")
+                        }
                     }
                 } else {
                     event.isCancelled = true

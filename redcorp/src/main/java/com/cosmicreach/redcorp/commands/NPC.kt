@@ -15,6 +15,8 @@ import com.cosmicreach.redcorp.npcs.Patrick
 import com.cosmicreach.redcorp.npcs.ShadeE
 import com.cosmicreach.redcorp.npcs.Shaggy
 import com.cosmicreach.redcorp.npcs.Sterling
+import com.cosmicreach.redcorp.npcs.Sum
+import com.cosmicreach.redcorp.npcs.Ting
 import com.cosmicreach.redcorp.npcs.Toad
 import com.cosmicreach.redcorp.npcs.Wong
 import com.cosmicreach.redcorp.npcs.Zarek
@@ -28,11 +30,6 @@ import org.bukkit.entity.Player
 import java.util.concurrent.ThreadLocalRandom
 
 class NPC(): CommandExecutor {
-    private var kyleStage = HashMap<Player, Int>()
-    private val kyleConfirm = HashMap<Player, Boolean>()
-    private val merlinConfirm = HashMap<Player, Boolean>()
-    private val zarekConfirm = HashMap<Player, Boolean>()
-    private var zarekStage = HashMap<Player, Int>()
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (sender is Player && !sender.hasPermission("redcorp.npc")) {
             sender.sendMessage("§cCR §8| §c${sender.displayName} kindly fuck off")
@@ -53,7 +50,7 @@ class NPC(): CommandExecutor {
                     return false
                 }
                 "kyle" -> {
-                    Kyle(player, kyleConfirm, kyleStage).run()
+                    Kyle(player).run()
                     return false
                 }
                 "jeramey" -> {
@@ -81,11 +78,11 @@ class NPC(): CommandExecutor {
                     return false
                 }
                 "zarek" -> {
-                    Zarek(player, zarekConfirm, zarekStage).run()
+                    Zarek(player).run()
                     return false
                 }
                 "zarek_portal" -> {
-                    Zarek(player, zarekConfirm, zarekStage).openPortal()
+                    Zarek(player).openPortal()
                     return false
                 }
                 in (1..20).map { "cop_$it" } -> {
@@ -120,6 +117,14 @@ class NPC(): CommandExecutor {
                 }
                 "wong" -> {
                     Wong(player).run()
+                    return false
+                }
+                "sum" -> {
+                    Sum(player).run()
+                    return false
+                }
+                "ting" -> {
+                    Ting(player).run()
                     return false
                 }
                 "cassian" -> {

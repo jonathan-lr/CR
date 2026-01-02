@@ -36,6 +36,17 @@ class Utils {
         return id
     }
 
+    fun getType(item: ItemStack): String? {
+        if (!item.hasItemMeta()) { return null }
+        var type = ""
+
+        NBT.get(item) { nbt ->
+            type = nbt.getString("item-type")
+        }
+
+        return type
+    }
+
     fun getGameID(item: ItemStack): Int {
         var id = 0
 

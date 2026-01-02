@@ -85,4 +85,30 @@ class GreenhouseItems {
         item.setItemMeta(meta)
         return item
     }
+
+    fun GreenhouseUpgrade2 (a: Int): ItemStack {
+        var item = ItemStack(Material.PAPER, a)
+
+        NBT.modify(item) { nbt ->
+            nbt.setInteger("item-id", 204)
+        }
+
+        item = Utils().makeEdibleWithComponents(item, canAlwaysEat = true, saturation = 0f, nutrition = 0, consumeTime = 2.0, sound = "minecraft:entity.sniffer.eat")
+
+        val meta = item.itemMeta as ItemMeta
+        val cm = meta.customModelDataComponent
+
+        cm.strings = mutableListOf("greenhouse")
+
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+        meta.setCustomModelDataComponent(cm)
+
+        meta.setDisplayName("§2§lɢʀᴇᴇɴʜᴏᴜsᴇ ғᴜɴᴅɪɴɢ")
+
+        val lore = listOf("§9Right click to use", "§9Max 2 per greenhouse")
+        meta.lore = lore
+
+        item.setItemMeta(meta)
+        return item
+    }
 }

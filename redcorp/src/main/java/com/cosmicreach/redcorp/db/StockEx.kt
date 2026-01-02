@@ -53,6 +53,7 @@ class StockEx(private var connection: Connection) {
                 END
             ELSE stock
         END
+        WHERE item NOT IN ('border_item')
     """.trimIndent()
 
         connection.prepareStatement(sql).use { statement ->

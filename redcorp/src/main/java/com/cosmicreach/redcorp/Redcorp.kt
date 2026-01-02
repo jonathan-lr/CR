@@ -10,15 +10,16 @@ import com.sk89q.worldguard.protection.flags.StateFlag
 import com.yourplugin.DatabaseManager
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.Bukkit
-import org.bukkit.Location
 import org.bukkit.block.Block
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
-import org.bukkit.scheduler.BukkitRunnable
 import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.inventory.VirtualInventory
 import xyz.xenondevs.invui.window.Window
 import java.sql.Connection
+import java.time.Duration
+import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
 
 
 class RedCorp : JavaPlugin() {
@@ -27,9 +28,9 @@ class RedCorp : JavaPlugin() {
     private var teleportStarter = HashMap<Player, Player>()
     private var teleportSolo = HashMap<Player, Int>()
     private var particlePlayers = HashMap<Player, ParticleManager>()
-    private var grinderPlayers = HashMap<Player, VirtualInventory>()
+    var grinderPlayers = HashMap<Player, VirtualInventory>()
     private var shipmentPlayers = HashMap<Player, VirtualInventory>()
-    private var agingBarrels = HashMap<Block, VirtualInventory>()
+    var agingBarrels = HashMap<Block, VirtualInventory>()
     private var storedGuis = HashMap<Block, Gui>()
     private val agingViewers = HashMap<Block, MutableList<Window>>()
     private var particleTeleport = HashMap<Player, ParticleManager>()
@@ -37,18 +38,16 @@ class RedCorp : JavaPlugin() {
     private var taggedPlayer = HashMap<Int, Player>()
     private var lastTagged = HashMap<Int, Player>()
     private var passedTimes = HashMap<Int, Int>()
-    private var magicUnlocked = HashMap<Player, Boolean>()
+    var magicUnlocked = HashMap<Player, Boolean>()
     private var canRaid = HashMap<Player, Int>()
     private var greenhouseInvite = HashMap<Player, Player>()
     private var greenhouseTracker = HashMap<Player, Int>()
     private var gambleLock = HashMap<Player, Boolean>()
     private var purchaseAmount = HashMap<Player, Int>()
-    private var fairiesFound = HashMap<Player, Array<Boolean>>()
+    var fairiesFound = HashMap<Player, Array<Boolean>>()
     private lateinit var databaseManager: DatabaseManager
-    private var lastExecutionTime: Long = 0
     private var worldBorder: Double = 0.0
     private val playerRegions = mutableMapOf<Player, Set<String>>()
-    val merlinConfirm = HashMap<Player, Boolean>()
 
     override fun onLoad() {
         logger.info("Registering Flags")
@@ -81,7 +80,7 @@ class RedCorp : JavaPlugin() {
 
         logger.info("Registering Listeners")
         //Register event listeners
-        EventsListener(teleportingPlayers, particleTeleport, teleportActions, teleportStarter, teleportSolo, grinderPlayers, agingBarrels)
+        EventsListener(teleportingPlayers, particleTeleport, teleportActions, teleportStarter, teleportSolo, agingBarrels)
         logger.info("Finished Registering Listeners")
 
         logger.info("Registering Custom Crafting")
@@ -98,7 +97,7 @@ class RedCorp : JavaPlugin() {
         if (world != null) {
             worldBorder = world.worldBorder.size
         }
-        startHourly()
+        scheduleNextTopOfHour()
         logger.info("Finished World Border Setup")
     }
 
@@ -131,28 +130,36 @@ class RedCorp : JavaPlugin() {
         getCommand("greenhouse")?.tabCompleter = GreenhouseComplete()
         getCommand("createnpc")?.setExecutor(CreateNPC())
         getCommand("createnpc")?.tabCompleter = CreateNPCComplete()
+        getCommand("dragondrops")?.setExecutor(DragonDrops())
         //getCommand("setnicks")?.setExecutor(SetNicks(this, config))
     }
 
-    private fun startHourly() {
-        lastExecutionTime = System.currentTimeMillis()
+    private fun scheduleNextTopOfHour() {
+        val zone = java.time.ZoneId.of("Europe/London")
+        val now = ZonedDateTime.now(zone)
+        var nextHour = now.truncatedTo(ChronoUnit.HOURS).plusHours(1)
 
-        object : BukkitRunnable() {
-            override fun run() {
-                val currentTime = System.currentTimeMillis()
+        var delayMillis = Duration.between(now, nextHour).toMillis()
 
-                // Check if one hour (3600000 milliseconds) has passed
-                if (currentTime - lastExecutionTime >= 3600000) {
-                    lastExecutionTime = currentTime // Reset the last execution time
+        if (delayMillis in 0 until Duration.ofMinutes(2).toMillis()) {
+            nextHour = nextHour.plusHours(1)
+            delayMillis = Duration.between(now, nextHour).toMillis()
+        }
 
-                    // Run your hourly task
-                    logger.info("CR Running Hourly Expansion & Inflation")
-                    performExpanse()
-                    val db = getConnection()!!
-                    StockEx(db).decayAllStocksTowardsZero(8)
-                }
+        val delayTicks = (delayMillis / 50L).coerceAtLeast(1L) // 20 ticks/sec, min 1 tick
+
+        logger.info("Next scheduled run at: " + nextHour)
+
+        Bukkit.getScheduler().runTaskLater(this, Runnable {
+            try {
+                logger.info("Running Hourly Expansion & Inflation")
+                performExpanse()
+                val db = getConnection()!!
+                StockEx(db).decayAllStocksTowardsZero(8)
+            } finally {
+                scheduleNextTopOfHour()
             }
-        }.runTaskTimer(this,0L,1200L )
+        }, delayTicks)
     }
 
     private fun performExpanse() {
@@ -184,20 +191,12 @@ class RedCorp : JavaPlugin() {
         return passedTimes
     }
 
-    fun getMagicUnlocked(): HashMap<Player, Boolean> {
-        return magicUnlocked
-    }
-
     fun getCanRaid(): HashMap<Player, Int> {
         return canRaid
     }
 
     fun getGreenhouseInvite(): HashMap<Player, Player> {
         return greenhouseInvite
-    }
-
-    fun getAgingBarrels(): HashMap<Block, VirtualInventory> {
-        return agingBarrels
     }
 
     fun getStoredGuis(): HashMap<Block, Gui> {
@@ -210,10 +209,6 @@ class RedCorp : JavaPlugin() {
 
     fun getConnection(): Connection? {
         return databaseManager.getConnection()
-    }
-
-    fun getFairies(): HashMap<Player, Array<Boolean>> {
-        return fairiesFound
     }
 
     fun getWorldBorder(): Double {
@@ -234,10 +229,6 @@ class RedCorp : JavaPlugin() {
 
     fun getEcon(): Economy{
         return economy!!
-    }
-
-    fun getGrinderPlayers(): HashMap<Player, VirtualInventory> {
-        return grinderPlayers
     }
 
     fun getGambleLock(): HashMap<Player, Boolean> {

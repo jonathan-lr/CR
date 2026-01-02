@@ -7,7 +7,7 @@ import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.SimpleItem
 
-class Confirm(private var confirm: HashMap<Player, Boolean>) {
+class Confirm(private var type: Int) {
     fun makeGUI(): Gui{
         val border = SimpleItem(ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).setDisplayName("§r"))
         val gui = Gui.normal()
@@ -16,8 +16,8 @@ class Confirm(private var confirm: HashMap<Player, Boolean>) {
                         "# . x . . . y . #",
                         "# . . . . . . . #")
                 .addIngredient('#', border)
-                .addIngredient('x', YesItem(confirm))
-                .addIngredient('y', NoItem(confirm))
+                .addIngredient('x', YesItem(type))
+                .addIngredient('y', NoItem(type))
                 .build()
         return gui
     }

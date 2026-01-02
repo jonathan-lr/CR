@@ -26,11 +26,6 @@ class GodMode(private val config: FileConfiguration) : CommandExecutor {
                 c = config.getString("configuration.yorick.creative")
                 a = config.getString("configuration.yorick.adventure")
             }
-            if (sender.name == "Wasbie") {
-                s = config.getString("configuration.jay.survival")
-                c = config.getString("configuration.jay.creative")
-                a = config.getString("configuration.jay.adventure")
-            }
 
             when(parseInt(args[0])) {
                 1 -> {

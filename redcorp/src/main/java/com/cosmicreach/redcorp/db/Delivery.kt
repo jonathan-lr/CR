@@ -51,4 +51,27 @@ class Delivery(private var connection: Connection) {
         }
     }
 
+    fun getFinishedDeliveryCount(playerUUID: UUID, drugType: Int): Int {
+        val sql = """
+        SELECT COUNT(*) AS total
+        FROM deliveries
+        WHERE user = ?
+          AND drugtype = ?
+          AND finished = true
+    """.trimIndent()
+
+        connection.prepareStatement(sql).use { statement ->
+            statement.setString(1, playerUUID.toString())
+            statement.setInt(2, drugType)
+
+            statement.executeQuery().use { resultSet ->
+                return if (resultSet.next()) {
+                    resultSet.getInt("total")
+                } else {
+                    0
+                }
+            }
+        }
+    }
+
 }

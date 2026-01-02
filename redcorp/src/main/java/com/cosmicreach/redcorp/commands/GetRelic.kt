@@ -2,7 +2,7 @@ package com.cosmicreach.redcorp.commands
 
 import com.cosmicreach.redcorp.items.EarthItems
 import com.cosmicreach.redcorp.items.FireItems
-import com.cosmicreach.redcorp.items.SkyItems
+import com.cosmicreach.redcorp.items.AirItems
 import com.cosmicreach.redcorp.items.WaterItems
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -35,7 +35,7 @@ class GetRelic  : CommandExecutor {
             when (args[0]) {
                 "pick" -> {
                     when(args[1]) {
-                        "air" -> sender.inventory.addItem(SkyItems().skyPick())
+                        "air" -> sender.inventory.addItem(AirItems().airPick())
                         "fire" -> sender.inventory.addItem(FireItems().firePick())
                         "water" -> sender.inventory.addItem(WaterItems().waterPick())
                         "earth" -> sender.inventory.addItem(EarthItems().earthPick())
@@ -43,7 +43,7 @@ class GetRelic  : CommandExecutor {
                 }
                 "shovel" -> {
                     when(args[1]) {
-                        "air" -> sender.inventory.addItem(SkyItems().skyShovel())
+                        "air" -> sender.inventory.addItem(AirItems().airShovel())
                         "fire" -> sender.inventory.addItem(FireItems().fireShovel())
                         "water" -> sender.inventory.addItem(WaterItems().waterShovel())
                         "earth" -> sender.inventory.addItem(EarthItems().earthShovel())
@@ -51,7 +51,7 @@ class GetRelic  : CommandExecutor {
                 }
                 "hoe" -> {
                     when(args[1]) {
-                        "air" -> sender.inventory.addItem(SkyItems().skyHoe())
+                        "air" -> sender.inventory.addItem(AirItems().airHoe())
                         "fire" -> sender.inventory.addItem(FireItems().fireHoe())
                         "water" -> sender.inventory.addItem(WaterItems().waterHoe())
                         "earth" -> sender.inventory.addItem(EarthItems().earthHoe())
@@ -59,7 +59,7 @@ class GetRelic  : CommandExecutor {
                 }
                 "axe" -> {
                     when(args[1]) {
-                        "air" -> sender.inventory.addItem(SkyItems().skyAxe())
+                        "air" -> sender.inventory.addItem(AirItems().airAxe())
                         "fire" -> sender.inventory.addItem(FireItems().fireAxe())
                         "water" -> sender.inventory.addItem(WaterItems().waterAxe())
                         "earth" -> sender.inventory.addItem(EarthItems().earthAxe())
@@ -67,7 +67,7 @@ class GetRelic  : CommandExecutor {
                 }
                 "sword" -> {
                     when(args[1]) {
-                        "air" -> sender.inventory.addItem(SkyItems().skySword())
+                        "air" -> sender.inventory.addItem(AirItems().airSword())
                         "fire" -> sender.inventory.addItem(FireItems().fireSword())
                         "water" -> sender.inventory.addItem(WaterItems().waterSword())
                         "earth" -> sender.inventory.addItem(EarthItems().earthSword())
@@ -75,7 +75,7 @@ class GetRelic  : CommandExecutor {
                 }
                 "helmet" -> {
                     when(args[1]) {
-                        "air" -> sender.inventory.addItem(SkyItems().skyHelmet())
+                        "air" -> sender.inventory.addItem(AirItems().airHelmet())
                         "fire" -> sender.inventory.addItem(FireItems().fireHelmet())
                         "water" -> sender.inventory.addItem(WaterItems().waterHelmet())
                         "earth" -> sender.inventory.addItem(EarthItems().earthHelmet())
@@ -83,7 +83,7 @@ class GetRelic  : CommandExecutor {
                 }
                 "chestplate" -> {
                     when(args[1]) {
-                        "air" -> sender.inventory.addItem(SkyItems().skyChestplate())
+                        "air" -> sender.inventory.addItem(AirItems().airChestplate())
                         "fire" -> sender.inventory.addItem(FireItems().fireChestplate())
                         "water" -> sender.inventory.addItem(WaterItems().waterChestplate())
                         "earth" -> sender.inventory.addItem(EarthItems().earthChestplate())
@@ -91,7 +91,7 @@ class GetRelic  : CommandExecutor {
                 }
                 "leggings" -> {
                     when(args[1]) {
-                        "air" -> sender.inventory.addItem(SkyItems().skyLeggings())
+                        "air" -> sender.inventory.addItem(AirItems().airLeggings())
                         "fire" -> sender.inventory.addItem(FireItems().fireLeggings())
                         "water" -> sender.inventory.addItem(WaterItems().waterLeggings())
                         "earth" -> sender.inventory.addItem(EarthItems().earthLeggings())
@@ -99,7 +99,7 @@ class GetRelic  : CommandExecutor {
                 }
                 "boots" -> {
                     when(args[1]) {
-                        "air" -> sender.inventory.addItem(SkyItems().skyBoots())
+                        "air" -> sender.inventory.addItem(AirItems().airBoots())
                         "fire" -> sender.inventory.addItem(FireItems().fireBoots())
                         "water" -> sender.inventory.addItem(WaterItems().waterBoots())
                         "earth" -> sender.inventory.addItem(EarthItems().earthBoots())
@@ -107,7 +107,7 @@ class GetRelic  : CommandExecutor {
                 }
                 "wings" -> {
                     when(args[1]) {
-                        "air" -> sender.inventory.addItem(SkyItems().skyWings())
+                        "air" -> sender.inventory.addItem(AirItems().airWings())
                         "fire" -> sender.inventory.addItem(FireItems().fireWings())
                         "water" -> sender.inventory.addItem(WaterItems().waterWings())
                         "earth" -> sender.inventory.addItem(EarthItems().earthWings())

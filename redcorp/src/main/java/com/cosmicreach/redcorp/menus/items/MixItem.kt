@@ -21,15 +21,23 @@ import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.controlitem.ControlItem
 import kotlin.math.roundToInt
 
-class MixItem(private val inv : VirtualInventory, private val progressInv: VirtualInventory, private val block: Block, private val setMixing: (Boolean) -> Boolean, private val getMixing: () -> Boolean) : ControlItem<Gui>() {
+class MixItem(
+    private val inv: VirtualInventory,
+    private val progressInv: VirtualInventory,
+    private val block: Block,
+    private val setMixing: (Boolean) -> Boolean,
+    private val getMixing: () -> Boolean
+) : ControlItem<Gui>() {
     override fun getItemProvider(gui: Gui): ItemProvider {
-        return ItemBuilder(Material.GRINDSTONE).setDisplayName("§2§lPress Item").setLegacyLore((mutableListOf("§f§lClick to press", "§f4 Produce = 1 condense")))
+        return ItemBuilder(Material.GRINDSTONE).setDisplayName("§2§lPress Item")
+            .setLegacyLore((mutableListOf("§f§lClick to press", "§f4 Produce = 1 condense")))
     }
 
     override fun handleClick(clickType: ClickType, player: Player, event: InventoryClickEvent) {
         if (getMixing()) return
 
         val inputSlots = listOf(0, 1, 2)
+
         data class SlotData(val index: Int, val stack: ItemStack)
 
         val filledSlots = inputSlots.mapNotNull { index ->
@@ -89,7 +97,10 @@ class MixItem(private val inv : VirtualInventory, private val progressInv: Virtu
                     val secondAmt = (total - firstAmt).coerceAtMost(64)
 
                     inv.setItemSilently(0, ItemStack(DrugItems().MixedCoke(firstAmt)))
-                    inv.setItemSilently(1, if (secondAmt > 0) ItemStack(DrugItems().MixedCoke(secondAmt)) else ItemStack(Material.AIR))
+                    inv.setItemSilently(
+                        1,
+                        if (secondAmt > 0) ItemStack(DrugItems().MixedCoke(secondAmt)) else ItemStack(Material.AIR)
+                    )
 
                     inv.setItemSilently(2, ItemStack(Material.AIR))
 

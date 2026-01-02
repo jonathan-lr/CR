@@ -135,7 +135,7 @@ class DecideLoot() {
         when (drop) {
             0 -> {
                 when(vault) {
-                    0 -> p.inventory.addItem(SkyItems().skyPick())
+                    0 -> p.inventory.addItem(AirItems().airPick())
                     1 -> p.inventory.addItem(FireItems().firePick())
                     2 -> p.inventory.addItem(WaterItems().waterPick())
                     3 -> p.inventory.addItem(EarthItems().earthPick())
@@ -143,7 +143,7 @@ class DecideLoot() {
             }
             1 -> {
                 when(vault) {
-                    0 -> p.inventory.addItem(SkyItems().skyShovel())
+                    0 -> p.inventory.addItem(AirItems().airShovel())
                     1 -> p.inventory.addItem(FireItems().fireShovel())
                     2 -> p.inventory.addItem(WaterItems().waterShovel())
                     3 -> p.inventory.addItem(EarthItems().earthShovel())
@@ -151,7 +151,7 @@ class DecideLoot() {
             }
             2 -> {
                 when(vault) {
-                    0 -> p.inventory.addItem(SkyItems().skyHoe())
+                    0 -> p.inventory.addItem(AirItems().airHoe())
                     1 -> p.inventory.addItem(FireItems().fireHoe())
                     2 -> p.inventory.addItem(WaterItems().waterHoe())
                     3 -> p.inventory.addItem(EarthItems().earthHoe())
@@ -159,7 +159,7 @@ class DecideLoot() {
             }
             3 -> {
                 when(vault) {
-                    0 -> p.inventory.addItem(SkyItems().skyAxe())
+                    0 -> p.inventory.addItem(AirItems().airAxe())
                     1 -> p.inventory.addItem(FireItems().fireAxe())
                     2 -> p.inventory.addItem(WaterItems().waterAxe())
                     3 -> p.inventory.addItem(EarthItems().earthAxe())
@@ -167,7 +167,7 @@ class DecideLoot() {
             }
             4 -> {
                 when(vault) {
-                    0 -> p.inventory.addItem(SkyItems().skySword())
+                    0 -> p.inventory.addItem(AirItems().airSword())
                     1 -> p.inventory.addItem(FireItems().fireSword())
                     2 -> p.inventory.addItem(WaterItems().waterSword())
                     3 -> p.inventory.addItem(EarthItems().earthSword())
@@ -175,7 +175,7 @@ class DecideLoot() {
             }
             5 -> {
                 when(vault) {
-                    0 -> p.inventory.addItem(SkyItems().skyHelmet())
+                    0 -> p.inventory.addItem(AirItems().airHelmet())
                     1 -> p.inventory.addItem(FireItems().fireHelmet())
                     2 -> p.inventory.addItem(WaterItems().waterHelmet())
                     3 -> p.inventory.addItem(EarthItems().earthHelmet())
@@ -183,7 +183,7 @@ class DecideLoot() {
             }
             6 -> {
                 when(vault) {
-                    0 -> p.inventory.addItem(SkyItems().skyChestplate())
+                    0 -> p.inventory.addItem(AirItems().airChestplate())
                     1 -> p.inventory.addItem(FireItems().fireChestplate())
                     2 -> p.inventory.addItem(WaterItems().waterChestplate())
                     3 -> p.inventory.addItem(EarthItems().earthChestplate())
@@ -191,7 +191,7 @@ class DecideLoot() {
             }
             7 -> {
                 when(vault) {
-                    0 -> p.inventory.addItem(SkyItems().skyLeggings())
+                    0 -> p.inventory.addItem(AirItems().airLeggings())
                     1 -> p.inventory.addItem(FireItems().fireLeggings())
                     2 -> p.inventory.addItem(WaterItems().waterLeggings())
                     3 -> p.inventory.addItem(EarthItems().earthLeggings())
@@ -199,7 +199,7 @@ class DecideLoot() {
             }
             8 -> {
                 when(vault) {
-                    0 -> p.inventory.addItem(SkyItems().skyBoots())
+                    0 -> p.inventory.addItem(AirItems().airBoots())
                     1 -> p.inventory.addItem(FireItems().fireBoots())
                     2 -> p.inventory.addItem(WaterItems().waterBoots())
                     3 -> p.inventory.addItem(EarthItems().earthBoots())
@@ -207,7 +207,7 @@ class DecideLoot() {
             }
             9 -> {
                 when(vault) {
-                    0 -> p.inventory.addItem(SkyItems().skyWings())
+                    0 -> p.inventory.addItem(AirItems().airWings())
                     1 -> p.inventory.addItem(FireItems().fireWings())
                     2 -> p.inventory.addItem(WaterItems().waterWings())
                     3 -> p.inventory.addItem(EarthItems().earthWings())
