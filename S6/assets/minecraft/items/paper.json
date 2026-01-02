@@ -435,10 +435,17 @@
         }
       },
       {
-        "when": "mixing",
+        "when": "mixer",
         "model": {
           "type": "model",
           "model": "item/mixers"
+        }
+      },
+      {
+        "when": "press",
+        "model": {
+          "type": "model",
+          "model": "item/press"
         }
       }
     ]
